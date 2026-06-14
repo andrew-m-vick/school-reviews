@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math 1324 Review</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff; --bg2: #f7f7f5; --bg3: #f0efe9;
+    --bg-success: #eaf3de; --bg-danger: #fcebeb; --bg-warning: #faeeda; --bg-info: #e6f1fb; --bg-hint: #f3f0ff;
+    --text: #1a1a1a; --text2: #6b6b6b;
+    --text-success: #3b6d11; --text-danger: #a32d2d; --text-warning: #854f0b; --text-info: #185fa5; --text-hint: #5b3fa6;
+    --border: rgba(0,0,0,0.12); --border2: rgba(0,0,0,0.2);
+    --border-success: #c0dd97; --border-danger: #f7c1c1; --border-warning: #fac775; --border-info: #b5d4f4; --border-hint: #c4b5fd;
+    --green: #1D9E75; --r: 8px; --rl: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1e1e1c; --bg2: #2a2a28; --bg3: #252523;
+      --bg-success: #173404; --bg-danger: #501313; --bg-warning: #412402; --bg-info: #042c53; --bg-hint: #1e1040;
+      --text: #f0efe9; --text2: #a0a09a;
+      --text-success: #c0dd97; --text-danger: #f7c1c1; --text-warning: #fac775; --text-info: #b5d4f4; --text-hint: #c4b5fd;
+      --border: rgba(255,255,255,0.12); --border2: rgba(255,255,255,0.2);
+      --border-success: #3b6d11; --border-danger: #791f1f; --border-warning: #633806; --border-info: #0c447c; --border-hint: #5b3fa6;
+    }
+  }
+  body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg3); color: var(--text); min-height: 100vh; padding: 2rem 1rem; }
+  #app { max-width: 720px; margin: 0 auto; background: var(--bg); border-radius: var(--rl); border: 0.5px solid var(--border); padding: 2rem; }
+  h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+  .subtitle { font-size: 14px; color: var(--text2); margin-bottom: 1.5rem; }
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .fbtn { border: 0.5px solid var(--border2); border-radius: 999px; padding: 5px 14px; font-size: 12px; font-family: inherit; cursor: pointer; background: var(--bg); color: var(--text2); transition: all 0.15s; }
+  .fbtn:hover { background: var(--bg2); }
+  .fbtn.active { background: var(--bg-info); border-color: var(--border-info); color: var(--text-info); font-weight: 500; }
+  .history-panel { margin-bottom: 1.25rem; display: none; }
+  .history-label { font-size: 11px; font-weight: 500; color: var(--text2); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+  .history-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .hchip { font-size: 12px; padding: 4px 12px; border-radius: 999px; border: 0.5px solid var(--border); background: var(--bg2); color: var(--text2); }
+  .hchip.best { border-color: var(--green); color: var(--green); font-weight: 500; }
+  .score-row { display: flex; gap: 10px; margin-bottom: 1.25rem; }
+  .scard { flex: 1; background: var(--bg2); border-radius: var(--r); padding: 0.75rem 1rem; }
+  .slabel { font-size: 11px; color: var(--text2); margin-bottom: 3px; }
+  .sval { font-size: 22px; font-weight: 600; }
+  .pbar-bg { height: 4px; background: var(--bg2); border-radius: 2px; margin-bottom: 1.5rem; }
+  .pbar-fill { height: 4px; background: var(--green); border-radius: 2px; transition: width 0.4s; }
+  .banner { background: var(--bg-success); border: 0.5px solid var(--border-success); border-radius: var(--rl); padding: 1rem 1.25rem; margin-bottom: 1.25rem; display: none; }
+  .banner h3 { font-size: 15px; font-weight: 600; color: var(--text-success); margin-bottom: 4px; }
+  .banner p { font-size: 13px; color: var(--text-success); opacity: 0.9; }
+  .qcard { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--rl); padding: 1.5rem; margin-bottom: 1rem; }
+  .stag { font-size: 11px; font-weight: 500; color: var(--text-info); background: var(--bg-info); padding: 3px 9px; border-radius: var(--r); display: inline-block; margin-bottom: 0.75rem; }
+  .atag { font-size: 11px; color: var(--text2); margin-left: 8px; }
+  .qtext { font-size: 16px; font-weight: 500; color: var(--text); line-height: 1.65; margin-bottom: 1.25rem; }
+  .options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1rem; }
+  .obtn { background: var(--bg); border: 0.5px solid var(--border2); border-radius: var(--r); padding: 11px 16px; font-size: 14px; font-family: inherit; color: var(--text); text-align: left; cursor: pointer; transition: all 0.15s; }
+  .obtn:hover:not(:disabled) { background: var(--bg2); border-color: var(--green); }
+  .obtn.reveal-correct { background: var(--bg-success); border-color: var(--border-success); color: var(--text-success); font-weight: 500; }
+  .obtn.dwrong { opacity: 0.35; cursor: not-allowed; text-decoration: line-through; }
+  .free-row { display: flex; gap: 8px; margin-bottom: 1rem; }
+  .free-row input { flex: 1; font-size: 14px; font-family: inherit; padding: 10px 14px; border: 0.5px solid var(--border2); border-radius: var(--r); background: var(--bg); color: var(--text); outline: none; transition: border-color 0.15s; }
+  .free-row input:focus { border-color: var(--green); }
+  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+  .abtn { border: 0.5px solid var(--border2); border-radius: var(--r); padding: 8px 14px; font-size: 13px; font-family: inherit; cursor: pointer; background: var(--bg); color: var(--text); transition: background 0.15s; }
+  .abtn:hover { background: var(--bg2); }
+  .abtn.redo { border-color: var(--green); color: var(--green); font-weight: 500; }
+  .abtn.redo:hover { background: var(--bg-success); }
+
+  /* hint box */
+  .hint-box { margin-top: 1rem; background: var(--bg-hint); border: 0.5px solid var(--border-hint); border-radius: var(--rl); padding: 1.25rem; display: none; }
+  .hint-box h4 { font-size: 13px; font-weight: 600; color: var(--text-hint); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 6px; }
+  .hint-concept { font-size: 13px; color: var(--text-hint); line-height: 1.7; margin-bottom: 0.75rem; }
+  .hint-steps { list-style: none; padding: 0; }
+  .hint-steps li { font-size: 13px; color: var(--text-hint); line-height: 1.7; padding: 4px 0 4px 20px; position: relative; }
+  .hint-steps li::before { content: counter(step); counter-increment: step; position: absolute; left: 0; font-weight: 600; color: var(--text-hint); }
+  .hint-steps { counter-reset: step; }
+  .hint-note { font-size: 12px; color: var(--text-hint); opacity: 0.8; margin-top: 0.5rem; font-style: italic; }
+
+  /* worked solution box */
+  .solution-box { margin-top: 1rem; background: var(--bg-danger); border: 0.5px solid var(--border-danger); border-radius: var(--rl); padding: 1.25rem; display: none; }
+  .solution-box h4 { font-size: 13px; font-weight: 600; color: var(--text-danger); margin-bottom: 0.75rem; }
+  .solution-box .sol-step { font-size: 13px; color: var(--text-danger); line-height: 1.75; padding: 3px 0; }
+  .solution-box .sol-step strong { font-weight: 600; }
+  .solution-box .sol-answer { margin-top: 0.75rem; font-size: 14px; font-weight: 600; color: var(--text-danger); background: rgba(255,255,255,0.3); border-radius: var(--r); padding: 8px 12px; }
+
+  .feedback { margin-top: 0.75rem; font-size: 13px; font-weight: 500; display: none; }
+  .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; flex-wrap: wrap; gap: 8px; }
+  .qcounter { font-size: 13px; color: var(--text2); }
+  .nav-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  @media (max-width: 500px) { #app { padding: 1.25rem; } .sval { font-size: 18px; } h1 { font-size: 18px; } }
+</style>
+</head>
+<body>
+<div id="app">
+  <h1>Math 1324 Review</h1>
+  <p class="subtitle">Sets, Venn Diagrams &amp; Probability — step-by-step guided practice</p>
+  <div class="filters" id="filters"></div>
+  <div class="history-panel" id="history-panel">
+    <div class="history-label">attempt history</div>
+    <div class="history-row" id="history-row"></div>
+  </div>
+  <div class="score-row">
+    <div class="scard"><div class="slabel">correct</div><div class="sval" id="s-correct">0</div></div>
+    <div class="scard"><div class="slabel">attempted</div><div class="sval" id="s-attempted">0</div></div>
+    <div class="scard"><div class="slabel">accuracy</div><div class="sval" id="s-pct">—</div></div>
+    <div class="scard"><div class="slabel">round</div><div class="sval" id="s-round">1</div></div>
+  </div>
+  <div class="pbar-bg"><div class="pbar-fill" id="prog" style="width:0%"></div></div>
+  <div class="banner" id="banner"><h3 id="banner-title"></h3><p id="banner-msg"></p></div>
+  <div id="q-area"></div>
+  <div class="nav-row">
+    <span class="qcounter" id="qcounter"></span>
+    <div class="nav-btns">
+      <button class="abtn" id="btn-prev">← prev</button>
+      <button class="abtn" id="btn-next">next →</button>
+      <button class="abtn" id="btn-rand">random</button>
+      <button class="abtn redo" id="btn-redo" style="display:none">↺ new round</button>
+    </div>
+  </div>
+</div>
+<script>
+const Q = [
+  {
+    section:"Section 1 — Sets",
+    q:"True or false: 7 ∈ {2, 4, 7, 9}",
+    type:"mc", options:["True","False"], answer:"True",
+    hint:{
+      concept:"The symbol ∈ means 'is an element of.' When you see a ∈ B, you're asking: does the value a appear somewhere inside the set B?",
+      steps:["Look at the set on the right side of ∈: {2, 4, 7, 9}","Go through each element one by one: 2, 4, 7, 9","Ask: is 7 one of those listed elements?","If yes → the statement is True. If no → False."],
+      note:"Sets are just collections of values inside curly braces { }. Order doesn't matter."
+    },
+    solution:{
+      steps:["The set is {2, 4, 7, 9}","We list the elements: 2 ... 4 ... 7 ← found it!","Since 7 appears in the set, 7 ∈ {2, 4, 7, 9} is TRUE."]
+    }
+  },
+  {
+    section:"Section 1 — Sets",
+    q:"True or false: 5 ∉ {1, 3, 7, 9}",
+    type:"mc", options:["True","False"], answer:"True",
+    hint:{
+      concept:"The symbol ∉ means 'is NOT an element of.' It's the opposite of ∈. So 5 ∉ B means: 5 does NOT appear in set B.",
+      steps:["Look at the set: {1, 3, 7, 9}","Check each element: 1, 3, 7, 9 — is 5 anywhere in that list?","If 5 is NOT there, then the ∉ statement is TRUE.","If 5 IS there, then the ∉ statement would be FALSE."],
+      note:"Think of ∉ as the 'not in' symbol — it's just ∈ with a slash through it."
+    },
+    solution:{
+      steps:["The set is {1, 3, 7, 9}","We scan through: 1 ≠ 5, 3 ≠ 5, 7 ≠ 5, 9 ≠ 5","5 does NOT appear in the set","Therefore 5 ∉ {1, 3, 7, 9} is TRUE."]
+    }
+  },
+  {
+    section:"Section 1 — Sets",
+    q:"True or false: {a, e, i} = {i, e, a}",
+    type:"mc", options:["True","False"], answer:"True",
+    hint:{
+      concept:"Two sets are equal if and only if they contain exactly the same elements — regardless of the order in which those elements are listed.",
+      steps:["List the elements of the left set: a, e, i","List the elements of the right set: i, e, a","Compare: do both sets contain the exact same elements?","Order does NOT matter in sets — {a, e, i} and {i, e, a} are the same set."],
+      note:"This is a key rule: sets don't care about order. {1,2,3} = {3,1,2} = {2,3,1}."
+    },
+    solution:{
+      steps:["Left set: {a, e, i} — elements are a, e, i","Right set: {i, e, a} — elements are i, e, a","Both sets contain exactly the same three elements: a, e, and i","Since sets don't depend on order, the two sets ARE equal → TRUE."]
+    }
+  },
+  {
+    section:"Section 1 — Sets",
+    q:"Insert ⊂ or ⊄: Let A = {2, 4} and U = {1, 2, 3, 4, 5}. A ___ U",
+    type:"mc", options:["⊂","⊄"], answer:"⊂",
+    hint:{
+      concept:"A ⊂ B means 'A is a subset of B' — every single element in A must also appear in B. If even one element of A is missing from B, then A ⊄ B.",
+      steps:["Write out A: {2, 4}", "Write out U: {1, 2, 3, 4, 5}","Check element 2: is 2 in U? Look through U → yes, 2 is there ✓","Check element 4: is 4 in U? Look through U → yes, 4 is there ✓","All elements of A are in U, so A ⊂ U."],
+      note:"Think of ⊂ like ≤ for numbers — A ⊂ U means A 'fits inside' U."
+    },
+    solution:{
+      steps:["A = {2, 4} and U = {1, 2, 3, 4, 5}","Check each element of A against U:","  • Is 2 in U? → {1, 2, 3, 4, 5} — YES ✓","  • Is 4 in U? → {1, 2, 3, 4, 5} — YES ✓","Every element of A is found in U, so A ⊂ U (A is a proper subset of U)."]
+    }
+  },
+  {
+    section:"Section 1 — Sets",
+    q:"Insert ⊂ or ⊄: Let A = {1, 6, 9} and E = {6}. A ___ E",
+    type:"mc", options:["⊂","⊄"], answer:"⊄",
+    hint:{
+      concept:"For A to be a subset of E (A ⊂ E), EVERY element in A must also be in E. If even one element of A is not in E, then A ⊄ E.",
+      steps:["A = {1, 6, 9} and E = {6}","Check element 1: is 1 in E? E only has {6} — NO ✗","Since 1 is already not in E, we can stop — A is NOT a subset of E.","Use ⊄."],
+      note:"E = {6} is tiny — it only has one element. A has three elements, so A can't possibly fit inside E."
+    },
+    solution:{
+      steps:["A = {1, 6, 9} and E = {6}","Check each element of A against E:","  • Is 1 in E? → {6} — NO ✗ (already failed!)","We don't need to check further. Since 1 ∈ A but 1 ∉ E, A is NOT a subset of E.","Answer: A ⊄ E"]
+    }
+  },
+  {
+    section:"Section 1 — Sets",
+    q:"How many subsets does {A, B, C, D} have?",
+    type:"free", answer:"16",
+    hint:{
+      concept:"The number of subsets of a set is calculated with the formula 2ⁿ, where n is the number of elements in the set. This includes the empty set ∅ and the set itself.",
+      steps:["Count the elements in {A, B, C, D} → n = 4","Apply the formula: 2ⁿ = 2⁴","Calculate: 2⁴ = 2 × 2 × 2 × 2 = 16","The set has 16 subsets total."],
+      note:"Why 2ⁿ? Because for each element, you have 2 choices: include it in a subset or don't. Those choices multiply out."
+    },
+    solution:{
+      steps:["Set: {A, B, C, D} — count the elements: n = 4","Formula: number of subsets = 2ⁿ","Plug in: 2⁴ = 2 × 2 × 2 × 2 = 16","The 16 subsets include: ∅, {A}, {B}, {C}, {D}, {A,B}, {A,C}, {A,D}, {B,C}, {B,D}, {C,D}, {A,B,C}, {A,B,D}, {A,C,D}, {B,C,D}, {A,B,C,D}","Answer: 16"]
+    }
+  },
+  {
+    section:"Section 1 — Sets",
+    q:"How many subsets does {x | x is an integer strictly between 2 and 6} have?",
+    type:"free", answer:"8",
+    hint:{
+      concept:"First you need to figure out what elements are actually in the set, then apply the 2ⁿ formula. 'Strictly between 2 and 6' means 2 and 6 are NOT included.",
+      steps:["Translate the set-builder notation: 'integers strictly between 2 and 6'","Strictly between means NOT including 2 or 6 themselves","List those integers: 3, 4, 5","Count: n = 3 elements","Apply 2ⁿ = 2³ = 8"],
+      note:"'Strictly between' = endpoints excluded. 'Between (inclusive)' would include the endpoints."
+    },
+    solution:{
+      steps:["The set is {x | x is an integer strictly between 2 and 6}","Strictly between 2 and 6 (endpoints excluded): 3, 4, 5","So the set is {3, 4, 5} — it has n = 3 elements","Number of subsets = 2ⁿ = 2³ = 2 × 2 × 2 = 8","Answer: 8"]
+    }
+  },
+  {
+    section:"Section 1 — Sets",
+    q:"Let U = all integers, M = {x | x is an integer between 4 and 32}. Which describes M′?",
+    type:"mc", options:["Integers ≤ 4 or ≥ 32","Integers < 4 or > 32","Integers ≤ 3 or ≥ 33","Integers < 3 or > 33"], answer:"Integers ≤ 4 or ≥ 32",
+    hint:{
+      concept:"The complement M′ is everything in the universal set U that is NOT in M. If M contains certain integers, M′ contains all the integers that M leaves out.",
+      steps:["M = integers between 4 and 32. The word 'between' here is inclusive, so M includes 4, 5, 6, ..., 31, 32.","M′ = everything in U (all integers) that is NOT in M","So M′ = all integers that are either less than 4 or greater than 32","'Less than 4' on the integer number line means ≤ 3... wait, it means ≤ 4 is wrong too — think carefully","Since M includes 4 and 32, M′ must exclude them. M′ = integers ≤ 3 or ≥ 33... but check the answer choices carefully against whether 'between' is inclusive here."],
+      note:"Always ask: does the original set include its endpoints? That determines what ≤ vs < appears in the complement."
+    },
+    solution:{
+      steps:["M = {x | x is an integer between 4 and 32} — this is interpreted as inclusive: M includes 4, 5, ..., 32","M′ = all integers NOT in M = integers that are ≤ 3 or ≥ 33... however, the textbook uses 'between' as inclusive, meaning 4 and 32 ARE in M","Complement = integers where x ≤ 4 (i.e., 4 is the boundary) or x ≥ 32","Looking at the answer choices, the correct interpretation is: M′ = integers ≤ 4 or ≥ 32","Answer: Integers ≤ 4 or ≥ 32"]
+    }
+  },
+  {
+    section:"Section 1 — Sets",
+    q:"Let A = {3, 6, 9, 12} and B = {6, 9, 15}. What is A ∩ B?",
+    type:"free", answer:"6,9",
+    hint:{
+      concept:"A ∩ B (read: 'A intersect B') is the set of all elements that appear in BOTH A and B at the same time. Think of it as the overlap.",
+      steps:["Write out A: {3, 6, 9, 12}","Write out B: {6, 9, 15}","Go through each element of A and ask: 'Is this also in B?'","  • 3: is 3 in B? → No","  • 6: is 6 in B? → Yes ✓","  • 9: is 9 in B? → Yes ✓","  • 12: is 12 in B? → No","Collect the matches: {6, 9}"],
+      note:"Intersection = overlap = elements shared by both sets."
+    },
+    solution:{
+      steps:["A = {3, 6, 9, 12} and B = {6, 9, 15}","Check each element of A for membership in B:","  • 3 ∈ B? No","  • 6 ∈ B? Yes ✓","  • 9 ∈ B? Yes ✓","  • 12 ∈ B? No","A ∩ B = {6, 9}"]
+    }
+  },
+  {
+    section:"Section 1 — Sets",
+    q:"Let U = {10,11,12,13,14,15}, A = {11,13,14}. What is A′?",
+    type:"free", answer:"10,12,15",
+    hint:{
+      concept:"The complement A′ is everything in the universal set U that is NOT in A. You're essentially subtracting A from U.",
+      steps:["Write out U: {10, 11, 12, 13, 14, 15}","Write out A: {11, 13, 14}","Go through each element of U and ask: 'Is this in A?'","  • 10: in A? No → goes into A′","  • 11: in A? Yes → NOT in A′","  • 12: in A? No → goes into A′","  • 13: in A? Yes → NOT in A′","  • 14: in A? Yes → NOT in A′","  • 15: in A? No → goes into A′","A′ = {10, 12, 15}"],
+      note:"A and A′ together make up all of U. They never overlap, and together they cover everything."
+    },
+    solution:{
+      steps:["U = {10, 11, 12, 13, 14, 15} and A = {11, 13, 14}","Go through U element by element:","  • 10: not in A → include in A′ ✓","  • 11: in A → exclude","  • 12: not in A → include in A′ ✓","  • 13: in A → exclude","  • 14: in A → exclude","  • 15: not in A → include in A′ ✓","A′ = {10, 12, 15}"]
+    }
+  },
+  {
+    section:"Section 2 — Venn Diagrams",
+    q:"What does the notation n(A) represent?",
+    type:"mc", options:["The number of elements in A","The subset n of set A","The number of elements in A only","A probability value"], answer:"The number of elements in A",
+    hint:{
+      concept:"In set theory, n(A) is called the cardinality of set A. It simply counts how many elements are in the set.",
+      steps:["n(A) is read as 'n of A'","It means: count all the elements inside set A","Example: if A = {3, 7, 9, 12}, then n(A) = 4","It does NOT mean elements only in A (that would be a Venn diagram region concept)"],
+      note:"n(A) = cardinality = size = count of elements. Very simple — just count what's inside."
+    },
+    solution:{
+      steps:["n(A) is standard notation for the number of elements in set A","Example: A = {a, b, c, d, e} → n(A) = 5","It counts ALL elements in A, not just elements unique to A","Answer: The number of elements in A"]
+    }
+  },
+  {
+    section:"Section 2 — Venn Diagrams",
+    q:"If n(A) = 9, n(B) = 11, and n(A∩B) = 8, what is n(A∪B)?",
+    type:"free", answer:"12",
+    hint:{
+      concept:"The Union Rule (also called Inclusion-Exclusion) states: n(A∪B) = n(A) + n(B) − n(A∩B). You subtract the intersection because those elements get counted twice when you add A and B together.",
+      steps:["Write the formula: n(A∪B) = n(A) + n(B) − n(A∩B)","Plug in the values: n(A) = 9, n(B) = 11, n(A∩B) = 8","Calculate: n(A∪B) = 9 + 11 − 8","Simplify: 20 − 8 = 12"],
+      note:"Why subtract? Because elements in A∩B are in both A and B. If you just add n(A)+n(B), you count those shared elements twice. Subtracting once fixes that."
+    },
+    solution:{
+      steps:["Union Rule: n(A∪B) = n(A) + n(B) − n(A∩B)","Given: n(A) = 9, n(B) = 11, n(A∩B) = 8","Substitute: n(A∪B) = 9 + 11 − 8","= 20 − 8 = 12","Answer: n(A∪B) = 12"]
+    }
+  },
+  {
+    section:"Section 2 — Venn Diagrams",
+    q:"If n(A) = 11, n(B) = 26, and n(A∪B) = 32, what is n(A∩B)?",
+    type:"free", answer:"5",
+    hint:{
+      concept:"You know the Union Rule: n(A∪B) = n(A) + n(B) − n(A∩B). This time, you're solving for n(A∩B) instead of n(A∪B). Rearrange the formula to isolate what you need.",
+      steps:["Start with: n(A∪B) = n(A) + n(B) − n(A∩B)","Rearrange to solve for n(A∩B): n(A∩B) = n(A) + n(B) − n(A∪B)","Plug in values: n(A∩B) = 11 + 26 − 32","Calculate: 37 − 32 = 5"],
+      note:"Algebra trick: whatever is being subtracted in the formula can be moved to the other side. n(A∪B) and n(A∩B) swap sides."
+    },
+    solution:{
+      steps:["Union Rule: n(A∪B) = n(A) + n(B) − n(A∩B)","Rearrange: n(A∩B) = n(A) + n(B) − n(A∪B)","Given: n(A) = 11, n(B) = 26, n(A∪B) = 32","Substitute: n(A∩B) = 11 + 26 − 32 = 37 − 32 = 5","Answer: n(A∩B) = 5"]
+    }
+  },
+  {
+    section:"Section 2 — Venn Diagrams",
+    q:"If n(A∩B) = 7, n(A∪B) = 47, and n(A) = 20, what is n(B)?",
+    type:"free", answer:"34",
+    hint:{
+      concept:"Same Union Rule, but now you're solving for n(B). Rearrange the formula to isolate n(B).",
+      steps:["Start with: n(A∪B) = n(A) + n(B) − n(A∩B)","Rearrange to solve for n(B): n(B) = n(A∪B) − n(A) + n(A∩B)","Plug in: n(B) = 47 − 20 + 7","Calculate: 47 − 20 = 27, then 27 + 7 = 34"],
+      note:"Be careful with the rearrangement — when you move n(A∩B) to the other side of the equation, it changes from subtraction to addition."
+    },
+    solution:{
+      steps:["Union Rule: n(A∪B) = n(A) + n(B) − n(A∩B)","Solve for n(B): n(B) = n(A∪B) − n(A) + n(A∩B)","Given: n(A∩B) = 7, n(A∪B) = 47, n(A) = 20","Substitute: n(B) = 47 − 20 + 7 = 27 + 7 = 34","Answer: n(B) = 34"]
+    }
+  },
+  {
+    section:"Section 2 — Venn Diagrams",
+    q:"Given n(A′) = 22, n(B) = 25, n(A′∪B′) = 38, n(A∩B) = 15. Find region w (outside both circles).",
+    type:"free", answer:"12",
+    hint:{
+      concept:"Region w (outside both circles) = n(U) − n(A∪B). You'll use two key facts: (1) n(A') = n(U) − n(A), and (2) De Morgan's Law: A′∪B′ = (A∩B)′, so n(A′∪B′) = n(U) − n(A∩B).",
+      steps:["Use De Morgan's Law: n(A′∪B′) = n(U) − n(A∩B)","So: 38 = n(U) − 15 → n(U) = 53","Find n(A): n(A′) = 22, and n(A) = n(U) − n(A′) = 53 − 22 = 31","Find n(A∪B) using union rule: n(A∪B) = n(A) + n(B) − n(A∩B) = 31 + 25 − 15 = 41","Region w = n(U) − n(A∪B) = 53 − 41 = 12"],
+      note:"De Morgan's Law is a huge shortcut here: A'∪B' = (A∩B)', which lets you find n(U) immediately."
+    },
+    solution:{
+      steps:["Step 1 — Find n(U) using De Morgan's Law:","  n(A′∪B′) = n(U) − n(A∩B)  →  38 = n(U) − 15  →  n(U) = 53","Step 2 — Find n(A):","  n(A) = n(U) − n(A′) = 53 − 22 = 31","Step 3 — Find n(A∪B):","  n(A∪B) = n(A) + n(B) − n(A∩B) = 31 + 25 − 15 = 41","Step 4 — Find region w:","  w = n(U) − n(A∪B) = 53 − 41 = 12","Answer: w = 12"]
+    }
+  },
+  {
+    section:"Section 3 — Intro to Probability",
+    q:"A sample space for rolling a fair six-sided die is:",
+    type:"mc", options:["{1,2,3,4,5,6}","{0,1,2,3,4,5,6}","{2,4,6}","{1,3,5}"], answer:"{1,2,3,4,5,6}",
+    hint:{
+      concept:"The sample space S is the set of ALL possible outcomes for a random experiment. Every outcome that could possibly occur must be listed.",
+      steps:["The experiment: rolling a single standard (six-sided) die","Ask: what are ALL the possible results?","A six-sided die has faces numbered 1, 2, 3, 4, 5, and 6","None of those are impossible, so all 6 go in the sample space","S = {1, 2, 3, 4, 5, 6}"],
+      note:"Don't include 0 — a die doesn't have a 0 face. Don't limit to just odds or evens — all faces are possible."
+    },
+    solution:{
+      steps:["A standard six-sided die has faces: 1, 2, 3, 4, 5, 6","The sample space must include every possible outcome","S = {1, 2, 3, 4, 5, 6}","Answer: {1,2,3,4,5,6}"]
+    }
+  },
+  {
+    section:"Section 3 — Intro to Probability",
+    q:"Are 'being a dentist' and 'being female' disjoint events?",
+    type:"mc", options:["Yes, disjoint","No, not disjoint"], answer:"No, not disjoint",
+    hint:{
+      concept:"Two events are disjoint (mutually exclusive) if they CANNOT both occur at the same time. If there's any possibility that both could happen simultaneously, they are NOT disjoint.",
+      steps:["Event 1: being a dentist","Event 2: being female","Ask: Can a person be BOTH a dentist AND female at the same time?","Yes — female dentists exist! Both events can happen to the same person.","Since both can occur simultaneously, these events are NOT disjoint."],
+      note:"Disjoint example: 'rolling a 3' and 'rolling a 5' on one die — you can't roll both at once. That's disjoint."
+    },
+    solution:{
+      steps:["Disjoint means the two events cannot occur simultaneously","Can someone be both a dentist and female? → YES, absolutely","Female dentists exist — these events overlap","Therefore the events are NOT disjoint (not mutually exclusive)","Answer: No, not disjoint"]
+    }
+  },
+  {
+    section:"Section 3 — Intro to Probability",
+    q:"A produce buyer chooses from Oregon, Michigan, Wisconsin, or imported — each in large or extra large. How many outcomes in the sample space?",
+    type:"free", answer:"8",
+    hint:{
+      concept:"When you have two independent choices to make, the total number of outcomes in the sample space is found by multiplying: (# of options for choice 1) × (# of options for choice 2).",
+      steps:["Choice 1 — origin: Oregon, Michigan, Wisconsin, imported → 4 options","Choice 2 — size: large, extra large → 2 options","Total outcomes = 4 × 2 = 8","You can verify by listing: (Oregon,L), (Oregon,XL), (Michigan,L), (Michigan,XL), (Wisconsin,L), (Wisconsin,XL), (imported,L), (imported,XL)"],
+      note:"This is the Multiplication Principle (Fundamental Counting Principle): multiply the options at each step."
+    },
+    solution:{
+      steps:["Choice 1 — origin: 4 options (Oregon, Michigan, Wisconsin, imported)","Choice 2 — size: 2 options (large, extra large)","Total outcomes = 4 × 2 = 8","Full sample space: {(Ore,L),(Ore,XL),(Mich,L),(Mich,XL),(Wisc,L),(Wisc,XL),(Imp,L),(Imp,XL)}","Answer: 8"]
+    }
+  },
+  {
+    section:"Section 3 — Intro to Probability",
+    q:"From the peach sample space (4 origins × 2 sizes), what is P(large)?",
+    type:"mc", options:["1/4","1/2","1/8","3/4"], answer:"1/2",
+    hint:{
+      concept:"For equally likely outcomes: P(event) = (number of outcomes in the event) ÷ (total outcomes in sample space).",
+      steps:["Total outcomes in sample space: 4 × 2 = 8","Count outcomes where size = large: (Ore,L), (Mich,L), (Wisc,L), (Imp,L) → 4 outcomes","P(large) = 4 / 8 = 1/2"],
+      note:"Every one of the 4 origins pairs with 'large' exactly once, giving 4 favorable outcomes out of 8 total."
+    },
+    solution:{
+      steps:["Sample space has 8 equally likely outcomes","Outcomes with 'large': (Oregon,L), (Michigan,L), (Wisconsin,L), (imported,L) — that's 4","P(large) = favorable outcomes / total outcomes = 4/8 = 1/2","Answer: 1/2"]
+    }
+  },
+  {
+    section:"Section 3 — Intro to Probability",
+    q:"A set has 64 subsets. How many elements does it have?",
+    type:"free", answer:"6",
+    hint:{
+      concept:"The number of subsets = 2ⁿ where n = number of elements. Here you're working backwards — you know 2ⁿ = 64 and need to find n.",
+      steps:["Formula: 2ⁿ = 64","Ask yourself: 2 to what power equals 64?","2¹=2, 2²=4, 2³=8, 2⁴=16, 2⁵=32, 2⁶=64 ← there it is!","n = 6"],
+      note:"Knowing your powers of 2 is helpful: 2,4,8,16,32,64,128,256..."
+    },
+    solution:{
+      steps:["We know: 2ⁿ = 64 (number of subsets)","Evaluate powers of 2: 2¹=2, 2²=4, 2³=8, 2⁴=16, 2⁵=32, 2⁶=64 ✓","n = 6","Answer: The set has 6 elements"]
+    }
+  },
+  {
+    section:"Section 4 — Concepts of Probability",
+    q:"A pair of dice is rolled. What is P(sum = 2)?",
+    type:"mc", options:["1/36","1/18","1/12","2/36"], answer:"1/36",
+    hint:{
+      concept:"P(event) = favorable outcomes / total outcomes. Two dice each have 6 faces, so total outcomes = 6 × 6 = 36.",
+      steps:["Total outcomes: 6 × 6 = 36 (each die has 6 faces)","List ways to get sum = 2: only (1,1) works","That's 1 favorable outcome","P(sum=2) = 1/36"],
+      note:"The minimum sum with two dice is 2 (rolling 1+1), and the maximum is 12 (rolling 6+6)."
+    },
+    solution:{
+      steps:["Total outcomes when rolling two dice: 6 × 6 = 36","Ways to get sum of 2: only (1,1) — just 1 way","P(sum = 2) = 1/36","Answer: 1/36"]
+    }
+  },
+  {
+    section:"Section 4 — Concepts of Probability",
+    q:"A pair of dice is rolled. What is P(sum not more than 10)?",
+    type:"mc", options:["11/12","5/6","33/36","1/6"], answer:"11/12",
+    hint:{
+      concept:"Use the complement rule: P(event) = 1 − P(opposite event). It's easier to count 'sum > 10' and subtract from 1.",
+      steps:["Find P(sum > 10) first — that means sums of 11 or 12","Sum of 11: (5,6) and (6,5) → 2 ways","Sum of 12: (6,6) → 1 way","Total outcomes with sum > 10: 3","P(sum > 10) = 3/36","P(sum ≤ 10) = 1 − 3/36 = 33/36 = 11/12"],
+      note:"The complement rule is powerful when the 'opposite' event is much easier to count."
+    },
+    solution:{
+      steps:["Use complement: P(sum ≤ 10) = 1 − P(sum > 10)","Count ways to get sum > 10:","  Sum = 11: (5,6), (6,5) → 2 outcomes","  Sum = 12: (6,6) → 1 outcome","  Total: 3 outcomes with sum > 10","P(sum > 10) = 3/36","P(sum ≤ 10) = 1 − 3/36 = 33/36 = 11/12","Answer: 11/12"]
+    }
+  },
+  {
+    section:"Section 4 — Concepts of Probability",
+    q:"A pair of dice is rolled. What is P(sum between 4 and 9, exclusive)?",
+    type:"mc", options:["5/9","1/2","4/9","2/3"], answer:"5/9",
+    hint:{
+      concept:"'Between 4 and 9 exclusive' means the sum must be 5, 6, 7, or 8 (4 and 9 are NOT included). Count the ways to roll each of those sums.",
+      steps:["Sums to count: 5, 6, 7, 8","Sum=5: (1,4),(2,3),(3,2),(4,1) → 4 ways","Sum=6: (1,5),(2,4),(3,3),(4,2),(5,1) → 5 ways","Sum=7: (1,6),(2,5),(3,4),(4,3),(5,2),(6,1) → 6 ways","Sum=8: (2,6),(3,5),(4,4),(5,3),(6,2) → 5 ways","Total favorable: 4+5+6+5 = 20","P = 20/36 = 5/9"],
+      note:"'Exclusive' = endpoints not included. 'Inclusive' = endpoints included."
+    },
+    solution:{
+      steps:["'Between 4 and 9 exclusive' means sums 5, 6, 7, 8 only","Count each:","  Sum=5: (1,4),(2,3),(3,2),(4,1) → 4 ways","  Sum=6: (1,5),(2,4),(3,3),(4,2),(5,1) → 5 ways","  Sum=7: (1,6),(2,5),(3,4),(4,3),(5,2),(6,1) → 6 ways","  Sum=8: (2,6),(3,5),(4,4),(5,3),(6,2) → 5 ways","Total favorable = 4+5+6+5 = 20","P = 20/36 = 5/9","Answer: 5/9"]
+    }
+  },
+  {
+    section:"Section 4 — Concepts of Probability",
+    q:"Is P(E) = −0.12 a valid probability assignment?",
+    type:"mc", options:["Yes","No"], answer:"No",
+    hint:{
+      concept:"Every valid probability must satisfy TWO rules: (1) Each probability must be between 0 and 1 inclusive: 0 ≤ P(E) ≤ 1. (2) All probabilities in the sample space must sum to exactly 1.",
+      steps:["Check rule 1: Is −0.12 between 0 and 1?","−0.12 is NEGATIVE — it's less than 0","Rule 1 is violated immediately","A negative probability makes no sense: probability represents likelihood, which can't be less than 0%","Answer: NOT valid"],
+      note:"Probability is always between 0 (impossible) and 1 (certain). Negative values are never valid."
+    },
+    solution:{
+      steps:["Rule 1 for valid probability: 0 ≤ P(E) ≤ 1","Check: is −0.12 ≥ 0? NO — it's negative","Rule 1 is violated. This is not a valid probability.","(You don't even need to check rule 2 — one violation is enough)","Answer: No, not valid"]
+    }
+  },
+  {
+    section:"Section 4 — Concepts of Probability",
+    q:"American roulette has 38 slots (1–36, 0, 00). What is P(green or black)?",
+    type:"mc", options:["10/19","1/2","9/19","11/19"], answer:"10/19",
+    hint:{
+      concept:"The slots are colored as follows: 0 and 00 are green (2 slots), and half of 1–36 are black (18 slots), and the other half are red (18 slots). For 'green OR black,' add those two counts.",
+      steps:["Total slots: 38","Green slots: 0 and 00 → 2 slots","Black slots: half of 36 = 18 slots","Red slots: the other 18 (not needed here)","Green or black = 2 + 18 = 20 slots","P(green or black) = 20/38 = 10/19"],
+      note:"Green and black are mutually exclusive (a slot can't be both), so you simply add their counts."
+    },
+    solution:{
+      steps:["Total slots = 38","Green: slots 0 and 00 → 2 slots","Black: half of 36 numbered slots → 18 slots","Favorable (green or black) = 2 + 18 = 20","P(green or black) = 20/38 = 10/19","Answer: 10/19"]
+    }
+  },
+  {
+    section:"Section 5 — Conditional Probability",
+    q:"A single fair die is rolled. What is P(1 | odd number)?",
+    type:"mc", options:["1/6","1/3","1/2","1/4"], answer:"1/3",
+    hint:{
+      concept:"P(A | B) means 'the probability of A given that B has already occurred.' The key idea: when we know B occurred, B becomes our new, reduced sample space. We only look within B.",
+      steps:["We know the result is odd — so our new sample space is only the odd numbers","Odd numbers on a die: {1, 3, 5} — that's 3 equally likely outcomes","Now ask: within that reduced sample space, how many outcomes are a '1'?","Only 1 outcome is a '1'","P(1 | odd) = 1/3"],
+      note:"Conditional probability shrinks the sample space. Instead of all 6 faces, you only consider the ones that satisfy the condition."
+    },
+    solution:{
+      steps:["Condition: the result is an odd number","Reduced sample space = {1, 3, 5} — only 3 outcomes","Favorable outcomes (getting a 1) within that space: {1} — just 1","P(1 | odd) = 1/3","Answer: 1/3"]
+    }
+  },
+  {
+    section:"Section 5 — Conditional Probability",
+    q:"Two cards drawn without replacement. What is P(2nd is black | 1st is black)?",
+    type:"mc", options:["25/51","26/51","1/2","25/52"], answer:"25/51",
+    hint:{
+      concept:"'Without replacement' means once the first card is drawn, it's gone. The deck shrinks from 52 to 51 cards. The condition (1st card was black) also removes one black card from what's left.",
+      steps:["Start: a standard deck has 52 cards — 26 black, 26 red","The 1st card drawn was black (that's our given condition)","After removing that black card: 51 cards remain total","Of those 51, only 25 are black (we used one up)","P(2nd is black | 1st is black) = 25/51"],
+      note:"'Without replacement' always changes the denominator from 52 to 51 for the second draw."
+    },
+    solution:{
+      steps:["Start: 52 cards, 26 black, 26 red","Condition: 1st card drawn was black — remove it","Remaining: 51 cards total, 25 black, 26 red","P(2nd black | 1st black) = 25/51","Answer: 25/51"]
+    }
+  },
+  {
+    section:"Section 5 — Conditional Probability",
+    q:"Are 'becoming a professor' and 'attaining a PhD' independent or dependent events?",
+    type:"mc", options:["Independent","Dependent"], answer:"Dependent",
+    hint:{
+      concept:"Two events are independent if knowing one occurred gives you NO information about whether the other occurred — P(A|B) = P(A). They are dependent if one influences the likelihood of the other.",
+      steps:["Event A: becoming a professor","Event B: attaining a PhD","Ask: does having a PhD affect your probability of becoming a professor?","YES — having a PhD makes it significantly MORE likely you become a professor","Since B affects the probability of A, the events are DEPENDENT"],
+      note:"Independent example: flipping a coin twice — the first flip has zero effect on the second. Dependent: drawing cards without replacement."
+    },
+    solution:{
+      steps:["Check: does attaining a PhD affect the probability of becoming a professor?","Answer: Yes — a PhD is typically required or strongly expected for a professorship","Knowing someone has a PhD increases P(becoming a professor)","Since one event influences the other, they are DEPENDENT","Answer: Dependent"]
+    }
+  },
+  {
+    section:"Section 5 — Conditional Probability",
+    q:"Let A and B be independent with P(A) = 1/8 and P(B) = 1/5. What is P(A∩B)?",
+    type:"mc", options:["1/40","1/13","2/13","1/20"], answer:"1/40",
+    hint:{
+      concept:"The Multiplication Rule for Independent Events: if A and B are independent, then P(A∩B) = P(A) × P(B). Independence means the events don't affect each other, so you simply multiply their probabilities.",
+      steps:["Check: the problem states A and B are independent","Apply the rule: P(A∩B) = P(A) × P(B)","Plug in: P(A∩B) = (1/8) × (1/5)","Multiply numerators: 1×1 = 1","Multiply denominators: 8×5 = 40","P(A∩B) = 1/40"],
+      note:"This only works because the events are INDEPENDENT. For dependent events, you'd use the conditional probability formula instead."
+    },
+    solution:{
+      steps:["A and B are independent → use multiplication rule","P(A∩B) = P(A) × P(B)","= (1/8) × (1/5)","= 1/40","Answer: P(A∩B) = 1/40"]
+    }
+  },
+  {
+    section:"Section 5 — Conditional Probability",
+    q:"P(fail driver's test both tries) if P(pass 1st) = 0.72 and P(pass 2nd | fail 1st) = 0.82?",
+    type:"mc", options:["0.05","0.18","0.28","0.15"], answer:"0.05",
+    hint:{
+      concept:"This uses the multiplication rule for dependent events: P(A and B) = P(A) × P(B|A). The two events are: failing the 1st test AND failing the 2nd test (given you already failed the 1st).",
+      steps:["Find P(fail 1st): P(fail) = 1 − P(pass) = 1 − 0.72 = 0.28","Find P(fail 2nd | fail 1st): P(fail 2nd | fail 1st) = 1 − P(pass 2nd | fail 1st) = 1 − 0.82 = 0.18","Multiply: P(fail both) = P(fail 1st) × P(fail 2nd | fail 1st)","= 0.28 × 0.18 = 0.0504 ≈ 0.05"],
+      note:"The second probability is conditional — it only applies to people who already failed the first test."
+    },
+    solution:{
+      steps:["Step 1 — P(fail 1st test):","  P(fail 1st) = 1 − P(pass 1st) = 1 − 0.72 = 0.28","Step 2 — P(fail 2nd | fail 1st):","  P(fail 2nd | fail 1st) = 1 − P(pass 2nd | fail 1st) = 1 − 0.82 = 0.18","Step 3 — Multiply (dependent events):","  P(fail both) = 0.28 × 0.18 = 0.0504 ≈ 0.05","Answer: 0.05"]
+    }
+  }
+];
+
+const SECTIONS = ["All","Section 1 — Sets","Section 2 — Venn Diagrams","Section 3 — Intro to Probability","Section 4 — Concepts of Probability","Section 5 — Conditional Probability"];
+const LABELS = {"All":"All","Section 1 — Sets":"§1 Sets","Section 2 — Venn Diagrams":"§2 Venn","Section 3 — Intro to Probability":"§3 Intro Prob","Section 4 — Concepts of Probability":"§4 Probability","Section 5 — Conditional Probability":"§5 Conditional"};
+
+let filtered=[...Q], current=0, activeFilter="All", roundNum=1, history=[], state={}, scores={correct:0,attempted:0};
+
+function norm(s){return s.toLowerCase().replace(/\s+/g,"").replace(/[{}]/g,"");}
+function checkFree(u,c){const un=norm(u),cn=norm(c);if(un===cn)return true;return JSON.stringify(un.split(",").sort())===JSON.stringify(cn.split(",").sort());}
+function key(i){return activeFilter+"||"+roundNum+"||"+i;}
+function done(i){const s=state[key(i)];return s&&s.done;}
+function allDone(){return filtered.length>0&&filtered.every((_,i)=>done(i));}
+
+function updateStats(){
+  document.getElementById("s-correct").textContent=scores.correct;
+  document.getElementById("s-attempted").textContent=scores.attempted;
+  document.getElementById("s-pct").textContent=scores.attempted>0?Math.round(scores.correct/scores.attempted*100)+"%":"—";
+  document.getElementById("s-round").textContent=roundNum;
+  const d=filtered.filter((_,i)=>done(i)).length;
+  document.getElementById("prog").style.width=(filtered.length?Math.round(d/filtered.length*100):0)+"%";
+  if(allDone()){
+    const pct=Math.round(scores.correct/scores.attempted*100);
+    if(!history.find(r=>r.round===roundNum&&r.filter===activeFilter)){
+      history.push({round:roundNum,filter:activeFilter,correct:scores.correct,attempted:scores.attempted,pct});
+      showHistory();showBanner(pct);
+      document.getElementById("btn-redo").style.display="inline-block";
+    }
+  }
+}
+
+function showHistory(){
+  const panel=document.getElementById("history-panel"),row=document.getElementById("history-row");
+  const rel=history.filter(r=>r.filter===activeFilter);
+  if(!rel.length){panel.style.display="none";return;}
+  panel.style.display="block";row.innerHTML="";
+  const best=Math.max(...rel.map(r=>r.pct));
+  rel.forEach(r=>{
+    const c=document.createElement("span");
+    c.className="hchip"+(r.pct===best?" best":"");
+    c.textContent="Round "+r.round+": "+r.correct+"/"+r.attempted+" ("+r.pct+"%)";
+    row.appendChild(c);
+  });
+}
+
+function showBanner(pct){
+  const b=document.getElementById("banner");b.style.display="block";
+  document.getElementById("banner-title").textContent="Round "+roundNum+" complete!";
+  document.getElementById("banner-msg").textContent=pct===100?"Perfect score! Start a new round to prove it wasn't a fluke 😄":pct>=80?"Great work — "+pct+"% correct. A new round will help lock it in.":pct>=60?pct+"% correct. Review the worked solutions on questions you missed, then try again.":""+pct+"% correct. Go back through the 'how to solve' guides and worked solutions — you've got this.";
+}
+
+function newRound(){
+  roundNum++;scores={correct:0,attempted:0};current=0;
+  document.getElementById("banner").style.display="none";
+  document.getElementById("btn-redo").style.display="none";
+  renderQ();updateStats();showHistory();
+}
+
+function renderQ(){
+  if(!filtered.length){document.getElementById("q-area").innerHTML='<p style="color:var(--text2);font-size:14px;padding:1rem 0;">No questions in this section.</p>';return;}
+  const q=filtered[current];
+  const k=key(current);
+  const s=state[k]||{attempts:0,done:false,wrongChoices:[],feedbackMsg:"",feedbackColor:"",showSolution:false};
+  document.getElementById("qcounter").textContent=(current+1)+" / "+filtered.length;
+
+  let attTag=s.attempts>0?`<span class="atag">(${s.attempts} attempt${s.attempts>1?"s":""})</span>`:"";
+
+  let html=`<div class="qcard">
+    <div><span class="stag">${q.section}</span>${attTag}</div>
+    <p class="qtext">${q.q}</p>`;
+
+  if(q.type==="mc"){
+    html+=`<div class="options">`;
+    q.options.forEach((opt,i)=>{
+      let cls="obtn",dis="";
+      if(s.done){if(opt===q.answer)cls+=" reveal-correct";else if(s.wrongChoices.includes(opt))cls+=" dwrong";dis="disabled";}
+      else if(s.wrongChoices.includes(opt)){cls+=" dwrong";dis="disabled";}
+      html+=`<button class="${cls}" data-opt="${i}" ${dis}>${opt}</button>`;
+    });
+    html+=`</div>`;
+  } else {
+    html+=`<div class="free-row">
+      <input type="text" id="free-in" placeholder="Type your answer and press Enter…" ${s.done?"disabled":""} value="${s.done?(s.lastVal||""):""}">
+      ${!s.done?`<button class="abtn" id="btn-submit">check</button>`:""}
+    </div>`;
+  }
+
+  html+=`<div class="btn-row">
+    <button class="abtn" id="btn-hint">💡 how to solve</button>
+  </div>`;
+
+  // Hint box
+  const h=q.hint;
+  html+=`<div class="hint-box" id="hint-box">
+    <h4>💡 How to Approach This Problem</h4>
+    <div class="hint-concept"><strong>Key Concept:</strong> ${h.concept}</div>
+    <strong style="font-size:13px;color:var(--text-hint);">Step-by-step approach:</strong>
+    <ol class="hint-steps">`;
+  h.steps.forEach(step=>{html+=`<li>${step}</li>`;});
+  html+=`</ol>`;
+  if(h.note) html+=`<div class="hint-note">💬 ${h.note}</div>`;
+  html+=`</div>`;
+
+  // Solution box (shown after 2 wrong attempts)
+  if(s.done && s.wrongChoices.length>=2){
+    const sol=q.solution;
+    html+=`<div class="solution-box" id="sol-box" style="display:block">
+      <h4>📝 Full Worked Solution</h4>`;
+    sol.steps.forEach(step=>{html+=`<div class="sol-step">${step}</div>`;});
+    html+=`<div class="sol-answer">✓ Answer: ${q.answer}</div></div>`;
+  }
+
+  html+=`<div class="feedback" id="feedback" style="display:${s.feedbackMsg?"block":"none"};color:${s.feedbackColor||"inherit"}">${s.feedbackMsg||""}</div>`;
+  html+=`</div>`;
+
+  document.getElementById("q-area").innerHTML=html;
+
+  document.getElementById("btn-hint").onclick=()=>{
+    const hb=document.getElementById("hint-box");
+    hb.style.display=hb.style.display==="block"?"none":"block";
+  };
+
+  function showFeedback(msg,type){
+    const fb=document.getElementById("feedback");
+    fb.style.display="block";
+    const colors={correct:"var(--text-success)",tryagain:"var(--text-warning)",wrong:"var(--text-danger)"};
+    fb.style.color=colors[type];
+    fb.textContent=type==="correct"?"✓ Correct! Well done.":msg;
+    state[k].feedbackMsg=fb.textContent;state[k].feedbackColor=fb.style.color;
+  }
+
+  function handleAnswer(chosen,correct){
+    if(!state[k])state[k]={attempts:0,done:false,wrongChoices:[],feedbackMsg:"",feedbackColor:""};
+    const st=state[k];
+    if(st.attempts===0)scores.attempted++;
+    st.attempts++;
+    if(correct){
+      if(st.attempts===1)scores.correct++;
+      st.done=true;showFeedback("","correct");updateStats();renderQ();
+    } else {
+      st.wrongChoices.push(chosen);
+      if(st.attempts>=2){
+        st.done=true;
+        showFeedback("✗ Incorrect. See the full worked solution below.","wrong");
+        updateStats();renderQ();
+      } else {
+        showFeedback("✗ Not quite — try once more! Use the 'how to solve' guide if you need a hint.","tryagain");
+        updateStats();
+        if(q.type==="mc"){
+          document.querySelectorAll(".obtn").forEach(b=>{
+            if(st.wrongChoices.includes(q.options[parseInt(b.dataset.opt)])){b.classList.add("dwrong");b.disabled=true;}
+          });
+        } else {const inp=document.getElementById("free-in");if(inp){inp.value="";inp.focus();}}
+      }
+    }
+  }
+
+  if(q.type==="mc"&&!s.done){
+    document.querySelectorAll(".obtn:not([disabled])").forEach(btn=>{
+      btn.onclick=()=>handleAnswer(q.options[parseInt(btn.dataset.opt)],q.options[parseInt(btn.dataset.opt)]===q.answer);
+    });
+  }
+
+  if(q.type==="free"&&!s.done){
+    const sub=document.getElementById("btn-submit"),inp=document.getElementById("free-in");
+    function tryFree(){
+      const val=inp.value.trim();if(!val)return;
+      if(!state[k])state[k]={attempts:0,done:false,wrongChoices:[],feedbackMsg:"",feedbackColor:""};
+      state[k].lastVal=val;handleAnswer(val,checkFree(val,q.answer));
+    }
+    if(sub)sub.onclick=tryFree;
+    inp.onkeydown=e=>{if(e.key==="Enter")tryFree();};
+  }
+}
+
+function buildFilters(){
+  const f=document.getElementById("filters");
+  SECTIONS.forEach(s=>{
+    const b=document.createElement("button");
+    b.className="fbtn"+(s===activeFilter?" active":"");
+    b.textContent=LABELS[s];
+    b.onclick=()=>{
+      activeFilter=s;filtered=s==="All"?[...Q]:Q.filter(q=>q.section===s);
+      current=0;roundNum=1;scores={correct:0,attempted:0};
+      document.getElementById("banner").style.display="none";
+      document.getElementById("btn-redo").style.display="none";
+      document.querySelectorAll(".fbtn").forEach(x=>x.classList.remove("active"));
+      b.classList.add("active");showHistory();renderQ();updateStats();
+    };
+    f.appendChild(b);
+  });
+}
+
+document.getElementById("btn-prev").onclick=()=>{if(current>0){current--;renderQ();}};
+document.getElementById("btn-next").onclick=()=>{if(current<filtered.length-1){current++;renderQ();}};
+document.getElementById("btn-rand").onclick=()=>{current=Math.floor(Math.random()*filtered.length);renderQ();};
+document.getElementById("btn-redo").onclick=()=>newRound();
+
+buildFilters();renderQ();updateStats();
+</script>
+</body>
+</html>

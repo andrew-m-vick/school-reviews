@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math 1324 — Chapter 9 Review</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:#ffffff;--bg2:#f7f7f5;--bg3:#f0efe9;
+    --bg-success:#eaf3de;--bg-danger:#fcebeb;--bg-warning:#faeeda;--bg-info:#e6f1fb;--bg-hint:#f3f0ff;
+    --text:#1a1a1a;--text2:#6b6b6b;
+    --text-success:#3b6d11;--text-danger:#a32d2d;--text-warning:#854f0b;--text-info:#185fa5;--text-hint:#5b3fa6;
+    --border:rgba(0,0,0,0.12);--border2:rgba(0,0,0,0.2);
+    --border-success:#c0dd97;--border-danger:#f7c1c1;--border-warning:#fac775;--border-info:#b5d4f4;--border-hint:#c4b5fd;
+    --green:#1D9E75;--r:8px;--rl:12px;
+  }
+  @media (prefers-color-scheme:dark){:root{
+    --bg:#1e1e1c;--bg2:#2a2a28;--bg3:#252523;
+    --bg-success:#173404;--bg-danger:#501313;--bg-warning:#412402;--bg-info:#042c53;--bg-hint:#1e1040;
+    --text:#f0efe9;--text2:#a0a09a;
+    --text-success:#c0dd97;--text-danger:#f7c1c1;--text-warning:#fac775;--text-info:#b5d4f4;--text-hint:#c4b5fd;
+    --border:rgba(255,255,255,0.12);--border2:rgba(255,255,255,0.2);
+    --border-success:#3b6d11;--border-danger:#791f1f;--border-warning:#633806;--border-info:#0c447c;--border-hint:#5b3fa6;
+  }}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--bg3);color:var(--text);min-height:100vh;padding:2rem 1rem;}
+  #app{max-width:720px;margin:0 auto;background:var(--bg);border-radius:var(--rl);border:0.5px solid var(--border);padding:2rem;}
+  h1{font-size:22px;font-weight:600;margin-bottom:4px;}
+  .subtitle{font-size:14px;color:var(--text2);margin-bottom:1.5rem;}
+  .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.5rem;}
+  .fbtn{border:0.5px solid var(--border2);border-radius:999px;padding:5px 14px;font-size:12px;font-family:inherit;cursor:pointer;background:var(--bg);color:var(--text2);transition:all .15s;}
+  .fbtn:hover{background:var(--bg2);}
+  .fbtn.active{background:var(--bg-info);border-color:var(--border-info);color:var(--text-info);font-weight:500;}
+  .history-panel{margin-bottom:1.25rem;display:none;}
+  .history-label{font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;}
+  .history-row{display:flex;gap:8px;flex-wrap:wrap;}
+  .hchip{font-size:12px;padding:4px 12px;border-radius:999px;border:0.5px solid var(--border);background:var(--bg2);color:var(--text2);}
+  .hchip.best{border-color:var(--green);color:var(--green);font-weight:500;}
+  .score-row{display:flex;gap:10px;margin-bottom:1.25rem;}
+  .scard{flex:1;background:var(--bg2);border-radius:var(--r);padding:.75rem 1rem;}
+  .slabel{font-size:11px;color:var(--text2);margin-bottom:3px;}
+  .sval{font-size:22px;font-weight:600;}
+  .pbar-bg{height:4px;background:var(--bg2);border-radius:2px;margin-bottom:1.5rem;}
+  .pbar-fill{height:4px;background:var(--green);border-radius:2px;transition:width .4s;}
+  .banner{background:var(--bg-success);border:0.5px solid var(--border-success);border-radius:var(--rl);padding:1rem 1.25rem;margin-bottom:1.25rem;display:none;}
+  .banner h3{font-size:15px;font-weight:600;color:var(--text-success);margin-bottom:4px;}
+  .banner p{font-size:13px;color:var(--text-success);opacity:.9;}
+  .qcard{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:1.5rem;margin-bottom:1rem;}
+  .stag{font-size:11px;font-weight:500;color:var(--text-info);background:var(--bg-info);padding:3px 9px;border-radius:var(--r);display:inline-block;margin-bottom:.75rem;}
+  .atag{font-size:11px;color:var(--text2);margin-left:8px;}
+  .qtext{font-size:16px;font-weight:500;line-height:1.65;margin-bottom:1.25rem;}
+  .qtext code{font-family:'JetBrains Mono',monospace;font-size:13px;background:var(--bg2);padding:1px 5px;border-radius:4px;}
+  .options{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+  .obtn{background:var(--bg);border:0.5px solid var(--border2);border-radius:var(--r);padding:11px 16px;font-size:14px;font-family:inherit;color:var(--text);text-align:left;cursor:pointer;transition:all .15s;}
+  .obtn:hover:not(:disabled){background:var(--bg2);border-color:var(--green);}
+  .obtn.reveal-correct{background:var(--bg-success);border-color:var(--border-success);color:var(--text-success);font-weight:500;}
+  .obtn.dwrong{opacity:.35;cursor:not-allowed;text-decoration:line-through;}
+  .free-row{display:flex;gap:8px;margin-bottom:1rem;}
+  .free-row input{flex:1;font-size:14px;font-family:'JetBrains Mono',monospace;padding:10px 14px;border:0.5px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text);outline:none;transition:border-color .15s;}
+  .free-row input:focus{border-color:var(--green);}
+  .btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
+  .abtn{border:0.5px solid var(--border2);border-radius:var(--r);padding:8px 14px;font-size:13px;font-family:inherit;cursor:pointer;background:var(--bg);color:var(--text);transition:background .15s;}
+  .abtn:hover{background:var(--bg2);}
+  .abtn.redo{border-color:var(--green);color:var(--green);font-weight:500;}
+  .abtn.redo:hover{background:var(--bg-success);}
+  .hint-box{margin-top:1rem;background:var(--bg-hint);border:0.5px solid var(--border-hint);border-radius:var(--rl);padding:1.25rem;display:none;}
+  .hint-box h4{font-size:13px;font-weight:600;color:var(--text-hint);margin-bottom:.75rem;}
+  .hint-concept{font-size:13px;color:var(--text-hint);line-height:1.7;margin-bottom:.75rem;}
+  .hint-steps{list-style:none;padding:0;counter-reset:step;}
+  .hint-steps li{font-size:13px;color:var(--text-hint);line-height:1.75;padding:3px 0 3px 22px;position:relative;}
+  .hint-steps li::before{content:counter(step);counter-increment:step;position:absolute;left:0;font-weight:600;color:var(--text-hint);}
+  .hint-note{font-size:12px;color:var(--text-hint);opacity:.8;margin-top:.6rem;font-style:italic;}
+  .solution-box{margin-top:1rem;background:var(--bg-danger);border:0.5px solid var(--border-danger);border-radius:var(--rl);padding:1.25rem;display:none;}
+  .solution-box h4{font-size:13px;font-weight:600;color:var(--text-danger);margin-bottom:.75rem;}
+  .sol-step{font-size:13px;color:var(--text-danger);line-height:1.8;padding:2px 0;}
+  .sol-answer{margin-top:.75rem;font-size:14px;font-weight:600;color:var(--text-danger);background:rgba(255,255,255,.3);border-radius:var(--r);padding:8px 12px;}
+  .feedback{margin-top:.75rem;font-size:13px;font-weight:500;display:none;}
+  .nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:1rem;flex-wrap:wrap;gap:8px;}
+  .qcounter{font-size:13px;color:var(--text2);}
+  .nav-btns{display:flex;gap:8px;flex-wrap:wrap;}
+  @media(max-width:500px){#app{padding:1.25rem;}.sval{font-size:18px;}h1{font-size:18px;}}
+</style>
+</head>
+<body>
+<div id="app">
+  <h1>Math 1324 — Chapter 9 Review</h1>
+  <p class="subtitle">Probability Distributions · Counting · Binomial Probability — step-by-step guided practice</p>
+  <div class="filters" id="filters"></div>
+  <div class="history-panel" id="history-panel">
+    <div class="history-label">attempt history</div>
+    <div class="history-row" id="history-row"></div>
+  </div>
+  <div class="score-row">
+    <div class="scard"><div class="slabel">correct</div><div class="sval" id="s-correct">0</div></div>
+    <div class="scard"><div class="slabel">attempted</div><div class="sval" id="s-attempted">0</div></div>
+    <div class="scard"><div class="slabel">accuracy</div><div class="sval" id="s-pct">—</div></div>
+    <div class="scard"><div class="slabel">round</div><div class="sval" id="s-round">1</div></div>
+  </div>
+  <div class="pbar-bg"><div class="pbar-fill" id="prog" style="width:0%"></div></div>
+  <div class="banner" id="banner"><h3 id="banner-title"></h3><p id="banner-msg"></p></div>
+  <div id="q-area"></div>
+  <div class="nav-row">
+    <span class="qcounter" id="qcounter"></span>
+    <div class="nav-btns">
+      <button class="abtn" id="btn-prev">← prev</button>
+      <button class="abtn" id="btn-next">next →</button>
+      <button class="abtn" id="btn-rand">random</button>
+      <button class="abtn redo" id="btn-redo" style="display:none">↺ new round</button>
+    </div>
+  </div>
+</div>
+<script>
+const Q = [
+  {
+    section:"§9.1 — Probability Distributions",
+    q:"A family has 2 children. Using x = number of boys, what is P(x = 1)?",
+    type:"mc",options:["1/4","1/2","3/4","1"],answer:"1/2",
+    hint:{
+      concept:"To find a probability, first list ALL possible equally likely outcomes (the sample space), then count how many match the event you want.",
+      steps:["List all possible gender combinations for 2 children: GG, GB, BG, BB — that's 4 total equally likely outcomes","Count which outcomes have exactly 1 boy: GB and BG — that's 2 outcomes","P(x=1) = favorable outcomes / total outcomes = 2/4 = 1/2"],
+      note:"GB and BG are different outcomes because the first and second child are distinct people."
+    },
+    solution:{steps:["Sample space: {GG, GB, BG, BB} — 4 equally likely outcomes","Outcomes with exactly 1 boy: {GB, BG} — 2 outcomes","P(x = 1) = 2/4 = 1/2","Answer: 1/2"]}
+  },
+  {
+    section:"§9.1 — Probability Distributions",
+    q:"For a valid probability distribution, all P(x) values must sum to what?",
+    type:"mc",options:["0","0.5","1","100"],answer:"1",
+    hint:{
+      concept:"A probability distribution must satisfy two rules: (1) every individual probability must be ≥ 0, and (2) all the probabilities must add up to exactly 1 (because the total probability of all outcomes together is 100%).",
+      steps:["Rule 1: Each P(x) must satisfy 0 ≤ P(x) ≤ 1","Rule 2: The sum of all P(x) values must equal 1","This represents the fact that SOMETHING must happen — the total probability is always 1 (100%)"],
+      note:"Think of it like a pie: the slices might be different sizes, but they must fill the entire pie (sum = 1)."
+    },
+    solution:{steps:["A valid probability distribution requires that all probabilities sum to 1","This reflects the certainty that one of the outcomes will occur","Answer: 1"]}
+  },
+  {
+    section:"§9.1 — Probability Distributions",
+    q:"A distribution has P(x) values: 0.02, 0.05, 0.10, 0.22, 0.41, 0.15, 0.05. Is it valid?",
+    type:"mc",options:["Yes — all values ≥ 0 and sum = 1","No — probabilities do not sum to 1","No — a value is negative","No — too many values"],answer:"Yes — all values ≥ 0 and sum = 1",
+    hint:{
+      concept:"Check both validity rules: (1) Are all values non-negative? (2) Do all values add up to exactly 1?",
+      steps:["Check Rule 1: scan for any negative values — 0.02, 0.05, 0.10, 0.22, 0.41, 0.15, 0.05 — all are positive ✓","Check Rule 2: add them all up","0.02 + 0.05 = 0.07","0.07 + 0.10 = 0.17","0.17 + 0.22 = 0.39","0.39 + 0.41 = 0.80","0.80 + 0.15 = 0.95","0.95 + 0.05 = 1.00 ✓","Both rules pass — distribution is valid"],
+      note:"Always add carefully. It helps to add in stages rather than all at once."
+    },
+    solution:{steps:["Rule 1: All values (0.02, 0.05, 0.10, 0.22, 0.41, 0.15, 0.05) are ≥ 0 ✓","Rule 2: Sum = 0.02+0.05+0.10+0.22+0.41+0.15+0.05 = 1.00 ✓","Both rules satisfied → the distribution IS valid","Answer: Yes — all values ≥ 0 and sum = 1"]}
+  },
+  {
+    section:"§9.1 — Probability Distributions",
+    q:"A distribution has P(20) = −0.06. What is wrong?",
+    type:"mc",options:["Probabilities cannot be negative","Probabilities do not sum to 1","The random variable is not a function","Nothing is wrong"],answer:"Probabilities cannot be negative",
+    hint:{
+      concept:"Remember the two rules for valid probability distributions. A negative probability is immediately invalid — probability represents a likelihood (a proportion), and proportions can't be negative.",
+      steps:["Check Rule 1: Is −0.06 ≥ 0? NO — it is negative","A negative probability is impossible: probability means 'the chance of something happening,' which is always between 0% and 100% (0 and 1)","Rule 1 is violated immediately — no need to even check Rule 2"],
+      note:"Probability = 0 means impossible. Probability = 1 means certain. Anything below 0 makes no physical sense."
+    },
+    solution:{steps:["P(20) = −0.06 is a negative number","Rule 1 states: every P(x) must be ≥ 0","A negative probability is not possible — it has no meaning","Answer: Probabilities cannot be negative"]}
+  },
+  {
+    section:"§9.1 — Probability Distributions",
+    q:"Given x: 2, 3, 4, 5 with P(x): 0.2, 0.3, 0.4, 0.1 — what is E(x)?",
+    type:"free",answer:"3.4",
+    hint:{
+      concept:"Expected value E(x) is the long-run average outcome. Formula: E(x) = Σ[x · P(x)] — multiply each value by its probability, then add all products together.",
+      steps:["Multiply each x by its probability:","  x=2: 2 × 0.2 = 0.4","  x=3: 3 × 0.3 = 0.9","  x=4: 4 × 0.4 = 1.6","  x=5: 5 × 0.1 = 0.5","Add all products: 0.4 + 0.9 + 1.6 + 0.5 = 3.4"],
+      note:"E(x) doesn't have to be a value x can actually take. It's a weighted average — more likely outcomes pull the average toward them."
+    },
+    solution:{steps:["E(x) = Σ[x · P(x)]","= 2(0.2) + 3(0.3) + 4(0.4) + 5(0.1)","= 0.4 + 0.9 + 1.6 + 0.5","= 3.4","Answer: E(x) = 3.4"]}
+  },
+  {
+    section:"§9.1 — Probability Distributions",
+    q:"Given z: 9, 12, 15, 18, 21 with P(z): 0.11, 0.25, 0.42, 0.16, 0.06 — what is E(z)?",
+    type:"free",answer:"14.43",
+    hint:{
+      concept:"Same process: E(z) = Σ[z · P(z)]. Multiply each z-value by its probability, then sum all products.",
+      steps:["  z=9:  9 × 0.11 = 0.99","  z=12: 12 × 0.25 = 3.00","  z=15: 15 × 0.42 = 6.30","  z=18: 18 × 0.16 = 2.88","  z=21: 21 × 0.06 = 1.26","Sum: 0.99 + 3.00 + 6.30 + 2.88 + 1.26 = 14.43"],
+      note:"Double-check by verifying the probabilities sum to 1: 0.11+0.25+0.42+0.16+0.06 = 1.00 ✓"
+    },
+    solution:{steps:["E(z) = 9(0.11) + 12(0.25) + 15(0.42) + 18(0.16) + 21(0.06)","= 0.99 + 3.00 + 6.30 + 2.88 + 1.26","= 14.43","Answer: E(z) = 14.43"]}
+  },
+  {
+    section:"§9.1 — Probability Distributions",
+    q:"Fill in the missing probability: x = 4,8,12,16,20,24 with P(x) = 0.02,0.16,0.27,0.44,0.08,?",
+    type:"free",answer:"0.03",
+    hint:{
+      concept:"All probabilities in a distribution must sum to exactly 1. If one is missing, add the known ones and subtract from 1.",
+      steps:["Add up all known probabilities: 0.02 + 0.16 + 0.27 + 0.44 + 0.08","= 0.02 + 0.16 = 0.18","= 0.18 + 0.27 = 0.45","= 0.45 + 0.44 = 0.89","= 0.89 + 0.08 = 0.97","Missing P = 1 − 0.97 = 0.03"],
+      note:"This always works: missing P = 1 − (sum of known P values)"
+    },
+    solution:{steps:["Sum of known P(x): 0.02 + 0.16 + 0.27 + 0.44 + 0.08 = 0.97","Missing P(24) = 1 − 0.97 = 0.03","Answer: 0.03"]}
+  },
+  {
+    section:"§9.1 — Probability Distributions",
+    q:"Fill in the missing probability: x = 15,25,35,45 with P(x) = 0.11,?,0.18,0.31",
+    type:"free",answer:"0.40",
+    hint:{
+      concept:"Same approach: missing P = 1 − (sum of all known P values).",
+      steps:["Known probabilities: 0.11, 0.18, 0.31","Sum of known: 0.11 + 0.18 + 0.31 = 0.60","Missing P(25) = 1 − 0.60 = 0.40"],
+      note:"Always add the known values first, then subtract the total from 1."
+    },
+    solution:{steps:["Known values: 0.11 + 0.18 + 0.31 = 0.60","Missing P(25) = 1 − 0.60 = 0.40","Answer: 0.40"]}
+  },
+  {
+    section:"§9.1 — Probability Distributions",
+    q:"A female animal has 0 offspring (P=0.26), 1 (P=0.24), 2 (P=0.19), 3 (P=0.17), 4 (P=0.14). What is E(x)?",
+    type:"free",answer:"1.69",
+    hint:{
+      concept:"E(x) = Σ[x · P(x)]. Multiply each possible number of offspring by its probability, then add.",
+      steps:["  x=0: 0 × 0.26 = 0.00","  x=1: 1 × 0.24 = 0.24","  x=2: 2 × 0.19 = 0.38","  x=3: 3 × 0.17 = 0.51","  x=4: 4 × 0.14 = 0.56","Sum: 0 + 0.24 + 0.38 + 0.51 + 0.56 = 1.69"],
+      note:"Notice x=0 contributes nothing to the sum (0 × anything = 0). Always include it but expect it to drop out."
+    },
+    solution:{steps:["E(x) = 0(0.26) + 1(0.24) + 2(0.19) + 3(0.17) + 4(0.14)","= 0 + 0.24 + 0.38 + 0.51 + 0.56","= 1.69","Answer: E(x) = 1.69"]}
+  },
+  {
+    section:"§9.1 — Probability Distributions",
+    q:"A used-car dealer has complaints with P(x): 0.02,0.05,0.10,0.22,0.41,0.15,0.05 for x=0–6. What is E(x)?",
+    type:"free",answer:"3.6",
+    hint:{
+      concept:"E(x) = Σ[x · P(x)] for x = 0, 1, 2, 3, 4, 5, 6.",
+      steps:["  x=0: 0 × 0.02 = 0.00","  x=1: 1 × 0.05 = 0.05","  x=2: 2 × 0.10 = 0.20","  x=3: 3 × 0.22 = 0.66","  x=4: 4 × 0.41 = 1.64","  x=5: 5 × 0.15 = 0.75","  x=6: 6 × 0.05 = 0.30","Sum all products together"],
+      note:"Work methodically — compute each product separately, then add. Mistakes usually happen when rushing."
+    },
+    solution:{steps:["E(x) = 0(0.02)+1(0.05)+2(0.10)+3(0.22)+4(0.41)+5(0.15)+6(0.05)","= 0 + 0.05 + 0.20 + 0.66 + 1.64 + 0.75 + 0.30","= 3.60","Answer: E(x) = 3.6"]}
+  },
+  {
+    section:"§9.1 — Probability Distributions",
+    q:"Antibiotic A: P(cure)=0.55 at $59.30; P(no cure)=0.45 at $96.15. What is E(cost)?",
+    type:"free",answer:"75.88",
+    hint:{
+      concept:"Expected value works for dollar amounts too — multiply each cost by its probability, then add. This gives the long-run average cost per patient.",
+      steps:["Identify the outcomes and their probabilities:","  Cure (cost $59.30): P = 0.55","  No cure (cost $96.15): P = 0.45","E(cost) = 59.30(0.55) + 96.15(0.45)","= 32.615 + 43.2675","= 75.8825 ≈ 75.88"],
+      note:"Expected value in cost problems tells you the average cost you'd expect to pay per patient over many trials."
+    },
+    solution:{steps:["E(cost) = 59.30 × 0.55 + 96.15 × 0.45","= 32.615 + 43.2675","= 75.8825 ≈ 75.88","Answer: $75.88"]}
+  },
+  {
+    section:"§9.2 — Counting Principles",
+    q:"A car model comes in 7 colors, 5 exterior colors, 4 upholstery fabrics, and 9 interior colors. How many varieties?",
+    type:"free",answer:"1260",
+    hint:{
+      concept:"The Multiplication Principle (Fundamental Counting Principle): when making independent sequential choices, MULTIPLY the number of options at each step.",
+      steps:["Choice 1 — colors: 7 options","Choice 2 — exterior colors: 5 options","Choice 3 — upholstery fabrics: 4 options","Choice 4 — interior colors: 9 options","Total = 7 × 5 × 4 × 9"],
+      note:"This works because each choice is independent — choosing one option doesn't restrict your options for the next choice."
+    },
+    solution:{steps:["Total varieties = 7 × 5 × 4 × 9","= 35 × 36","= 1,260","Answer: 1,260"]}
+  },
+  {
+    section:"§9.2 — Counting Principles",
+    q:"A menu has 2 salads, 7 main dishes, 6 desserts. How many different meals (one of each)?",
+    type:"free",answer:"84",
+    hint:{
+      concept:"The Multiplication Principle: when choosing one item from each category independently, multiply the number of options in each category.",
+      steps:["Salad choices: 2","Main dish choices: 7","Dessert choices: 6","Total meals = 2 × 7 × 6"],
+      note:"Each combination of (salad, main, dessert) is a unique meal."
+    },
+    solution:{steps:["Total = 2 × 7 × 6 = 14 × 6 = 84","Answer: 84 different meals"]}
+  },
+  {
+    section:"§9.2 — Counting Principles",
+    q:"Evaluate 5!",
+    type:"free",answer:"120",
+    hint:{
+      concept:"n! (n factorial) means multiply n by every positive integer below it down to 1. It counts the number of ways to arrange n distinct items.",
+      steps:["5! = 5 × 4 × 3 × 2 × 1","= 20 × 3 × 2 × 1","= 60 × 2","= 120"],
+      note:"Memorize small factorials: 0!=1, 1!=1, 2!=2, 3!=6, 4!=24, 5!=120, 6!=720"
+    },
+    solution:{steps:["5! = 5 × 4 × 3 × 2 × 1 = 120","Answer: 120"]}
+  },
+  {
+    section:"§9.2 — Counting Principles",
+    q:"Evaluate ₉P₂",
+    type:"free",answer:"72",
+    hint:{
+      concept:"A permutation nPr counts the number of ways to choose r items from n and ARRANGE them in order. Formula: nPr = n!/(n−r)! — or more simply, start at n and multiply r consecutive descending numbers.",
+      steps:["₉P₂ means: choose 2 from 9, order matters","Shortcut: start at 9, multiply 2 consecutive numbers going down","9 × 8 = 72","Or formally: 9!/(9-2)! = 9!/7! = (9×8×7!)/(7!) = 9×8 = 72"],
+      note:"Key: PERMUTATION = order MATTERS. Different arrangements = different outcomes."
+    },
+    solution:{steps:["₉P₂ = 9!/(9-2)! = 9!/7! = 9 × 8 = 72","Answer: 72"]}
+  },
+  {
+    section:"§9.2 — Counting Principles",
+    q:"Evaluate ₇P₁",
+    type:"free",answer:"7",
+    hint:{
+      concept:"nP1 = n. When choosing just 1 item to 'arrange,' you simply have n choices — any of the n items can be that 1 selected item.",
+      steps:["₇P₁ = 7!/(7-1)! = 7!/6!","= (7 × 6!)/(6!) = 7","Or just think: 'pick 1 from 7 items in order' — there are 7 ways"],
+      note:"nP1 always equals n. nP0 always equals 1 (there's exactly one way to arrange nothing)."
+    },
+    solution:{steps:["₇P₁ = 7!/(7-1)! = 7!/6! = 7","Answer: 7"]}
+  },
+  {
+    section:"§9.2 — Counting Principles",
+    q:"Evaluate ₉C₃",
+    type:"free",answer:"84",
+    hint:{
+      concept:"A combination nCr counts the number of ways to choose r items from n when ORDER DOES NOT MATTER. Formula: nCr = n! / (r! × (n−r)!). You can also compute it as: (n × (n-1) × ... r terms) / r!",
+      steps:["₉C₃ = 9! / (3! × 6!)","Numerator (top r terms of n!): 9 × 8 × 7 = 504","Denominator: 3! = 3 × 2 × 1 = 6","₉C₃ = 504 / 6 = 84"],
+      note:"Key: COMBINATION = order does NOT matter. {A,B,C} and {C,B,A} count as the SAME group."
+    },
+    solution:{steps:["₉C₃ = 9!/(3! × 6!) = (9×8×7)/(3×2×1) = 504/6 = 84","Answer: 84"]}
+  },
+  {
+    section:"§9.2 — Counting Principles",
+    q:"Evaluate ₁₄C₄",
+    type:"free",answer:"1001",
+    hint:{
+      concept:"nCr = (top r terms of n, descending) / r!",
+      steps:["₁₄C₄: numerator = 14 × 13 × 12 × 11 (four terms, starting at 14)","= 182 × 132 = 24,024","Denominator: 4! = 4 × 3 × 2 × 1 = 24","₁₄C₄ = 24,024 / 24 = 1,001"],
+      note:"Always divide by r! to account for the fact that we're treating arrangements of the same group as identical."
+    },
+    solution:{steps:["₁₄C₄ = (14×13×12×11) / (4×3×2×1)","Numerator: 14×13=182, 182×12=2184, 2184×11=24,024","Denominator: 4! = 24","24,024 / 24 = 1,001","Answer: 1,001"]}
+  },
+  {
+    section:"§9.2 — Counting Principles",
+    q:"Evaluate ₁₇C₆",
+    type:"free",answer:"12376",
+    hint:{
+      concept:"nCr = (top r descending terms of n) / r!",
+      steps:["Numerator: 17 × 16 × 15 × 14 × 13 × 12","= 17×16=272, ×15=4080, ×14=57120, ×13=742560, ×12=8,910,720","Denominator: 6! = 720","₁₇C₆ = 8,910,720 / 720 = 12,376"],
+      note:"For large combinations, a calculator is your friend. The key is knowing WHEN to use the combination formula."
+    },
+    solution:{steps:["₁₇C₆ = (17×16×15×14×13×12) / 6!","Numerator = 8,910,720","Denominator = 6! = 720","8,910,720 / 720 = 12,376","Answer: 12,376"]}
+  },
+  {
+    section:"§9.2 — Counting Principles",
+    q:"Tim can listen to 3 of 14 songs. How many ordered ways can he listen?",
+    type:"free",answer:"2184",
+    hint:{
+      concept:"The key word here is 'ordered' — the order of listening matters (song A then B then C is different from B then A then C). Use a PERMUTATION.",
+      steps:["Order matters → use permutation: ₁₄P₃","₁₄P₃ = 14 × 13 × 12 (three descending numbers starting from 14)","= 182 × 12 = 2,184"],
+      note:"Ask yourself: 'Does a different order count as a different outcome?' If YES → permutation. If NO → combination."
+    },
+    solution:{steps:["Order matters → ₁₄P₃ = 14!/(14-3)! = 14!/11!","= 14 × 13 × 12 = 182 × 12 = 2,184","Answer: 2,184"]}
+  },
+  {
+    section:"§9.2 — Counting Principles",
+    q:"6 soda types, 4 are selected for 4 different people. How many ways?",
+    type:"free",answer:"360",
+    hint:{
+      concept:"Each person gets a DIFFERENT soda — and which person gets which soda matters (giving Coke to person 1 vs person 2 is different). Order matters → permutation.",
+      steps:["Order matters (different assignments to different people) → ₆P₄","₆P₄ = 6 × 5 × 4 × 3 = 360","Or: 6!/(6-4)! = 6!/2! = 720/2 = 360"],
+      note:"When items are being assigned to distinct people/positions, order typically matters → permutation."
+    },
+    solution:{steps:["Order matters → ₆P₄ = 6!/(6-4)! = 6!/2!","= 6 × 5 × 4 × 3 = 360","Answer: 360"]}
+  },
+  {
+    section:"§9.2 — Counting Principles",
+    q:"A club of 32 selects president, VP, treasurer, secretary. How many ways?",
+    type:"free",answer:"863040",
+    hint:{
+      concept:"Different offices (president, VP, etc.) mean the same set of people in different roles creates different outcomes. Order matters → permutation.",
+      steps:["4 different offices from 32 people → ₃₂P₄","₃₂P₄ = 32 × 31 × 30 × 29","= 992 × 30 × 29","= 29,760 × 29 = 863,040"],
+      note:"If it were just a committee of 4 (no defined roles), you'd use ₃₂C₄ instead."
+    },
+    solution:{steps:["Distinct offices → ₃₂P₄ = 32 × 31 × 30 × 29","= 32×31 = 992","= 992×30 = 29,760","= 29,760×29 = 863,040","Answer: 863,040"]}
+  },
+  {
+    section:"§9.2 — Counting Principles",
+    q:"A committee of 6 is chosen from 16 fraternity members. How many ways?",
+    type:"free",answer:"8008",
+    hint:{
+      concept:"A committee has no ranked positions — member A being on the committee with member B is the same as member B being on it with A. Order does NOT matter → combination.",
+      steps:["Order doesn't matter → ₁₆C₆","₁₆C₆ = (16×15×14×13×12×11) / 6!","Numerator: 16×15=240, ×14=3360, ×13=43680, ×12=524160, ×11=5,765,760","Denominator: 6! = 720","5,765,760 / 720 = 8,008"],
+      note:"Committee = combination. Ranked positions (president, VP...) = permutation."
+    },
+    solution:{steps:["₁₆C₆ = (16×15×14×13×12×11) / (6×5×4×3×2×1)","Numerator = 5,765,760","Denominator = 720","= 8,008","Answer: 8,008"]}
+  },
+  {
+    section:"§9.2 — Counting Principles",
+    q:"3 city commissioners chosen from 8 candidates. How many ways?",
+    type:"free",answer:"56",
+    hint:{
+      concept:"Commissioners are a group — no ranking. Order doesn't matter → combination.",
+      steps:["₈C₃ = (8 × 7 × 6) / (3 × 2 × 1)","Numerator: 8×7×6 = 336","Denominator: 6","336 / 6 = 56"],
+      note:"Quick check: ₈C₃ = ₈C₅ (choosing 3 from 8 equals choosing which 5 to leave out — same answer)."
+    },
+    solution:{steps:["₈C₃ = (8×7×6)/(3×2×1) = 336/6 = 56","Answer: 56"]}
+  },
+  {
+    section:"§9.2 — Counting Principles",
+    q:"Jeanine picks 4 of 18 different flowers. How many selections?",
+    type:"free",answer:"3060",
+    hint:{
+      concept:"Picking a bouquet — the same 4 flowers in different arrangements are still the same bouquet. Order doesn't matter → combination.",
+      steps:["₁₈C₄ = (18×17×16×15) / (4×3×2×1)","Numerator: 18×17=306, ×16=4896, ×15=73,440","Denominator: 4! = 24","73,440 / 24 = 3,060"],
+      note:"When selecting a GROUP where arrangement doesn't matter, always use combination."
+    },
+    solution:{steps:["₁₈C₄ = (18×17×16×15) / (4!)","= 73,440 / 24 = 3,060","Answer: 3,060"]}
+  },
+  {
+    section:"§9.2 — Counting Principles",
+    q:"Should you use a permutation or combination to count a committee? Why?",
+    type:"mc",options:["Permutation — order matters","Combination — order does not matter"],answer:"Combination — order does not matter",
+    hint:{
+      concept:"The key question for choosing between permutation and combination: 'Does a different arrangement or assignment of the same people/items create a different outcome?'",
+      steps:["For a committee: ask 'If we swap two members' positions, do we get a different committee?'","Answer: No — a committee is a committee regardless of who is listed first","Since re-ordering the same people creates the same committee, order does NOT matter","Order doesn't matter → use COMBINATION"],
+      note:"Permutation = ordered arrangement (elections, rankings, schedules). Combination = unordered group (committees, teams, selections)."
+    },
+    solution:{steps:["A committee is an unordered group — {Alice, Bob, Carol} = {Carol, Alice, Bob}","Swapping positions of members gives the SAME committee","Order does not matter → use a Combination","Answer: Combination — order does not matter"]}
+  },
+  {
+    section:"§9.3 — Probability with Counting",
+    q:"17 tiles, 7 defective, 4 sampled. How many total ways to choose 4 tiles?",
+    type:"free",answer:"2380",
+    hint:{
+      concept:"When sampling items from a group and order doesn't matter (you're just selecting a group of 4), use combinations.",
+      steps:["Total tiles: 17, selecting 4 → ₁₇C₄","₁₇C₄ = (17×16×15×14) / (4×3×2×1)","Numerator: 17×16=272, ×15=4080, ×14=57,120","Denominator: 4! = 24","57,120 / 24 = 2,380"],
+      note:"This gives the denominator for any probability question about this sampling scenario."
+    },
+    solution:{steps:["₁₇C₄ = (17×16×15×14) / (4!)","= 57,120 / 24 = 2,380","Answer: 2,380"]}
+  },
+  {
+    section:"§9.3 — Probability with Counting",
+    q:"17 tiles, 7 defective, 4 sampled. What is P(exactly 1 defective)?",
+    type:"mc",options:["0.3529","0.4286","0.2941","0.5000"],answer:"0.3529",
+    hint:{
+      concept:"P(event) = (favorable combinations) / (total combinations). For 'exactly 1 defective': choose 1 from the 7 defective tiles AND choose 3 from the 10 good tiles.",
+      steps:["Total ways to sample 4 from 17: ₁₇C₄ = 2,380 (denominator)","Ways to get exactly 1 defective:","  Choose 1 defective from 7: ₇C₁ = 7","  Choose 3 good from 10: ₁₀C₃ = 120","  Favorable = 7 × 120 = 840","P = 840 / 2,380 ≈ 0.3529"],
+      note:"Multiply the two combination counts because you're choosing FROM two separate groups simultaneously."
+    },
+    solution:{steps:["Denominator: ₁₇C₄ = 2,380","Numerator: ₇C₁ × ₁₀C₃ = 7 × 120 = 840","P(exactly 1 defective) = 840/2380 ≈ 0.3529","Answer: 0.3529"]}
+  },
+  {
+    section:"§9.3 — Probability with Counting",
+    q:"8 computers, 4 defective. Sample of 1. What is P(not defective)?",
+    type:"mc",options:["1/2","1/4","3/4","1/8"],answer:"1/2",
+    hint:{
+      concept:"With only 1 item sampled, this is straightforward: P(not defective) = (# good computers) / (total computers).",
+      steps:["Total computers: 8","Defective: 4, so good: 8 − 4 = 4","P(not defective) = 4/8 = 1/2"],
+      note:"When sampling just 1 item, no combinations needed — it's basic probability."
+    },
+    solution:{steps:["Good computers: 8 − 4 = 4","P(not defective) = 4/8 = 1/2","Answer: 1/2"]}
+  },
+  {
+    section:"§9.3 — Probability with Counting",
+    q:"11 computers, 2 defective. Sample of 2. What is P(no defective)?",
+    type:"mc",options:["36/55","9/11","45/55","25/55"],answer:"36/55",
+    hint:{
+      concept:"P(no defective) = (ways to choose 2 good) / (ways to choose any 2). Good computers = 11−2 = 9.",
+      steps:["Good computers: 11 − 2 = 9","Favorable: ₉C₂ = (9×8)/2 = 36","Total: ₁₁C₂ = (11×10)/2 = 55","P(no defective) = 36/55"],
+      note:"₉C₂ = 36 means there are 36 ways to pick 2 working computers from the 9 available."
+    },
+    solution:{steps:["Good computers: 11−2 = 9","₉C₂ = 36 (favorable ways)","₁₁C₂ = 55 (total ways)","P(no defective) = 36/55","Answer: 36/55"]}
+  },
+  {
+    section:"§9.3 — Probability with Counting",
+    q:"3 cards from a 52-card deck. What is P(all 3 are queens)?",
+    type:"mc",options:["0.000181","0.000453","0.00231","0.00077"],answer:"0.000181",
+    hint:{
+      concept:"P = (ways to choose 3 queens) / (ways to choose any 3 cards from 52). There are exactly 4 queens in a standard deck.",
+      steps:["Favorable: choose 3 queens from 4 → ₄C₃ = 4","Total: choose 3 from 52 → ₅₂C₃ = (52×51×50)/(3×2×1) = 22,100","P = 4/22,100 ≈ 0.000181"],
+      note:"₄C₃ = 4, not 3! (there are 4 ways to pick 3 queens from 4: leave out Q♠, or Q♥, or Q♦, or Q♣)"
+    },
+    solution:{steps:["₄C₃ = 4 (ways to pick 3 queens from 4)","₅₂C₃ = (52×51×50)/6 = 22,100","P = 4/22,100 ≈ 0.000181","Answer: 0.000181"]}
+  },
+  {
+    section:"§9.3 — Probability with Counting",
+    q:"3 cards from a 52-card deck. What is P(all 3 are diamonds)?",
+    type:"mc",options:["0.012941","0.025000","0.009615","0.019231"],answer:"0.012941",
+    hint:{
+      concept:"There are 13 diamonds in a standard 52-card deck. P = (ways to choose 3 diamonds) / (ways to choose any 3 cards).",
+      steps:["Favorable: ₁₃C₃ = (13×12×11)/(3×2×1) = 1716/6 = 286","Total: ₅₂C₃ = 22,100","P = 286/22,100 ≈ 0.012941"],
+      note:"Compare to the queens problem: 13 diamonds vs 4 queens — so P(3 diamonds) is much larger than P(3 queens)."
+    },
+    solution:{steps:["₁₃C₃ = (13×12×11)/6 = 1716/6 = 286","₅₂C₃ = 22,100","P = 286/22,100 ≈ 0.012941","Answer: 0.012941"]}
+  },
+  {
+    section:"§9.3 — Probability with Counting",
+    q:"Lottery: choose 5 from 1–14, order unimportant. What is P(winning)?",
+    type:"mc",options:["1/2002","1/240240","1/14","5/14"],answer:"1/2002",
+    hint:{
+      concept:"There is only 1 winning combination. The total number of possible combinations is ₁₄C₅. P(winning) = 1 / ₁₄C₅.",
+      steps:["Total possible selections: ₁₄C₅ = (14×13×12×11×10)/(5×4×3×2×1)","Numerator: 14×13=182, ×12=2184, ×11=24024, ×10=240,240","Denominator: 5! = 120","₁₄C₅ = 240,240/120 = 2,002","P(winning) = 1/2,002"],
+      note:"Lottery probabilities are extremely small — this illustrates how counting helps us quantify rare events."
+    },
+    solution:{steps:["₁₄C₅ = (14×13×12×11×10)/(5!) = 240,240/120 = 2,002","Only 1 winning combination exists","P(winning) = 1/2,002","Answer: 1/2002"]}
+  },
+  {
+    section:"§9.4 — Binomial Probability",
+    q:"Which formula gives the expected value of a binomial distribution?",
+    type:"mc",options:["E(x) = n/p","E(x) = np","E(x) = n + p","E(x) = p/n"],answer:"E(x) = np",
+    hint:{
+      concept:"A binomial distribution has n trials, each with probability of success p. The expected number of successes is simply n times p — intuitive shortcut instead of applying E(x) = Σ[x·P(x)].",
+      steps:["Recall: a binomial experiment has n fixed trials, each independently succeeding with probability p","E(x) = np is the formula — straightforward multiplication","Example: if you flip a fair coin 100 times (n=100, p=0.5), you expect 100×0.5 = 50 heads"],
+      note:"This formula ONLY works for binomial distributions. For general distributions, you still need E(x) = Σ[x·P(x)]."
+    },
+    solution:{steps:["For a binomial distribution: E(x) = n × p","This gives the expected (average) number of successes in n trials","Answer: E(x) = np"]}
+  },
+  {
+    section:"§9.4 — Binomial Probability",
+    q:"43% of females take on debt. n=9 selected. What is P(x=0)?",
+    type:"mc",options:["0.006","0.010","0.043","0.570"],answer:"0.006",
+    hint:{
+      concept:"Binomial formula: P(x=k) = C(n,k) × pᵏ × (1−p)ⁿ⁻ᵏ. For x=0: no successes, so pᵏ = p⁰ = 1, and (1-p)ⁿ = (1-p)ⁿ.",
+      steps:["P(x=0) = C(9,0) × (0.43)⁰ × (0.57)⁹","C(9,0) = 1 (only one way to choose zero items)","(0.43)⁰ = 1 (anything to the 0 power = 1)","(0.57)⁹ = ? → 0.57² ≈ 0.3249, 0.57⁴ ≈ 0.1056, 0.57⁸ ≈ 0.01115, 0.57⁹ ≈ 0.00636 ≈ 0.006","P(x=0) ≈ 0.006"],
+      note:"P(x=0) = (1-p)ⁿ always. This is because you need ALL n trials to be failures."
+    },
+    solution:{steps:["P(x=0) = C(9,0) × (0.43)⁰ × (0.57)⁹ = 1 × 1 × (0.57)⁹","(0.57)⁹ ≈ 0.00636 ≈ 0.006","Answer: 0.006"]}
+  },
+  {
+    section:"§9.4 — Binomial Probability",
+    q:"3% of children live with father only. n=15, find P(x=2).",
+    type:"mc",options:["0.064","0.119","0.033","0.200"],answer:"0.064",
+    hint:{
+      concept:"Binomial formula: P(x=k) = C(n,k) × pᵏ × (1−p)ⁿ⁻ᵏ. Here n=15, k=2, p=0.03, (1-p)=0.97.",
+      steps:["P(x=2) = C(15,2) × (0.03)² × (0.97)¹³","C(15,2) = (15×14)/2 = 105","(0.03)² = 0.0009","(0.97)¹³ ≈ 0.6474","P(x=2) = 105 × 0.0009 × 0.6474 ≈ 105 × 0.000583 ≈ 0.064"],
+      note:"Three parts to multiply: the combination (how many ways), pᵏ (probability of k successes), and (1-p)ⁿ⁻ᵏ (probability of the remaining failures)."
+    },
+    solution:{steps:["P(x=2) = C(15,2) × (0.03)² × (0.97)¹³","= 105 × 0.0009 × 0.6474","= 105 × 0.000583 ≈ 0.064","Answer: 0.064"]}
+  },
+  {
+    section:"§9.4 — Binomial Probability",
+    q:"7% of children live with father only. n=12. What is P(x=0)?",
+    type:"mc",options:["0.419","0.381","0.070","0.930"],answer:"0.419",
+    hint:{
+      concept:"P(x=0) = (1-p)ⁿ. All 12 children must NOT be in the 'father only' category.",
+      steps:["p = 0.07, n = 12","P(x=0) = (1-0.07)¹² = (0.93)¹²","(0.93)² = 0.8649","(0.93)⁴ ≈ 0.7481","(0.93)⁸ ≈ 0.5596","(0.93)¹² = (0.93)⁸ × (0.93)⁴ ≈ 0.5596 × 0.7481 ≈ 0.419"],
+      note:"For x=0 in binomial: always use (1-p)ⁿ. No combinations needed because C(n,0) = 1."
+    },
+    solution:{steps:["P(x=0) = C(12,0) × (0.07)⁰ × (0.93)¹² = (0.93)¹²","(0.93)¹² ≈ 0.419","Answer: 0.419"]}
+  },
+  {
+    section:"§9.4 — Binomial Probability",
+    q:"6% of children live with father only. n=12. What is P(at least 3)?",
+    type:"mc",options:["0.032","0.968","0.238","0.476"],answer:"0.032",
+    hint:{
+      concept:"'At least 3' means x ≥ 3. Use the complement: P(x≥3) = 1 − P(x≤2) = 1 − [P(0) + P(1) + P(2)]. This avoids computing many terms.",
+      steps:["p=0.06, n=12, q=0.94","P(0) = (0.94)¹² ≈ 0.4759","P(1) = C(12,1)(0.06)¹(0.94)¹¹ = 12 × 0.06 × 0.5063 ≈ 0.3645","P(2) = C(12,2)(0.06)²(0.94)¹⁰ = 66 × 0.0036 × 0.5386 ≈ 0.1280","P(x≤2) = 0.4759+0.3645+0.1280 = 0.9684","P(x≥3) = 1 − 0.9684 ≈ 0.032"],
+      note:"Complement rule for 'at least k': P(x≥k) = 1 − P(x≤k−1). This is almost always easier than summing many terms."
+    },
+    solution:{steps:["P(x≥3) = 1 − [P(0)+P(1)+P(2)]","P(0) = (0.94)¹² ≈ 0.4759","P(1) = 12(0.06)(0.94)¹¹ ≈ 0.3645","P(2) = 66(0.06)²(0.94)¹⁰ ≈ 0.1280","Sum = 0.9684","P(x≥3) = 1 − 0.9684 ≈ 0.032","Answer: 0.032"]}
+  },
+  {
+    section:"§9.4 — Binomial Probability",
+    q:"11.5% of population is 65+. n=25. What is P(at most 2 are 65+)?",
+    type:"mc",options:["0.439","0.561","0.153","0.847"],answer:"0.439",
+    hint:{
+      concept:"'At most 2' means x ≤ 2, so P(x≤2) = P(0) + P(1) + P(2). p=0.115, n=25.",
+      steps:["p=0.115, q=0.885, n=25","P(0) = (0.885)²⁵ ≈ 0.0508 ... actually use: (0.885)²⁵","P(1) = C(25,1)(0.115)¹(0.885)²⁴ = 25(0.115)(0.885)²⁴","P(2) = C(25,2)(0.115)²(0.885)²³ = 300(0.013225)(0.885)²³","Sum P(0)+P(1)+P(2) ≈ 0.439"],
+      note:"For 'at most k' you sum directly (no complement needed unless k is large)."
+    },
+    solution:{steps:["P(x≤2) = P(0) + P(1) + P(2) with p=0.115, n=25","P(0) ≈ 0.0508, P(1) ≈ 0.1653, P(2) ≈ 0.2228 [computed via binomial formula]","Sum ≈ 0.439","Answer: 0.439"]}
+  },
+  {
+    section:"§9.4 — Binomial Probability",
+    q:"26.6% of workforce has some college. n=220. What is E(x)?",
+    type:"free",answer:"58.52",
+    hint:{
+      concept:"For a binomial distribution, E(x) = n × p. This is a direct, quick calculation.",
+      steps:["n = 220, p = 0.266","E(x) = n × p = 220 × 0.266","= 58.52"],
+      note:"No need to compute the full distribution — just multiply n by p."
+    },
+    solution:{steps:["E(x) = n × p = 220 × 0.266 = 58.52","Answer: 58.52"]}
+  },
+  {
+    section:"§9.4 — Binomial Probability",
+    q:"70% of voters favor Ms. Stein. n=300. What is E(x)?",
+    type:"free",answer:"210",
+    hint:{
+      concept:"E(x) = n × p for a binomial distribution.",
+      steps:["n = 300, p = 0.70","E(x) = 300 × 0.70 = 210"],
+      note:"This means we'd expect about 210 of the 300 voters sampled to favor Ms. Stein."
+    },
+    solution:{steps:["E(x) = 300 × 0.70 = 210","Answer: 210"]}
+  },
+  {
+    section:"§9.4 — Binomial Probability",
+    q:"95% of dolphins are cured by antibiotic. n=40. How many are expected to be cured?",
+    type:"free",answer:"38",
+    hint:{
+      concept:"E(x) = n × p for a binomial distribution.",
+      steps:["n = 40, p = 0.95","E(x) = 40 × 0.95 = 38"],
+      note:"95% success rate with 40 trials → expect 38 successes on average."
+    },
+    solution:{steps:["E(x) = 40 × 0.95 = 38","Answer: 38"]}
+  },
+  {
+    section:"§9.4 — Binomial Probability",
+    q:"70% of very-low-birth-weight babies graduate by age 20. n=180. How many expected to graduate?",
+    type:"free",answer:"126",
+    hint:{
+      concept:"E(x) = n × p.",
+      steps:["n = 180, p = 0.70","E(x) = 180 × 0.70 = 126"],
+      note:"70% of 180 = 126 expected graduates."
+    },
+    solution:{steps:["E(x) = 180 × 0.70 = 126","Answer: 126"]}
+  },
+  {
+    section:"§9.4 — Binomial Probability",
+    q:"24% of state vehicles are pickup trucks. n=300. What is E(x)?",
+    type:"free",answer:"72",
+    hint:{
+      concept:"E(x) = n × p.",
+      steps:["n = 300, p = 0.24","E(x) = 300 × 0.24 = 72"],
+      note:"24% of 300 = 72 expected pickup trucks."
+    },
+    solution:{steps:["E(x) = 300 × 0.24 = 72","Answer: 72"]}
+  },
+  {
+    section:"§9.4 — Binomial Probability",
+    q:"For a binomial experiment, which of these is NOT a required condition?",
+    type:"mc",options:["Fixed number of trials","Each trial is independent","Outcomes are success or failure","Probability of success changes each trial"],answer:"Probability of success changes each trial",
+    hint:{
+      concept:"A binomial experiment has 4 strict requirements. Learn these — they're often tested directly.",
+      steps:["Required condition 1: FIXED number of trials (n is set in advance)","Required condition 2: Each trial is INDEPENDENT (outcome of one doesn't affect others)","Required condition 3: Each trial has exactly 2 outcomes: success or failure","Required condition 4: Probability of success p is CONSTANT (same for every trial)","The option 'probability changes each trial' VIOLATES condition 4 — so it's NOT a required condition, it's actually a violation"],
+      note:"If any of the 4 conditions fail, the binomial formula cannot be used."
+    },
+    solution:{steps:["The 4 binomial requirements are: fixed n, independent trials, binary outcomes, constant p","'Probability of success CHANGES each trial' violates the constant p requirement","This is NOT a condition — it's the opposite of what's required","Answer: Probability of success changes each trial"]}
+  }
+];
+
+const SECTIONS=["All","§9.1 — Probability Distributions","§9.2 — Counting Principles","§9.3 — Probability with Counting","§9.4 — Binomial Probability"];
+const LABELS={"All":"All","§9.1 — Probability Distributions":"§9.1 Distributions","§9.2 — Counting Principles":"§9.2 Counting","§9.3 — Probability with Counting":"§9.3 Prob+Counting","§9.4 — Binomial Probability":"§9.4 Binomial"};
+
+let filtered=[...Q],current=0,activeFilter="All",roundNum=1,history=[],state={},scores={correct:0,attempted:0};
+
+function norm(s){return s.toLowerCase().trim().replace(/,/g,"").replace(/\s/g,"");}
+function checkFree(u,c){
+  if(norm(u)===norm(c))return true;
+  const uN=parseFloat(u.replace(/,/g,"")),cN=parseFloat(c.replace(/,/g,""));
+  if(!isNaN(uN)&&!isNaN(cN))return Math.abs(uN-cN)<0.005;
+  return false;
+}
+function key(i){return activeFilter+"||"+roundNum+"||"+i;}
+function done(i){const s=state[key(i)];return s&&s.done;}
+function allDone(){return filtered.length>0&&filtered.every((_,i)=>done(i));}
+
+function updateStats(){
+  document.getElementById("s-correct").textContent=scores.correct;
+  document.getElementById("s-attempted").textContent=scores.attempted;
+  document.getElementById("s-pct").textContent=scores.attempted>0?Math.round(scores.correct/scores.attempted*100)+"%":"—";
+  document.getElementById("s-round").textContent=roundNum;
+  const d=filtered.filter((_,i)=>done(i)).length;
+  document.getElementById("prog").style.width=(filtered.length?Math.round(d/filtered.length*100):0)+"%";
+  if(allDone()){
+    const pct=Math.round(scores.correct/scores.attempted*100);
+    if(!history.find(r=>r.round===roundNum&&r.filter===activeFilter)){
+      history.push({round:roundNum,filter:activeFilter,correct:scores.correct,attempted:scores.attempted,pct});
+      showHistory();showBanner(pct);
+      document.getElementById("btn-redo").style.display="inline-block";
+    }
+  }
+}
+
+function showHistory(){
+  const panel=document.getElementById("history-panel"),row=document.getElementById("history-row");
+  const rel=history.filter(r=>r.filter===activeFilter);
+  if(!rel.length){panel.style.display="none";return;}
+  panel.style.display="block";row.innerHTML="";
+  const best=Math.max(...rel.map(r=>r.pct));
+  rel.forEach(r=>{
+    const c=document.createElement("span");
+    c.className="hchip"+(r.pct===best?" best":"");
+    c.textContent="Round "+r.round+": "+r.correct+"/"+r.attempted+" ("+r.pct+"%)";
+    row.appendChild(c);
+  });
+}
+
+function showBanner(pct){
+  document.getElementById("banner").style.display="block";
+  document.getElementById("banner-title").textContent="Round "+roundNum+" complete!";
+  document.getElementById("banner-msg").textContent=pct===100?"Perfect score! Try another round to cement it.":pct>=80?"Great work — "+pct+"%. Another round will lock it in.":pct>=60?pct+"% — review the worked solutions on missed questions, then retry.":pct+"% — go through the 'how to solve' guides carefully, then try again.";
+}
+
+function newRound(){
+  roundNum++;scores={correct:0,attempted:0};current=0;
+  document.getElementById("banner").style.display="none";
+  document.getElementById("btn-redo").style.display="none";
+  renderQ();updateStats();showHistory();
+}
+
+function renderQ(){
+  if(!filtered.length){document.getElementById("q-area").innerHTML='<p style="color:var(--text2);font-size:14px;padding:1rem 0;">No questions in this section.</p>';return;}
+  const q=filtered[current];
+  const k=key(current);
+  const s=state[k]||{attempts:0,done:false,wrongChoices:[],feedbackMsg:"",feedbackColor:""};
+  document.getElementById("qcounter").textContent=(current+1)+" / "+filtered.length;
+
+  let attTag=s.attempts>0?`<span class="atag">(${s.attempts} attempt${s.attempts>1?"s":""})</span>`:"";
+  let html=`<div class="qcard">
+    <div><span class="stag">${q.section}</span>${attTag}</div>
+    <p class="qtext">${q.q}</p>`;
+
+  if(q.type==="mc"){
+    html+=`<div class="options">`;
+    q.options.forEach((opt,i)=>{
+      let cls="obtn",dis="";
+      if(s.done){if(opt===q.answer)cls+=" reveal-correct";else if(s.wrongChoices.includes(opt))cls+=" dwrong";dis="disabled";}
+      else if(s.wrongChoices.includes(opt)){cls+=" dwrong";dis="disabled";}
+      html+=`<button class="${cls}" data-opt="${i}" ${dis}>${opt}</button>`;
+    });
+    html+=`</div>`;
+  } else {
+    html+=`<div class="free-row">
+      <input type="text" id="free-in" placeholder="Type your answer and press Enter…" ${s.done?"disabled":""} value="${s.done?(s.lastVal||""):""}">
+      ${!s.done?`<button class="abtn" id="btn-submit">check</button>`:""}
+    </div>`;
+  }
+
+  html+=`<div class="btn-row"><button class="abtn" id="btn-hint">💡 how to solve</button></div>`;
+
+  const h=q.hint;
+  html+=`<div class="hint-box" id="hint-box">
+    <h4>💡 How to Approach This Problem</h4>
+    <div class="hint-concept"><strong>Key Concept:</strong> ${h.concept}</div>
+    <strong style="font-size:13px;color:var(--text-hint);">Step-by-step approach:</strong>
+    <ol class="hint-steps">`;
+  h.steps.forEach(st=>{html+=`<li>${st}</li>`;});
+  html+=`</ol>`;
+  if(h.note)html+=`<div class="hint-note">💬 ${h.note}</div>`;
+  html+=`</div>`;
+
+  if(s.done&&s.wrongChoices.length>=2){
+    const sol=q.solution;
+    html+=`<div class="solution-box" style="display:block">
+      <h4>📝 Full Worked Solution</h4>`;
+    sol.steps.forEach(st=>{html+=`<div class="sol-step">${st}</div>`;});
+    html+=`<div class="sol-answer">✓ Answer: ${q.answer}</div></div>`;
+  }
+
+  html+=`<div class="feedback" id="feedback" style="display:${s.feedbackMsg?"block":"none"};color:${s.feedbackColor||"inherit"}">${s.feedbackMsg||""}</div>`;
+  html+=`</div>`;
+
+  document.getElementById("q-area").innerHTML=html;
+
+  document.getElementById("btn-hint").onclick=()=>{
+    const hb=document.getElementById("hint-box");
+    hb.style.display=hb.style.display==="block"?"none":"block";
+  };
+
+  function showFeedback(msg,type){
+    const fb=document.getElementById("feedback");
+    fb.style.display="block";
+    const colors={correct:"var(--text-success)",tryagain:"var(--text-warning)",wrong:"var(--text-danger)"};
+    fb.style.color=colors[type];
+    fb.textContent=type==="correct"?"✓ Correct! Well done.":msg;
+    state[k].feedbackMsg=fb.textContent;state[k].feedbackColor=fb.style.color;
+  }
+
+  function handleAnswer(chosen,correct){
+    if(!state[k])state[k]={attempts:0,done:false,wrongChoices:[],feedbackMsg:"",feedbackColor:""};
+    const st=state[k];
+    if(st.attempts===0)scores.attempted++;
+    st.attempts++;
+    if(correct){
+      if(st.attempts===1)scores.correct++;
+      st.done=true;showFeedback("","correct");updateStats();renderQ();
+    } else {
+      st.wrongChoices.push(chosen);
+      if(st.attempts>=2){
+        st.done=true;
+        showFeedback("✗ Incorrect. See the full worked solution below.","wrong");
+        updateStats();renderQ();
+      } else {
+        showFeedback("✗ Not quite — try once more! Use 'how to solve' for a hint.","tryagain");
+        updateStats();
+        if(q.type==="mc"){
+          document.querySelectorAll(".obtn").forEach(b=>{
+            if(st.wrongChoices.includes(q.options[parseInt(b.dataset.opt)])){b.classList.add("dwrong");b.disabled=true;}
+          });
+        } else {const inp=document.getElementById("free-in");if(inp){inp.value="";inp.focus();}}
+      }
+    }
+  }
+
+  if(q.type==="mc"&&!s.done){
+    document.querySelectorAll(".obtn:not([disabled])").forEach(btn=>{
+      btn.onclick=()=>handleAnswer(q.options[parseInt(btn.dataset.opt)],q.options[parseInt(btn.dataset.opt)]===q.answer);
+    });
+  }
+
+  if(q.type==="free"&&!s.done){
+    const sub=document.getElementById("btn-submit"),inp=document.getElementById("free-in");
+    function tryFree(){
+      const val=inp.value.trim();if(!val)return;
+      if(!state[k])state[k]={attempts:0,done:false,wrongChoices:[],feedbackMsg:"",feedbackColor:""};
+      state[k].lastVal=val;handleAnswer(val,checkFree(val,q.answer));
+    }
+    if(sub)sub.onclick=tryFree;
+    inp.onkeydown=e=>{if(e.key==="Enter")tryFree();};
+  }
+}
+
+function buildFilters(){
+  const f=document.getElementById("filters");
+  SECTIONS.forEach(s=>{
+    const b=document.createElement("button");
+    b.className="fbtn"+(s===activeFilter?" active":"");
+    b.textContent=LABELS[s];
+    b.onclick=()=>{
+      activeFilter=s;filtered=s==="All"?[...Q]:Q.filter(q=>q.section===s);
+      current=0;roundNum=1;scores={correct:0,attempted:0};
+      document.getElementById("banner").style.display="none";
+      document.getElementById("btn-redo").style.display="none";
+      document.querySelectorAll(".fbtn").forEach(x=>x.classList.remove("active"));
+      b.classList.add("active");showHistory();renderQ();updateStats();
+    };
+    f.appendChild(b);
+  });
+}
+
+document.getElementById("btn-prev").onclick=()=>{if(current>0){current--;renderQ();}};
+document.getElementById("btn-next").onclick=()=>{if(current<filtered.length-1){current++;renderQ();}};
+document.getElementById("btn-rand").onclick=()=>{current=Math.floor(Math.random()*filtered.length);renderQ();};
+document.getElementById("btn-redo").onclick=()=>newRound();
+
+buildFilters();renderQ();updateStats();
+</script>
+</body>
+</html>
