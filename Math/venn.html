@@ -95,17 +95,6 @@
 const Q = [
   {
     tag:"Venn Diagrams",
-    q:"What does the notation n(A) represent?",
-    type:"mc", options:["The number of elements in A","The subset n of set A","Elements only in A but not B","A probability value"], answer:"The number of elements in A",
-    hint:{
-      concept:"n(A) is called the cardinality of set A — it's simply a count.",
-      steps:["n(A) is read as 'n of A'","It means: count all elements inside set A","Example: if A = {3, 7, 9, 12}, what would n(A) equal?","Pick the answer that describes this."],
-      note:"n(A) counts ALL elements in A, not just the ones unique to A."
-    },
-    solution:{steps:["n(A) = the number of elements in set A","Example: A = {a, b, c, d, e} → n(A) = 5","Answer: The number of elements in A"], answer:"The number of elements in A"}
-  },
-  {
-    tag:"Venn Diagrams",
     q:"If n(A) = 9, n(B) = 11, and n(A∩B) = 8, what is n(A∪B)?",
     type:"free", answer:"12",
     hint:{
@@ -125,28 +114,6 @@ const Q = [
       note:"Algebra: move n(A∩B) and n(A∪B) to opposite sides — they swap roles."
     },
     solution:{steps:["n(A∩B) = 11 + 26 − 32","= 37 − 32 = 5"], answer:"5"}
-  },
-  {
-    tag:"Venn Diagrams",
-    q:"If n(A∩B) = 7, n(A∪B) = 47, and n(A) = 20, what is n(B)?",
-    type:"free", answer:"34",
-    hint:{
-      concept:"Rearrange the Union Rule to solve for n(B): n(B) = n(A∪B) − n(A) + n(A∩B).",
-      steps:["Start with: n(A∪B) = n(A) + n(B) − n(A∩B)","Rearrange to isolate n(B)","Plug in: n(A∩B) = 7, n(A∪B) = 47, n(A) = 20 and calculate."],
-      note:"When n(A∩B) moves to the other side of the equation, subtraction becomes addition."
-    },
-    solution:{steps:["n(B) = n(A∪B) − n(A) + n(A∩B)","= 47 − 20 + 7","= 27 + 7 = 34"], answer:"34"}
-  },
-  {
-    tag:"Venn Diagrams",
-    q:"Given n(A′) = 22, n(B) = 25, n(A′∪B′) = 38, n(A∩B) = 15. Find region w (outside both circles).",
-    type:"free", answer:"12",
-    hint:{
-      concept:"Region w = n(U) − n(A∪B). Use De Morgan's Law: n(A′∪B′) = n(U) − n(A∩B) to find n(U) first.",
-      steps:["Step 1 — Find n(U): use n(A′∪B′) = n(U) − n(A∩B) → 38 = n(U) − 15 → solve for n(U)","Step 2 — Find n(A): n(A) = n(U) − n(A′)","Step 3 — Find n(A∪B): apply the Union Rule with n(A), n(B) = 25, n(A∩B) = 15","Step 4 — Region w = n(U) − n(A∪B). Calculate."],
-      note:"De Morgan's Law is the key shortcut: A′∪B′ = (A∩B)′"
-    },
-    solution:{steps:["n(U) = 38 + 15 = 53","n(A) = 53 − 22 = 31","n(A∪B) = 31 + 25 − 15 = 41","w = 53 − 41 = 12"], answer:"12"}
   }
 ];
 

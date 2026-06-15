@@ -180,6 +180,72 @@ const Q = [
       note:"A and A′ together make up all of U with no overlap."
     },
     solution:{steps:["U = {10,11,12,13,14,15}, A = {11,13,14}","• 10: not in A → include ✓","• 11: in A → skip","• 12: not in A → include ✓","• 13: in A → skip","• 14: in A → skip","• 15: not in A → include ✓","A′ = {10, 12, 15}"], answer:"10, 12, 15"}
+  },
+  {
+    tag:"Sets",
+    q:"Let U={q,r,s,t,u,v,w,x,y,z}, A={q,s,u,w,y}, B={q,s,y,z}, C={v,w,x,y,z}. Find A′.",
+    type:"mc", options:["{r,t,v,x,z}","{q,s,u,w,y}","{r,t,u,v,x}","{q,r,s,t,z}"],
+    answer:"{r,t,v,x,z}",
+    hint:{
+      concept:"A′ (complement of A) = everything in U that is NOT in A.",
+      steps:[
+        "List U: {q,r,s,t,u,v,w,x,y,z}",
+        "List A: {q,s,u,w,y}",
+        "Go through each element of U and ask: 'Is this in A?'",
+        "Collect the ones NOT in A — those form A′."
+      ],
+      note:"A and A′ together make up all of U with no overlap."
+    },
+    solution:{steps:[
+      "U = {q,r,s,t,u,v,w,x,y,z}, A = {q,s,u,w,y}",
+      "• q: in A → skip | r: not in A → include",
+      "• s: in A → skip | t: not in A → include",
+      "• u: in A → skip | v: not in A → include",
+      "• w: in A → skip | x: not in A → include",
+      "• y: in A → skip | z: not in A → include",
+      "A′ = {r,t,v,x,z}"
+    ]}
+  },
+  {
+    tag:"Sets",
+    q:"Let U={q,r,s,t,u,v,w,x,y,z}, A={q,s,u,w,y}, B={q,s,y,z}, C={v,w,x,y,z}. Find (A∪B)′.",
+    type:"mc", options:["{r,t,v,x}","{r,t,u,v,x,z}","{q,s,u,w,y,z}","{r,t}"],
+    answer:"{r,t,v,x}",
+    hint:{
+      concept:"(A∪B)′ = everything in U NOT in A∪B. Find the union first, then take its complement.",
+      steps:[
+        "Step 1 — Find A∪B: combine all elements from A and B (no duplicates)",
+        "A={q,s,u,w,y}, B={q,s,y,z} → A∪B = ?",
+        "Step 2 — Find (A∪B)′: go through U and include only what is NOT in A∪B."
+      ],
+      note:"De Morgan's Law shortcut: (A∪B)′ = A′∩B′. Both methods give the same answer."
+    },
+    solution:{steps:[
+      "A∪B = {q,s,u,w,y} ∪ {q,s,y,z} = {q,s,u,w,y,z}",
+      "U = {q,r,s,t,u,v,w,x,y,z}",
+      "Elements of U NOT in A∪B: r, t, v, x",
+      "(A∪B)′ = {r,t,v,x}"
+    ]}
+  },
+  {
+    tag:"Sets",
+    q:"Let U={q,r,s,t,u,v,w,x,y,z}, A={q,s,u,w,y}, B={q,s,y,z}, C={v,w,x,y,z}. Find A∪(B∩C).",
+    type:"mc", options:["{q,s,u,w,y,z}","{q,s,u,v,w,x,y,z}","{y,z}","{q,s,u,w,x,y,z}"],
+    answer:"{q,s,u,w,y,z}",
+    hint:{
+      concept:"Work inside the parentheses first: find B∩C, then take the union with A.",
+      steps:[
+        "Step 1 — Find B∩C: elements in BOTH B and C",
+        "B={q,s,y,z}, C={v,w,x,y,z} → what do they share?",
+        "Step 2 — Find A∪(B∩C): combine A with the result from Step 1."
+      ],
+      note:"Always handle parentheses first, just like in arithmetic."
+    },
+    solution:{steps:[
+      "B∩C: B={q,s,y,z}, C={v,w,x,y,z} → shared elements: {y,z}",
+      "A∪{y,z}: A={q,s,u,w,y} ∪ {y,z} = {q,s,u,w,y,z}",
+      "A∪(B∩C) = {q,s,u,w,y,z}"
+    ]}
   }
 ];
 

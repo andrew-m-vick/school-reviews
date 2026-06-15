@@ -147,6 +147,87 @@ const Q = [
       note:"The second probability is conditional — it only applies to people who already failed the first test."
     },
     solution:{steps:["P(fail 1st) = 1 − 0.72 = 0.28","P(fail 2nd | fail 1st) = 1 − 0.82 = 0.18","P(fail both) = 0.28 × 0.18 = 0.0504 ≈ 0.05"], answer:"0.05"}
+  },
+  {
+    tag:"Conditional Probability",
+    q:"Two marbles are drawn without replacement from a box with 1 blue, 3 white, 2 green, and 2 red marbles. What is P(2nd is red | 1st is white)?",
+    type:"mc", options:["2/7","1/4","3/32","3/28"],
+    answer:"2/7",
+    hint:{
+      concept:"Conditional probability: the given condition changes your sample space. After drawing 1 white marble, the box is smaller.",
+      steps:[
+        "Total marbles: 1+3+2+2 = 8",
+        "Given: 1st marble was white — remove it from the box",
+        "Remaining: how many total? How many red?",
+        "P(2nd red | 1st white) = remaining red / remaining total"
+      ],
+      note:"The white marble is gone, but the number of red marbles hasn't changed."
+    },
+    solution:{steps:[
+      "After removing 1 white: 7 marbles remain, 2 still red",
+      "P(2nd red | 1st white) = 2/7"
+    ]}
+  },
+  {
+    tag:"Conditional Probability",
+    q:"Two marbles drawn without replacement from the same box (1 blue, 3 white, 2 green, 2 red). What is P(both are red)?",
+    type:"mc", options:["1/28","3/32","1/4","3/56"],
+    answer:"1/28",
+    hint:{
+      concept:"P(both red) = P(1st red) × P(2nd red | 1st red). Multiply using the conditional rule.",
+      steps:[
+        "P(1st red) = 2/8 (2 red out of 8 total)",
+        "P(2nd red | 1st red): after removing 1 red, how many red remain? How many total?",
+        "Multiply the two fractions together."
+      ],
+      note:"Without replacement: each draw changes what's left in the box."
+    },
+    solution:{steps:[
+      "P(1st red) = 2/8 = 1/4",
+      "P(2nd red | 1st red) = 1/7 (1 red left out of 7)",
+      "P(both red) = (1/4)(1/7) = 1/28"
+    ]}
+  },
+  {
+    tag:"Conditional Probability",
+    q:"Two cards are drawn WITH replacement from a deck. What is P(1st is a heart AND 2nd is a diamond)?",
+    type:"mc", options:["1/16","13/204","1/169","13/102"],
+    answer:"1/16",
+    hint:{
+      concept:"With replacement means the deck is reset between draws — the events are independent. Use P(A and B) = P(A) × P(B).",
+      steps:[
+        "P(1st is heart) = 13/52 — simplify this fraction",
+        "Since it's WITH replacement, the deck is full again for the 2nd draw",
+        "P(2nd is diamond) = 13/52 — simplify",
+        "Multiply the two simplified fractions."
+      ],
+      note:"WITH replacement → independent events → just multiply probabilities."
+    },
+    solution:{steps:[
+      "P(heart) = 13/52 = 1/4",
+      "P(diamond) = 13/52 = 1/4",
+      "P(heart then diamond) = (1/4)(1/4) = 1/16"
+    ]}
+  },
+  {
+    tag:"Conditional Probability",
+    q:"A family has 5 children. P(girl) = 1/2. What is P(having 2 girls followed by 3 boys, in that exact order)?",
+    type:"mc", options:["0.0313","0.3125","0.6252","0.1875"],
+    answer:"0.0313",
+    hint:{
+      concept:"This asks for a specific SEQUENCE — girl, girl, boy, boy, boy — in that exact order. Each birth is independent with P(girl)=1/2 and P(boy)=1/2.",
+      steps:[
+        "The sequence is: G, G, B, B, B",
+        "Each event is independent with probability 1/2",
+        "P(G,G,B,B,B) = (1/2) × (1/2) × (1/2) × (1/2) × (1/2)",
+        "Calculate (1/2)⁵ and round to 4 decimal places."
+      ],
+      note:"This is NOT the same as P(exactly 2 girls), which would count all arrangements. Here order matters — the two girls must come first."
+    },
+    solution:{steps:[
+      "P(G,G,B,B,B) = (1/2)⁵ = 1/32",
+      "= 0.03125 ≈ 0.0313"
+    ]}
   }
 ];
 

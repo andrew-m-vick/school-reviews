@@ -169,6 +169,46 @@ const Q = [
       note:"Permutation = rankings/schedules/assignments. Combination = groups/teams/selections."
     },
     solution:{steps:["{Alice, Bob, Carol} = {Carol, Alice, Bob} — same committee.","Order doesn't matter → Combination."], answer:"Combination — order does not matter"}
+  },
+  {
+    tag:"§9.2 Counting",
+    q:"How many different 5-digit sequences can be formed using the digits 0–9 if repetition is allowed?",
+    type:"mc", options:["100,000","59,049","45","6"],
+    answer:"100,000",
+    hint:{
+      concept:"When repetition IS allowed, each position is an independent choice. Multiply the number of options at each position.",
+      steps:[
+        "Digits available: 0,1,2,3,4,5,6,7,8,9 → how many choices per position?",
+        "Positions: 5 (one for each digit in the sequence)",
+        "Since repetition is allowed, each position has the same number of choices",
+        "Multiply: choices × choices × choices × choices × choices"
+      ],
+      note:"Repetition ALLOWED → multiply the same number n times = nⁿᵒˢⁱᵗⁱᵒⁿˢ. No repetition → permutation."
+    },
+    solution:{steps:[
+      "10 choices per position × 5 positions",
+      "10 × 10 × 10 × 10 × 10 = 10⁵ = 100,000"
+    ]}
+  },
+  {
+    tag:"§9.2 Counting",
+    q:"License plates are made using 3 letters followed by 2 digits. How many plates can be made if repetition is allowed?",
+    type:"mc", options:["1,757,600","11,881,376","100,000","175,760"],
+    answer:"1,757,600",
+    hint:{
+      concept:"Two separate groups with repetition allowed — apply the multiplication principle to each position.",
+      steps:[
+        "Letters: 26 options per position, 3 positions → 26 × 26 × 26 = ?",
+        "Digits: 10 options per position, 2 positions → 10 × 10 = ?",
+        "Multiply the letter total by the digit total."
+      ],
+      note:"26³ = 17,576 and 10² = 100. Multiply those two results."
+    },
+    solution:{steps:[
+      "Letters: 26³ = 17,576",
+      "Digits: 10² = 100",
+      "Total: 17,576 × 100 = 1,757,600"
+    ]}
   }
 ];
 

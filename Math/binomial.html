@@ -106,17 +106,6 @@ const Q = [
   },
   {
     tag:"§9.4 Binomial",
-    q:"43% of females take on debt. n=9 selected. What is P(x=0)?",
-    type:"mc", options:["0.006","0.010","0.043","0.570"], answer:"0.006",
-    hint:{
-      concept:"Binomial formula: P(x=k) = C(n,k) × pᵏ × (1−p)ⁿ⁻ᵏ. For x=0, this simplifies nicely.",
-      steps:["P(x=0) = C(9,0) × (0.43)⁰ × (0.57)⁹","C(9,0) = ? and (0.43)⁰ = ? (anything to the 0 power)","You need (0.57)⁹ — compute step by step: 0.57²≈0.3249, ×0.57 repeatedly","Multiply everything together."],
-      note:"P(x=0) = (1−p)ⁿ always — all n trials must be failures."
-    },
-    solution:{steps:["C(9,0)=1, (0.43)⁰=1, (0.57)⁹≈0.00636","P(x=0) ≈ 0.006"], answer:"0.006"}
-  },
-  {
-    tag:"§9.4 Binomial",
     q:"7% of children live with father only. n=12. What is P(x=0)?",
     type:"mc", options:["0.419","0.381","0.070","0.930"], answer:"0.419",
     hint:{
@@ -125,27 +114,6 @@ const Q = [
       note:"For x=0 in binomial, C(n,0)=1 and p⁰=1, so it's always just (1−p)ⁿ."
     },
     solution:{steps:["P(x=0) = (0.93)¹² ≈ 0.419"], answer:"0.419"}
-  },
-  {
-    tag:"§9.4 Binomial",
-    q:"6% of children live with father only. n=12. What is P(at least 3)?",
-    type:"mc", options:["0.032","0.968","0.238","0.476"], answer:"0.032",
-    hint:{
-      concept:"'At least 3' means x ≥ 3. Use complement: P(x≥3) = 1 − [P(0) + P(1) + P(2)].",
-      steps:["p=0.06, q=0.94, n=12","Calculate P(0) = (0.94)¹²","Calculate P(1) = C(12,1)(0.06)¹(0.94)¹¹","Calculate P(2) = C(12,2)(0.06)²(0.94)¹⁰","Sum P(0)+P(1)+P(2), then subtract from 1."],
-      note:"Complement for 'at least k': P(x≥k) = 1 − P(x≤k−1). Almost always easier."
-    },
-    solution:{steps:["P(0)≈0.4759, P(1)≈0.3645, P(2)≈0.1280","Sum ≈ 0.9684","P(x≥3) = 1 − 0.9684 ≈ 0.032"], answer:"0.032"}
-  },
-  {
-    tag:"§9.4 Binomial",
-    q:"70% of voters favor Ms. Stein. n=300. What is E(x)?",
-    type:"free", answer:"210",
-    hint:{
-      concept:"For binomial: E(x) = n × p. Direct multiplication.",
-      steps:["n = 300, p = 0.70","E(x) = n × p = ?"]
-    },
-    solution:{steps:["E(x) = 300 × 0.70 = 210"], answer:"210"}
   },
   {
     tag:"§9.4 Binomial",

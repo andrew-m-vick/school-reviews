@@ -150,14 +150,35 @@ const Q = [
   },
   {
     tag:"§9.1 Distributions",
-    q:"Antibiotic A: P(cure)=0.55 at $59.30; P(no cure)=0.45 at $96.15. What is E(cost)?",
-    type:"free", answer:"75.88",
+    q:"Three coins are tossed and the number of tails is recorded. Which probability distribution is correct?",
+    type:"mc",
+    options:[
+      "x: 0,1,2,3 | P(x): 1/8, 3/8, 3/8, 1/8",
+      "x: 0,1,2,3 | P(x): 1/6, 1/6, 1/6, 1/6",
+      "x: 0,1,2,3 | P(x): 3/16, 5/16, 5/16, 3/16",
+      "x: 0,1,2,3 | P(x): 1/4, 1/4, 1/4, 1/4"
+    ],
+    answer:"x: 0,1,2,3 | P(x): 1/8, 3/8, 3/8, 1/8",
     hint:{
-      concept:"Expected value works for costs too: E(cost) = Σ[cost × probability] for each outcome.",
-      steps:["Outcome 1 — cure: cost $59.30 × P(cure) = 59.30 × 0.55 = ?","Outcome 2 — no cure: cost $96.15 × P(no cure) = 96.15 × 0.45 = ?","Add the two products."],
-      note:"Round to 2 decimal places for a dollar amount."
+      concept:"Use combinations to count ways to get each number of tails, then divide by total outcomes (2³ = 8).",
+      steps:[
+        "Total outcomes for 3 coins: 2³ = 8",
+        "P(0 tails): C(3,0) ways = 1 → P = 1/8",
+        "P(1 tail): C(3,1) ways = 3 → P = 3/8",
+        "P(2 tails): C(3,2) ways = 3 → P = 3/8",
+        "P(3 tails): C(3,3) ways = 1 → P = 1/8",
+        "Check: do all probabilities sum to 1? Verify your table."
+      ],
+      note:"C(3,1) = 3 because there are 3 ways to get exactly 1 tail: THH, HTH, HHT."
     },
-    solution:{steps:["59.30 × 0.55 = 32.615","96.15 × 0.45 = 43.2675","E(cost) = 32.615 + 43.2675 = 75.8825 ≈ 75.88"], answer:"75.88"}
+    solution:{steps:[
+      "2³ = 8 total outcomes",
+      "P(0 tails) = C(3,0)/8 = 1/8",
+      "P(1 tail) = C(3,1)/8 = 3/8",
+      "P(2 tails) = C(3,2)/8 = 3/8",
+      "P(3 tails) = C(3,3)/8 = 1/8",
+      "Sum: 1/8+3/8+3/8+1/8 = 8/8 = 1 ✓"
+    ]}
   }
 ];
 

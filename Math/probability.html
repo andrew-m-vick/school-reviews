@@ -147,6 +147,110 @@ const Q = [
       note:"Green and black are mutually exclusive, so simply add their counts."
     },
     solution:{steps:["Green: 2 slots (0, 00)","Black: 18 slots","2 + 18 = 20 favorable","P = 20/38 = 10/19"], answer:"10/19"}
+  },
+  {
+    tag:"Probability",
+    q:"College students chose a pizza topping. Cheese: 16 freshmen, 10 sophomores, 22 juniors, 27 seniors. Meat: 27, 27, 10, 16. Veggie: 10, 16, 27, 27. What is P(a randomly selected student prefers cheese)?",
+    type:"mc", options:["0.319","0.115","0.360","0.340"],
+    answer:"0.319",
+    hint:{
+      concept:"P(event) = (favorable outcomes) / (total outcomes). Add up the cheese row, then divide by the grand total of all students.",
+      steps:[
+        "Cheese row total: 16+10+22+27 = ?",
+        "Meat row total: 27+27+10+16 = ?",
+        "Veggie row total: 10+16+27+27 = ?",
+        "Grand total = cheese + meat + veggie",
+        "P(cheese) = cheese total / grand total. Round to 3 decimal places."
+      ],
+      note:"In a two-way table, always find the grand total first, then identify your favorable row or column."
+    },
+    solution:{steps:[
+      "Cheese: 16+10+22+27 = 75",
+      "Meat: 27+27+10+16 = 80",
+      "Veggie: 10+16+27+27 = 80",
+      "Grand total: 75+80+80 = 235",
+      "P(cheese) = 75/235 ≈ 0.319"
+    ]}
+  },
+  {
+    tag:"Probability",
+    q:"One card is selected from a standard 52-card deck. What is P(black card or jack)?",
+    type:"mc", options:["7/13","27/52","15/26","1/26"],
+    answer:"7/13",
+    hint:{
+      concept:"Use the Inclusive OR formula: P(A or B) = P(A) + P(B) − P(A and B). Subtract the overlap to avoid double-counting.",
+      steps:[
+        "P(black card) = 26/52 (half the deck is black)",
+        "P(jack) = 4/52 (one jack per suit, 4 suits)",
+        "P(black AND jack) = ? (how many black jacks are there?)",
+        "Apply: P(black or jack) = P(black) + P(jack) − P(black and jack)",
+        "Simplify the fraction."
+      ],
+      note:"Black jacks are the jack of spades and jack of clubs — 2 cards."
+    },
+    solution:{steps:[
+      "P(black) = 26/52, P(jack) = 4/52, P(black jack) = 2/52",
+      "P(black or jack) = 26/52 + 4/52 − 2/52 = 28/52 = 7/13"
+    ]}
+  },
+  {
+    tag:"Probability",
+    q:"Suppose P(C) = 0.048, P(M∩C) = 0.044, and P(M∪C) = 0.524. Find P(M).",
+    type:"mc", options:["0.520","0.480","0.472","0.528"],
+    answer:"0.520",
+    hint:{
+      concept:"Rearrange the union rule: P(M∪C) = P(M) + P(C) − P(M∩C). Solve for the unknown P(M).",
+      steps:[
+        "Write the formula: P(M∪C) = P(M) + P(C) − P(M∩C)",
+        "Rearrange: P(M) = P(M∪C) − P(C) + P(M∩C)",
+        "Plug in: P(M∪C)=0.524, P(C)=0.048, P(M∩C)=0.044",
+        "Calculate."
+      ],
+      note:"This is the same union formula from algebra — just with probability values instead of counts."
+    },
+    solution:{steps:[
+      "P(M) = P(M∪C) − P(C) + P(M∩C)",
+      "= 0.524 − 0.048 + 0.044",
+      "= 0.520"
+    ]}
+  },
+  {
+    tag:"Probability",
+    q:"A survey found 31% are entertained by books, 37% by TV, and 15% by both. What is P(entertained by books or TV)?",
+    type:"mc", options:["53%","15%","83%","68%"],
+    answer:"53%",
+    hint:{
+      concept:"Inclusion-exclusion: P(A or B) = P(A) + P(B) − P(A and B). Subtract the 'both' group to avoid counting them twice.",
+      steps:[
+        "P(books) = 31%, P(TV) = 37%, P(both) = 15%",
+        "P(books or TV) = 31 + 37 − 15",
+        "Calculate."
+      ],
+      note:"Without subtracting 'both', you'd count that 15% twice — once in books and once in TV."
+    },
+    solution:{steps:[
+      "P(books or TV) = 31% + 37% − 15% = 53%"
+    ]}
+  },
+  {
+    tag:"Probability",
+    q:"Find the odds in favor of rolling a number less than 3 on a fair die.",
+    type:"mc", options:["1 to 2","1 to 3","2 to 3","1 to 1"],
+    answer:"1 to 2",
+    hint:{
+      concept:"Odds in favor = (favorable outcomes) : (unfavorable outcomes). This is NOT the same as probability.",
+      steps:[
+        "Favorable outcomes (less than 3): list them",
+        "Unfavorable outcomes (3 or more): list them",
+        "Odds = favorable : unfavorable (express as 'a to b', reduced to lowest terms)"
+      ],
+      note:"Probability = favorable/total. Odds = favorable : unfavorable. Different things!"
+    },
+    solution:{steps:[
+      "Favorable (less than 3): {1, 2} → 2 outcomes",
+      "Unfavorable (3,4,5,6): 4 outcomes",
+      "Odds in favor = 2:4 = 1:2 → '1 to 2'"
+    ]}
   }
 ];
 

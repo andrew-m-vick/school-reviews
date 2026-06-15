@@ -147,6 +147,62 @@ const Q = [
       note:"Powers of 2 to memorize: 2, 4, 8, 16, 32, 64, 128, 256…"
     },
     solution:{steps:["2ⁿ = 64","2⁶ = 64 ✓","n = 6 elements"], answer:"6"}
+  },
+  {
+    tag:"Intro to Probability",
+    q:"A die is tossed twice with results recorded as an ordered pair. Which set represents the event 'the first toss shows a 1'?",
+    type:"mc",
+    options:[
+      "{(1,1),(1,2),(1,3),(1,4),(1,5),(1,6)}",
+      "{(1,1),(1,3),(1,5)}",
+      "{(1,3)}",
+      "{(1,1),(2,1),(3,1),(4,1),(5,1),(6,1)}"
+    ],
+    answer:"{(1,1),(1,2),(1,3),(1,4),(1,5),(1,6)}",
+    hint:{
+      concept:"An ordered pair (a,b) records (1st toss, 2nd toss). The event 'first toss = 1' includes ALL pairs where the first number is 1, regardless of what the second is.",
+      steps:[
+        "The first element must be 1",
+        "The second element can be anything on a die: 1,2,3,4,5,6",
+        "List every pair (1, ?) for each possible second toss."
+      ],
+      note:"Don't restrict the second toss — it can be ANY of the 6 values."
+    },
+    solution:{steps:[
+      "First toss = 1, second toss = anything → (1,1),(1,2),(1,3),(1,4),(1,5),(1,6)",
+      "That's 6 ordered pairs.",
+      "Answer: {(1,1),(1,2),(1,3),(1,4),(1,5),(1,6)}"
+    ]}
+  },
+  {
+    tag:"Intro to Probability",
+    q:"A die is rolled twice. Which set of ordered pairs represents the event 'the sum of the rolls is 5'?",
+    type:"mc",
+    options:[
+      "{(1,4),(2,3),(3,2),(4,1)}",
+      "{(2,3),(4,1)}",
+      "{(1,4),(2,3)}",
+      "{(1,4),(2,3),(3,2),(4,1),(5,0)}"
+    ],
+    answer:"{(1,4),(2,3),(3,2),(4,1)}",
+    hint:{
+      concept:"List every ordered pair (a,b) where a+b=5. Remember both numbers must be valid die faces (1–6).",
+      steps:[
+        "Systematically try each value for the first die: 1, 2, 3, 4, 5, 6",
+        "If first die = 1, second die must be ? (what adds to 5?)",
+        "If first die = 2, second die = ?",
+        "Continue through all possibilities. Stop when the second die would exceed 6 or be less than 1."
+      ],
+      note:"(5,0) is not valid — a die has no 0 face. (5+0 would require a non-existent face.)"
+    },
+    solution:{steps:[
+      "1+4=5 ✓ → (1,4)",
+      "2+3=5 ✓ → (2,3)",
+      "3+2=5 ✓ → (3,2)",
+      "4+1=5 ✓ → (4,1)",
+      "5+0 → invalid (no 0 on die)",
+      "Event: {(1,4),(2,3),(3,2),(4,1)}"
+    ]}
   }
 ];
 
