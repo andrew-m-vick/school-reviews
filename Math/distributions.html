@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Probability Distributions — Math 1324</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; background: #f5f4f0; color: #1a1a1a; min-height: 100vh; padding: 2rem 1rem; }
+    .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #888; text-decoration: none; margin-bottom: 1.25rem; }
+    .back-link:hover { color: #1a1a1a; }
+    #app { max-width: 720px; margin: 0 auto; background: #fff; border-radius: 12px; border: 1px solid #d8d6ce; padding: 2rem; }
+    h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+    .subtitle { font-size: 14px; color: #888; margin-bottom: 1.5rem; }
+    .score-row { display: flex; gap: 10px; margin-bottom: 1.25rem; }
+    .scard { flex: 1; background: #f0eeea; border-radius: 8px; padding: 0.75rem 1rem; }
+    .slabel { font-size: 11px; color: #888; margin-bottom: 3px; }
+    .sval { font-size: 22px; font-weight: 600; }
+    .pbar-bg { height: 5px; background: #e2e0d8; border-radius: 999px; margin-bottom: 1.5rem; overflow: hidden; }
+    .pbar-fill { height: 100%; background: #1D9E75; border-radius: 999px; transition: width 0.4s; }
+    .banner { background: #EAF3DE; border: 1px solid #97C459; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.25rem; display: none; }
+    .banner h3 { font-size: 15px; font-weight: 600; color: #27500A; margin-bottom: 4px; }
+    .banner p { font-size: 13px; color: #27500A; opacity: 0.9; }
+    .qcard { background: #fff; border: 1px solid #d8d6ce; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; }
+    .qtag { font-size: 11px; font-weight: 500; color: #1A6B40; background: #E8F5EE; padding: 3px 9px; border-radius: 8px; display: inline-block; margin-bottom: 0.75rem; }
+    .atag { font-size: 11px; color: #888; margin-left: 8px; }
+    .qtext { font-size: 17px; font-weight: 500; color: #1a1a1a; line-height: 1.55; margin-bottom: 1.25rem; }
+    .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1rem; }
+    .obtn { background: #f7f6f2; border: 1px solid #c8c6be; border-radius: 12px; padding: 0.85rem 1rem; font-size: 15px; font-family: inherit; color: #1a1a1a; text-align: left; cursor: pointer; transition: background 0.15s, border-color 0.15s; line-height: 1.45; }
+    .obtn:hover:not(:disabled) { background: #eceae4; border-color: #a8a69e; }
+    .obtn.reveal-correct { background: #EAF3DE; border-color: #639922; color: #27500A; }
+    .obtn.dwrong { opacity: 0.35; cursor: not-allowed; text-decoration: line-through; }
+    .free-row { display: flex; gap: 8px; margin-bottom: 1rem; }
+    .free-row input { flex: 1; font-size: 14px; font-family: inherit; padding: 10px 14px; border: 1px solid #d8d6ce; border-radius: 8px; background: #fff; color: #1a1a1a; outline: none; transition: border-color 0.15s; }
+    .free-row input:focus { border-color: #1D9E75; }
+    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+    .abtn { border: 1px solid #d8d6ce; border-radius: 8px; padding: 8px 14px; font-size: 13px; font-family: inherit; cursor: pointer; background: #fff; color: #1a1a1a; transition: background 0.15s; }
+    .abtn:hover { background: #f0eeea; }
+    .abtn.redo { border-color: #1D9E75; color: #1D9E75; font-weight: 500; }
+    .abtn.redo:hover { background: #E8F5EE; }
+    #btn-hint { background: #EEEDFE; border-color: #c4b5fd; color: #534AB7; font-weight: 500; }
+    #btn-hint:hover { background: #e4e2fe; }
+    .hint-box { margin-top: 1rem; background: #EEEDFE; border: 1px solid #c4b5fd; border-radius: 12px; padding: 1.25rem; display: none; }
+    .hint-box h4 { font-size: 13px; font-weight: 600; color: #534AB7; margin-bottom: 0.75rem; }
+    .hint-concept { font-size: 13px; color: #534AB7; line-height: 1.7; margin-bottom: 0.75rem; }
+    .hint-steps { list-style: none; padding: 0; counter-reset: step; }
+    .hint-steps li { font-size: 13px; color: #534AB7; line-height: 1.7; padding: 4px 0 4px 20px; position: relative; }
+    .hint-steps li::before { content: counter(step); counter-increment: step; position: absolute; left: 0; font-weight: 600; color: #534AB7; }
+    .hint-note { font-size: 12px; color: #534AB7; opacity: 0.8; margin-top: 0.5rem; font-style: italic; }
+    .solution-box { margin-top: 1rem; background: #FCEBEB; border: 1px solid #F09595; border-radius: 12px; padding: 1.25rem; display: none; }
+    .solution-box h4 { font-size: 13px; font-weight: 600; color: #791F1F; margin-bottom: 0.75rem; }
+    .sol-step { font-size: 13px; color: #791F1F; line-height: 1.8; padding: 2px 0; }
+    .sol-answer { margin-top: 0.75rem; font-size: 14px; font-weight: 600; color: #791F1F; background: rgba(255,255,255,0.5); border-radius: 8px; padding: 8px 12px; }
+    .feedback { margin-top: 0.75rem; font-size: 13px; font-weight: 500; display: none; }
+    .history-panel { margin-bottom: 1.25rem; display: none; }
+    .history-label { font-size: 11px; font-weight: 500; color: #888; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+    .history-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .hchip { font-size: 12px; padding: 4px 12px; border-radius: 999px; border: 1px solid #e2e0d8; background: #f0eeea; color: #888; }
+    .hchip.best { border-color: #1D9E75; color: #1D9E75; font-weight: 500; }
+    .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; flex-wrap: wrap; gap: 8px; }
+    .qcounter { font-size: 13px; color: #888; }
+    .nav-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+    @media (max-width: 500px) { #app { padding: 1.25rem; } .sval { font-size: 18px; } h1 { font-size: 18px; } }
+  </style>
+</head>
+<body>
+<a class="back-link" href="index.html">← Math 1324</a>
+<div id="app">
+  <h1>Probability Distributions</h1>
+  <p class="subtitle">Expected value, valid distributions, and probability tables</p>
+  <div class="history-panel" id="history-panel">
+    <div class="history-label">attempt history</div>
+    <div class="history-row" id="history-row"></div>
+  </div>
+  <div class="score-row">
+    <div class="scard"><div class="slabel">correct</div><div class="sval" id="s-correct">0</div></div>
+    <div class="scard"><div class="slabel">attempted</div><div class="sval" id="s-attempted">0</div></div>
+    <div class="scard"><div class="slabel">accuracy</div><div class="sval" id="s-pct">—</div></div>
+    <div class="scard"><div class="slabel">round</div><div class="sval" id="s-round">1</div></div>
+  </div>
+  <div class="pbar-bg"><div class="pbar-fill" id="prog" style="width:0%"></div></div>
+  <div class="banner" id="banner"><h3 id="banner-title"></h3><p id="banner-msg"></p></div>
+  <div id="q-area"></div>
+  <div class="nav-row">
+    <span class="qcounter" id="qcounter"></span>
+    <div class="nav-btns">
+      <button class="abtn" id="btn-prev">← prev</button>
+      <button class="abtn" id="btn-next">next →</button>
+      <button class="abtn" id="btn-rand">random</button>
+      <button class="abtn redo" id="btn-redo" style="display:none">↺ new round</button>
+    </div>
+  </div>
+</div>
+<script>
+const Q = [
+  {
+    tag:"§9.1 Distributions",
+    q:"For a valid probability distribution, all P(x) values must sum to what?",
+    type:"mc", options:["0","0.5","1","100"], answer:"1",
+    hint:{
+      concept:"A probability distribution must satisfy two rules: each P(x) ≥ 0, and all probabilities sum to exactly 1.",
+      steps:["Rule 1: each P(x) must be between 0 and 1","Rule 2: they must all add up to — what number represents 'something must happen'?"],
+      note:"Think of it as a pie: slices can be different sizes, but they must fill the whole pie."
+    },
+    solution:{steps:["The total probability of all outcomes = 1 (100%)","All P(x) must sum to 1."], answer:"1"}
+  },
+  {
+    tag:"§9.1 Distributions",
+    q:"A distribution has P(x) values: 0.02, 0.05, 0.10, 0.22, 0.41, 0.15, 0.05. Is it valid?",
+    type:"mc", options:["Yes — all values ≥ 0 and sum = 1","No — probabilities do not sum to 1","No — a value is negative","No — too many values"], answer:"Yes — all values ≥ 0 and sum = 1",
+    hint:{
+      concept:"Check both rules: (1) any negative values? (2) do they sum to exactly 1?",
+      steps:["Scan for negatives: 0.02, 0.05, 0.10, 0.22, 0.41, 0.15, 0.05 — any below zero?","Add them up step by step: 0.02+0.05, then +0.10, then +0.22, then +0.41, then +0.15, then +0.05","What is the total?"],
+      note:"Add in stages rather than all at once to avoid arithmetic mistakes."
+    },
+    solution:{steps:["All values ≥ 0 ✓","0.02+0.05+0.10+0.22+0.41+0.15+0.05 = 1.00 ✓","Both rules satisfied → VALID."], answer:"Yes — all values ≥ 0 and sum = 1"}
+  },
+  {
+    tag:"§9.1 Distributions",
+    q:"Given x: 2, 3, 4, 5 with P(x): 0.2, 0.3, 0.4, 0.1 — what is E(x)?",
+    type:"free", answer:"3.4",
+    hint:{
+      concept:"Expected value E(x) = Σ[x · P(x)]. Multiply each value by its probability, then add all products.",
+      steps:["x=2: 2 × 0.2 = ?","x=3: 3 × 0.3 = ?","x=4: 4 × 0.4 = ?","x=5: 5 × 0.1 = ?","Add all four products together."],
+      note:"E(x) is a weighted average — more likely outcomes pull the average toward them."
+    },
+    solution:{steps:["2(0.2)+3(0.3)+4(0.4)+5(0.1)","= 0.4 + 0.9 + 1.6 + 0.5","= 3.4"], answer:"3.4"}
+  },
+  {
+    tag:"§9.1 Distributions",
+    q:"Fill in the missing probability: x = 4,8,12,16,20,24 with P(x) = 0.02, 0.16, 0.27, 0.44, 0.08, ?",
+    type:"free", answer:"0.03",
+    hint:{
+      concept:"All probabilities must sum to 1. Add the known ones, then find what's missing.",
+      steps:["Add the known values: 0.02 + 0.16 + 0.27 + 0.44 + 0.08","Subtract that total from 1.","The result is the missing probability."],
+      note:"Missing P = 1 − (sum of all known P values). Always."
+    },
+    solution:{steps:["0.02+0.16+0.27+0.44+0.08 = 0.97","Missing P = 1 − 0.97 = 0.03"], answer:"0.03"}
+  },
+  {
+    tag:"§9.1 Distributions",
+    q:"A female animal has 0 offspring (P=0.26), 1 (P=0.24), 2 (P=0.19), 3 (P=0.17), 4 (P=0.14). What is E(x)?",
+    type:"free", answer:"1.69",
+    hint:{
+      concept:"E(x) = Σ[x · P(x)]. Multiply each number of offspring by its probability and sum.",
+      steps:["x=0: 0 × 0.26 = ?","x=1: 1 × 0.24 = ?","x=2: 2 × 0.19 = ?","x=3: 3 × 0.17 = ?","x=4: 4 × 0.14 = ?","Add all five products."],
+      note:"x=0 contributes 0 to the sum no matter what (0 × anything = 0)."
+    },
+    solution:{steps:["0+0.24+0.38+0.51+0.56","= 1.69"], answer:"1.69"}
+  },
+  {
+    tag:"§9.1 Distributions",
+    q:"Antibiotic A: P(cure)=0.55 at $59.30; P(no cure)=0.45 at $96.15. What is E(cost)?",
+    type:"free", answer:"75.88",
+    hint:{
+      concept:"Expected value works for costs too: E(cost) = Σ[cost × probability] for each outcome.",
+      steps:["Outcome 1 — cure: cost $59.30 × P(cure) = 59.30 × 0.55 = ?","Outcome 2 — no cure: cost $96.15 × P(no cure) = 96.15 × 0.45 = ?","Add the two products."],
+      note:"Round to 2 decimal places for a dollar amount."
+    },
+    solution:{steps:["59.30 × 0.55 = 32.615","96.15 × 0.45 = 43.2675","E(cost) = 32.615 + 43.2675 = 75.8825 ≈ 75.88"], answer:"75.88"}
+  }
+];
+
+let questions = Q;
+let current = 0, roundNum = 1, history = [], state = {}, scores = { correct: 0, attempted: 0 };
+
+function norm(s) { return s.toLowerCase().replace(/\s+/g, '').replace(/[{}]/g, ''); }
+function checkFree(u, c) {
+  const un = norm(u), cn = norm(c);
+  if (un === cn) return true;
+  const uN = parseFloat(u.replace(/,/g, '')), cN = parseFloat(c.replace(/,/g, ''));
+  if (!isNaN(uN) && !isNaN(cN)) return Math.abs(uN - cN) < 0.005;
+  return JSON.stringify(un.split(',').sort()) === JSON.stringify(cn.split(',').sort());
+}
+function key(i) { return roundNum + '||' + i; }
+function done(i) { const s = state[key(i)]; return s && s.done; }
+function allDone() { return questions.length > 0 && questions.every((_, i) => done(i)); }
+
+function updateStats() {
+  document.getElementById('s-correct').textContent = scores.correct;
+  document.getElementById('s-attempted').textContent = scores.attempted;
+  document.getElementById('s-pct').textContent = scores.attempted > 0 ? Math.round(scores.correct / scores.attempted * 100) + '%' : '—';
+  document.getElementById('s-round').textContent = roundNum;
+  const d = questions.filter((_, i) => done(i)).length;
+  document.getElementById('prog').style.width = (questions.length ? Math.round(d / questions.length * 100) : 0) + '%';
+  if (allDone()) {
+    const pct = Math.round(scores.correct / scores.attempted * 100);
+    if (!history.find(r => r.round === roundNum)) {
+      history.push({ round: roundNum, correct: scores.correct, attempted: scores.attempted, pct });
+      showHistory(); showBanner(pct);
+      document.getElementById('btn-redo').style.display = 'inline-block';
+    }
+  }
+}
+
+function showHistory() {
+  const panel = document.getElementById('history-panel'), row = document.getElementById('history-row');
+  if (!history.length) { panel.style.display = 'none'; return; }
+  panel.style.display = 'block'; row.innerHTML = '';
+  const best = Math.max(...history.map(r => r.pct));
+  history.forEach(r => {
+    const c = document.createElement('span');
+    c.className = 'hchip' + (r.pct === best ? ' best' : '');
+    c.textContent = 'Round ' + r.round + ': ' + r.correct + '/' + r.attempted + ' (' + r.pct + '%)';
+    row.appendChild(c);
+  });
+}
+
+function showBanner(pct) {
+  document.getElementById('banner').style.display = 'block';
+  document.getElementById('banner-title').textContent = 'Section complete!';
+  document.getElementById('banner-msg').textContent = pct === 100 ? 'Perfect! Start a new round to lock it in.' : pct >= 80 ? 'Great work — ' + pct + '%. One more round will cement it.' : pct >= 60 ? pct + '% — review the worked solutions, then retry.' : pct + '% — go through the hints carefully, then try again.';
+}
+
+function newRound() {
+  roundNum++; scores = { correct: 0, attempted: 0 }; current = 0;
+  document.getElementById('banner').style.display = 'none';
+  document.getElementById('btn-redo').style.display = 'none';
+  renderQ(); updateStats(); showHistory();
+}
+
+function renderQ() {
+  const q = questions[current];
+  const k = key(current);
+  const s = state[k] || { attempts: 0, done: false, wrongChoices: [], feedbackMsg: '', feedbackColor: '' };
+  document.getElementById('qcounter').textContent = (current + 1) + ' / ' + questions.length;
+
+  let attTag = s.attempts > 0 ? `<span class="atag">(${s.attempts} attempt${s.attempts > 1 ? 's' : ''})</span>` : '';
+  let html = `<div class="qcard">
+    <div><span class="qtag">${q.tag}</span>${attTag}</div>
+    <p class="qtext">${q.q}</p>`;
+
+  if (q.type === 'mc') {
+    html += `<div class="options">`;
+    q.options.forEach((opt, i) => {
+      let cls = 'obtn', dis = '';
+      if (s.done) { if (opt === q.answer) cls += ' reveal-correct'; else if (s.wrongChoices.includes(opt)) cls += ' dwrong'; dis = 'disabled'; }
+      else if (s.wrongChoices.includes(opt)) { cls += ' dwrong'; dis = 'disabled'; }
+      html += `<button class="${cls}" data-opt="${i}" ${dis}>${opt}</button>`;
+    });
+    html += `</div>`;
+  } else {
+    html += `<div class="free-row">
+      <input type="text" id="free-in" placeholder="Type your answer…" ${s.done ? 'disabled' : ''} value="${s.done ? (s.lastVal || '') : ''}">
+      ${!s.done ? `<button class="abtn" id="btn-submit">check</button>` : ''}
+    </div>`;
+  }
+
+  html += `<div class="btn-row"><button class="abtn" id="btn-hint">💡 how to solve</button></div>`;
+
+  const h = q.hint;
+  html += `<div class="hint-box" id="hint-box">
+    <h4>💡 How to Approach This Problem</h4>
+    <div class="hint-concept"><strong>Key Concept:</strong> ${h.concept}</div>
+    <strong style="font-size:13px;color:#534AB7;">Step-by-step approach:</strong>
+    <ol class="hint-steps">`;
+  h.steps.forEach(step => { html += `<li>${step}</li>`; });
+  html += `</ol>`;
+  if (h.note) html += `<div class="hint-note">💬 ${h.note}</div>`;
+  html += `</div>`;
+
+  if (s.done && s.wrongChoices.length >= 2) {
+    const sol = q.solution;
+    html += `<div class="solution-box" style="display:block"><h4>📝 Full Worked Solution</h4>`;
+    sol.steps.forEach(step => { html += `<div class="sol-step">${step}</div>`; });
+    html += `<div class="sol-answer">✓ Answer: ${q.answer}</div></div>`;
+  }
+
+  html += `<div class="feedback" id="feedback" style="display:${s.feedbackMsg ? 'block' : 'none'};color:${s.feedbackColor || 'inherit'}">${s.feedbackMsg || ''}</div>`;
+  html += `</div>`;
+  document.getElementById('q-area').innerHTML = html;
+
+  document.getElementById('btn-hint').onclick = () => {
+    const hb = document.getElementById('hint-box');
+    hb.style.display = hb.style.display === 'block' ? 'none' : 'block';
+  };
+
+  function showFeedback(msg, type) {
+    const fb = document.getElementById('feedback');
+    fb.style.display = 'block';
+    const colors = { correct: '#27500A', tryagain: '#854f0b', wrong: '#791F1F' };
+    fb.style.color = colors[type];
+    fb.textContent = type === 'correct' ? '✓ Correct! Well done.' : msg;
+    state[k].feedbackMsg = fb.textContent; state[k].feedbackColor = fb.style.color;
+  }
+
+  function handleAnswer(chosen, correct) {
+    if (!state[k]) state[k] = { attempts: 0, done: false, wrongChoices: [], feedbackMsg: '', feedbackColor: '' };
+    const st = state[k];
+    if (st.attempts === 0) scores.attempted++;
+    st.attempts++;
+    if (correct) {
+      if (st.attempts === 1) scores.correct++;
+      st.done = true; showFeedback('', 'correct'); updateStats(); renderQ();
+    } else {
+      st.wrongChoices.push(chosen);
+      if (st.attempts >= 2) {
+        st.done = true;
+        showFeedback('✗ Incorrect. See the full worked solution below.', 'wrong');
+        updateStats(); renderQ();
+      } else {
+        showFeedback('✗ Not quite — try once more. Use the hint if you need a push.', 'tryagain');
+        updateStats();
+        if (q.type === 'mc') {
+          document.querySelectorAll('.obtn').forEach(b => {
+            if (st.wrongChoices.includes(q.options[parseInt(b.dataset.opt)])) { b.classList.add('dwrong'); b.disabled = true; }
+          });
+        } else { const inp = document.getElementById('free-in'); if (inp) { inp.value = ''; inp.focus(); } }
+      }
+    }
+  }
+
+  if (q.type === 'mc' && !s.done) {
+    document.querySelectorAll('.obtn:not([disabled])').forEach(btn => {
+      btn.onclick = () => handleAnswer(q.options[parseInt(btn.dataset.opt)], q.options[parseInt(btn.dataset.opt)] === q.answer);
+    });
+  }
+  if (q.type === 'free' && !s.done) {
+    const sub = document.getElementById('btn-submit'), inp = document.getElementById('free-in');
+    function tryFree() {
+      const val = inp.value.trim(); if (!val) return;
+      if (!state[k]) state[k] = { attempts: 0, done: false, wrongChoices: [], feedbackMsg: '', feedbackColor: '' };
+      state[k].lastVal = val; handleAnswer(val, checkFree(val, q.answer));
+    }
+    if (sub) sub.onclick = tryFree;
+    inp.onkeydown = e => { if (e.key === 'Enter') tryFree(); };
+  }
+}
+
+document.getElementById('btn-prev').onclick = () => { if (current > 0) { current--; renderQ(); } };
+document.getElementById('btn-next').onclick = () => { if (current < questions.length - 1) { current++; renderQ(); } };
+document.getElementById('btn-rand').onclick = () => { current = Math.floor(Math.random() * questions.length); renderQ(); };
+document.getElementById('btn-redo').onclick = () => newRound();
+renderQ(); updateStats();
+</script>
+</body>
+</html>

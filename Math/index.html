@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Math 1324 — Choose a Topic</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background: #f5f4f0;
+      color: #1a1a1a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 3rem 1rem 4rem;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: #888;
+      text-decoration: none;
+      margin-bottom: 2rem;
+      align-self: flex-start;
+      max-width: 680px;
+      width: 100%;
+    }
+    .back-link:hover { color: #1a1a1a; }
+
+    header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    header .eyebrow {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 0.4rem;
+    }
+    header h1 {
+      font-size: 26px;
+      font-weight: 600;
+      color: #1a1a1a;
+      line-height: 1.3;
+    }
+
+    .chapter-group {
+      width: 100%;
+      max-width: 680px;
+      margin-bottom: 0.75rem;
+    }
+
+    .chapter-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 0.75rem;
+      padding-left: 2px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 0.75rem;
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+
+    .topic-card {
+      background: #fff;
+      border: 1px solid #d8d6ce;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 1.25rem;
+      text-decoration: none;
+      color: #1a1a1a;
+      transition: background 0.12s, border-color 0.12s;
+    }
+
+    .topic-card:hover {
+      background: #f0eeea;
+      border-color: #b8b6ae;
+    }
+
+    .topic-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #1D9E75;
+      flex-shrink: 0;
+    }
+
+    .topic-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .topic-name {
+      font-size: 15px;
+      font-weight: 500;
+      color: #1a1a1a;
+    }
+
+    .topic-desc {
+      font-size: 12px;
+      color: #888;
+      margin-top: 2px;
+    }
+
+    .topic-arrow {
+      font-size: 18px;
+      color: #1D9E75;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 480px) {
+      body { padding: 2rem 1rem; }
+      header h1 { font-size: 22px; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="/">← School Reviews</a>
+
+  <header>
+    <p class="eyebrow">Math 1324</p>
+    <h1>Choose a Topic</h1>
+  </header>
+
+  <div class="chapter-group">
+    <div class="chapter-label">Chapter 8 — Sets &amp; Probability</div>
+    <div class="grid">
+      <a class="topic-card" href="sets.html">
+        <div class="topic-dot"></div>
+        <div class="topic-info">
+          <div class="topic-name">Sets</div>
+          <div class="topic-desc">Element notation, subsets, intersection, complement</div>
+        </div>
+        <span class="topic-arrow">›</span>
+      </a>
+      <a class="topic-card" href="venn.html">
+        <div class="topic-dot"></div>
+        <div class="topic-info">
+          <div class="topic-name">Venn Diagrams</div>
+          <div class="topic-desc">Cardinality and the union rule</div>
+        </div>
+        <span class="topic-arrow">›</span>
+      </a>
+      <a class="topic-card" href="intro-prob.html">
+        <div class="topic-dot"></div>
+        <div class="topic-info">
+          <div class="topic-name">Intro to Probability</div>
+          <div class="topic-desc">Sample spaces and basic probability</div>
+        </div>
+        <span class="topic-arrow">›</span>
+      </a>
+      <a class="topic-card" href="probability.html">
+        <div class="topic-dot"></div>
+        <div class="topic-info">
+          <div class="topic-name">Concepts of Probability</div>
+          <div class="topic-desc">Dice problems, valid assignments, roulette</div>
+        </div>
+        <span class="topic-arrow">›</span>
+      </a>
+      <a class="topic-card" href="conditional.html">
+        <div class="topic-dot"></div>
+        <div class="topic-info">
+          <div class="topic-name">Conditional Probability</div>
+          <div class="topic-desc">Conditional events, independence, dependent events</div>
+        </div>
+        <span class="topic-arrow">›</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="chapter-group">
+    <div class="chapter-label">Chapter 9 — Distributions &amp; Counting</div>
+    <div class="grid">
+      <a class="topic-card" href="distributions.html">
+        <div class="topic-dot"></div>
+        <div class="topic-info">
+          <div class="topic-name">Probability Distributions</div>
+          <div class="topic-desc">Expected value and distribution tables</div>
+        </div>
+        <span class="topic-arrow">›</span>
+      </a>
+      <a class="topic-card" href="counting.html">
+        <div class="topic-dot"></div>
+        <div class="topic-info">
+          <div class="topic-name">Counting Principles</div>
+          <div class="topic-desc">Factorial, permutations, combinations</div>
+        </div>
+        <span class="topic-arrow">›</span>
+      </a>
+      <a class="topic-card" href="prob-counting.html">
+        <div class="topic-dot"></div>
+        <div class="topic-info">
+          <div class="topic-name">Probability with Counting</div>
+          <div class="topic-desc">Combining counting with probability</div>
+        </div>
+        <span class="topic-arrow">›</span>
+      </a>
+      <a class="topic-card" href="binomial.html">
+        <div class="topic-dot"></div>
+        <div class="topic-info">
+          <div class="topic-name">Binomial Probability</div>
+          <div class="topic-desc">Binomial formula, E(x) = np, and conditions</div>
+        </div>
+        <span class="topic-arrow">›</span>
+      </a>
+    </div>
+  </div>
+</body>
+</html>
