@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PHIL 2306 — Quiz 2 Practice</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background: #f5f4f0;
+      color: #1a1a1a;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #888; text-decoration: none; margin-bottom: 1.25rem; }
+    .back-link:hover { color: #1a1a1a; }
+
+    .quiz-wrap { max-width: 640px; margin: 0 auto; }
+
+    header { margin-bottom: 2rem; }
+    header .eyebrow {
+      font-size: 12px; font-weight: 500; letter-spacing: 0.08em;
+      text-transform: uppercase; color: #534AB7; margin-bottom: 0.4rem;
+    }
+    header h1 { font-size: 22px; font-weight: 600; color: #1a1a1a; line-height: 1.3; }
+    header p { font-size: 14px; color: #666; margin-top: 0.35rem; }
+
+    .score-row { display: flex; gap: 10px; margin-bottom: 1.25rem; }
+    .scard { flex: 1; background: #fff; border: 1px solid #d8d6ce; border-radius: 10px; padding: 0.75rem 1rem; }
+    .slabel { font-size: 11px; color: #888; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.04em; }
+    .sval { font-size: 22px; font-weight: 600; color: #1a1a1a; }
+
+    .pbar-bg { height: 5px; background: #e2e0d8; border-radius: 999px; margin-bottom: 1.25rem; overflow: hidden; }
+    .pbar-fill { height: 100%; background: #534AB7; border-radius: 999px; transition: width 0.4s; }
+
+    .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.25rem; }
+    .fbtn {
+      font-size: 12px; font-weight: 500; padding: 5px 14px; border-radius: 999px;
+      border: 1px solid #d8d6ce; background: #fff; color: #888; cursor: pointer;
+      transition: background 0.12s, border-color 0.12s, color 0.12s;
+    }
+    .fbtn:hover { background: #f0eeea; }
+    .fbtn.active { background: #EEEDFE; border-color: #a89cf5; color: #534AB7; }
+
+    .history-panel { margin-bottom: 1.25rem; display: none; }
+    .history-label { font-size: 11px; font-weight: 500; color: #888; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+    .history-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .hchip { font-size: 12px; padding: 4px 12px; border-radius: 999px; border: 1px solid #e2e0d8; background: #f0eeea; color: #888; }
+    .hchip.best { border-color: #534AB7; color: #534AB7; font-weight: 500; }
+
+    .banner { background: #EEEDFE; border: 1px solid #a89cf5; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.25rem; display: none; }
+    .banner h3 { font-size: 15px; font-weight: 600; color: #2d2480; margin-bottom: 4px; }
+    .banner p { font-size: 13px; color: #2d2480; opacity: 0.9; }
+
+    .qcard {
+      background: #fff; border: 1px solid #d8d6ce; border-radius: 12px;
+      padding: 1.5rem; margin-bottom: 1rem;
+    }
+    .qtag {
+      font-size: 11px; font-weight: 500; color: #534AB7; background: #EEEDFE;
+      padding: 3px 9px; border-radius: 8px; display: inline-block; margin-bottom: 0.75rem;
+    }
+    .atag { font-size: 11px; color: #888; margin-left: 8px; }
+    .qtext { font-size: 16px; font-weight: 500; color: #1a1a1a; line-height: 1.6; margin-bottom: 1.25rem; }
+
+    .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1rem; }
+    .obtn {
+      background: #f7f6f2; border: 1px solid #c8c6be; border-radius: 12px;
+      padding: 0.85rem 1rem; font-size: 15px; font-family: inherit; color: #1a1a1a;
+      text-align: left; cursor: pointer; transition: background 0.15s, border-color 0.15s; line-height: 1.5;
+    }
+    .obtn:hover:not(:disabled) { background: #eceae4; border-color: #a8a69e; }
+    .obtn.reveal-correct { background: #EEEDFE; border-color: #a89cf5; color: #2d2480; }
+    .obtn.dwrong { opacity: 0.35; cursor: not-allowed; text-decoration: line-through; }
+
+    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+    .abtn {
+      border: 1px solid #d8d6ce; border-radius: 8px; padding: 8px 14px;
+      font-size: 13px; font-family: inherit; cursor: pointer; background: #fff;
+      color: #1a1a1a; transition: background 0.15s;
+    }
+    .abtn:hover { background: #f0eeea; }
+    .abtn.redo { border-color: #534AB7; color: #534AB7; font-weight: 500; }
+    .abtn.redo:hover { background: #EEEDFE; }
+    #btn-hint { background: #EEEDFE; border-color: #c4b5fd; color: #534AB7; font-weight: 500; }
+    #btn-hint:hover { background: #e4e2fe; }
+
+    .hint-box {
+      margin-top: 1rem; background: #EEEDFE; border: 1px solid #c4b5fd;
+      border-radius: 12px; padding: 1.25rem; display: none;
+    }
+    .hint-box h4 { font-size: 13px; font-weight: 600; color: #534AB7; margin-bottom: 0.75rem; }
+    .hint-concept { font-size: 13px; color: #534AB7; line-height: 1.7; margin-bottom: 0.75rem; }
+    .hint-steps { list-style: none; padding: 0; counter-reset: step; }
+    .hint-steps li { font-size: 13px; color: #534AB7; line-height: 1.7; padding: 4px 0 4px 20px; position: relative; }
+    .hint-steps li::before { content: counter(step); counter-increment: step; position: absolute; left: 0; font-weight: 600; color: #534AB7; }
+    .hint-note { font-size: 12px; color: #534AB7; opacity: 0.8; margin-top: 0.5rem; font-style: italic; }
+
+    .solution-box {
+      margin-top: 1rem; background: #FCEBEB; border: 1px solid #F09595;
+      border-radius: 12px; padding: 1.25rem; display: none;
+    }
+    .solution-box h4 { font-size: 13px; font-weight: 600; color: #791F1F; margin-bottom: 0.75rem; }
+    .sol-step { font-size: 13px; color: #791F1F; line-height: 1.8; padding: 2px 0; }
+    .sol-answer { margin-top: 0.75rem; font-size: 14px; font-weight: 600; color: #791F1F; background: rgba(255,255,255,0.5); border-radius: 8px; padding: 8px 12px; }
+
+    .feedback { margin-top: 0.75rem; font-size: 13px; font-weight: 500; display: none; }
+
+    .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; flex-wrap: wrap; gap: 8px; }
+    .qcounter { font-size: 13px; color: #888; }
+    .nav-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    @media (max-width: 500px) {
+      .quiz-wrap { padding: 0; }
+      .sval { font-size: 18px; }
+      header h1 { font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+<a class="back-link" href="/">← School Reviews</a>
+<div class="quiz-wrap">
+  <header>
+    <div class="eyebrow">PHIL 2306 — Introduction to Ethics</div>
+    <h1>Quiz 2 Practice</h1>
+    <p>20 questions · Euthyphro Dilemma, Religious Morality Critics, Natural Law, Kierkegaard, Utilitarianism</p>
+  </header>
+
+  <div class="filters" id="filters"></div>
+
+  <div class="history-panel" id="history-panel">
+    <div class="history-label">attempt history</div>
+    <div class="history-row" id="history-row"></div>
+  </div>
+
+  <div class="score-row">
+    <div class="scard"><div class="slabel">correct</div><div class="sval" id="s-correct">0</div></div>
+    <div class="scard"><div class="slabel">attempted</div><div class="sval" id="s-attempted">0</div></div>
+    <div class="scard"><div class="slabel">accuracy</div><div class="sval" id="s-pct">—</div></div>
+    <div class="scard"><div class="slabel">round</div><div class="sval" id="s-round">1</div></div>
+  </div>
+  <div class="pbar-bg"><div class="pbar-fill" id="prog" style="width:0%"></div></div>
+  <div class="banner" id="banner"><h3 id="banner-title"></h3><p id="banner-msg"></p></div>
+
+  <div id="q-area"></div>
+
+  <div class="nav-row">
+    <span class="qcounter" id="qcounter"></span>
+    <div class="nav-btns">
+      <button class="abtn" id="btn-prev">← prev</button>
+      <button class="abtn" id="btn-next">next →</button>
+      <button class="abtn" id="btn-rand">random</button>
+      <button class="abtn redo" id="btn-redo" style="display:none">↺ new round</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const ALL_Q = [
+  // ── EUTHYPHRO DILEMMA ──────────────────────────────────────────────
+  {
+    tag:"Euthyphro Dilemma",
+    q:"What is the modern phrasing of the Euthyphro Dilemma?",
+    type:"mc",
+    options:[
+      "Is something morally right because God commands it, or does God command it because it is morally right?",
+      "Do humans create morality, or is morality discovered through reason alone?",
+      "Is God good because He follows natural law, or is natural law good because God created it?",
+      "Should we obey God out of love or out of fear of punishment?"
+    ],
+    answer:"Is something morally right because God commands it, or does God command it because it is morally right?",
+    hint:{
+      concept:"The Euthyphro Dilemma (from Plato's dialogue) poses a direct challenge to the relationship between God and morality. It presents two options — and both create a problem for religious ethics.",
+      steps:[
+        "Option 1: God's commands MAKE things right → morality depends entirely on God's will",
+        "Option 2: Things are right FOR A REASON → God commands them because they're already right",
+        "Think about which answer option captures this exact either/or question about the source of moral rightness."
+      ],
+      note:"The dilemma is named after the character Euthyphro in Plato's dialogue, where Socrates asks a version of this question."
+    },
+    solution:{steps:[
+      "The Euthyphro Dilemma asks: is something morally right BECAUSE God commands it, or does God command it BECAUSE it is already morally right?",
+      "This sets up a fork — either morality depends on God's will (Divine Command Theory) or morality is independent of God.",
+      "Answer: 'Is something morally right because God commands it, or does God command it because it is morally right?'"
+    ]}
+  },
+  {
+    tag:"Euthyphro Dilemma",
+    q:"According to the first thesis of the Euthyphro Dilemma (Divine Command Theory), what makes an action morally right?",
+    type:"mc",
+    options:[
+      "It aligns with human nature and natural purposes",
+      "It produces the greatest happiness for the most people",
+      "God commands it — morality flows entirely from God's will",
+      "It can be justified through reason without reference to God"
+    ],
+    answer:"God commands it — morality flows entirely from God's will",
+    hint:{
+      concept:"Divine Command Theory (DCT) is the first horn of the dilemma. It holds that God is the direct source and creator of moral rightness.",
+      steps:[
+        "Ask: in DCT, what comes first — God's command or the moral fact?",
+        "DCT says God's command IS what makes something moral — there's no morality 'above' God",
+        "This means if God commanded something different, that would be moral instead."
+      ],
+      note:"This is called 'voluntarism' — morality depends on God's will (voluntas)."
+    },
+    solution:{steps:[
+      "Divine Command Theory holds that an action is morally right simply because God commands it.",
+      "Morality is entirely dependent on God's will — God's command is what creates the moral fact.",
+      "Answer: God commands it — morality flows entirely from God's will."
+    ]}
+  },
+  {
+    tag:"Euthyphro Dilemma",
+    q:"The second thesis of the Euthyphro Dilemma holds that:",
+    type:"mc",
+    options:[
+      "God's commands are arbitrary and morally unpredictable",
+      "God commands things because they are already morally right for independent reasons",
+      "Morality only exists within religious communities",
+      "Divine commands override all other ethical considerations without exception"
+    ],
+    answer:"God commands things because they are already morally right for independent reasons",
+    hint:{
+      concept:"The second horn of the dilemma says God recognizes moral truths rather than creating them. Morality exists independently of God.",
+      steps:[
+        "If God commands things BECAUSE they're right, then 'right' means something independent of God's will",
+        "This preserves morality's objectivity — but it limits God's role",
+        "Ask: which answer says morality is independent and God responds to it, rather than creating it?"
+      ],
+      note:"This horn is sometimes called 'intellectualism' or 'essentialism' — God knows and commands what is good, but doesn't invent it."
+    },
+    solution:{steps:[
+      "The second thesis holds that God commands things because they are already morally right — for reasons independent of God's will.",
+      "This means morality exists independently, and God's role is to recognize and communicate it.",
+      "Answer: God commands things because they are already morally right for independent reasons."
+    ]}
+  },
+
+  // ── CRITICS OF RELIGIOUS MORALITY ──────────────────────────────────
+  {
+    tag:"Critics of Religious Morality",
+    q:"P.H. Nowell-Smith argues that religious morality is 'heteronomous.' What does this mean?",
+    type:"mc",
+    options:[
+      "Religious morality changes over time as new revelations are received",
+      "Religious people follow moral rules given by an external authority rather than reasoning for themselves",
+      "Religious morality is superior because it derives directly from a divine source",
+      "Religious people are incapable of forming independent moral judgments"
+    ],
+    answer:"Religious people follow moral rules given by an external authority rather than reasoning for themselves",
+    hint:{
+      concept:"Nowell-Smith contrasts 'heteronomous' morality (rules from outside/others) with 'autonomous' morality (self-governed, reasoned from within). Think about what 'hetero' (other) vs 'auto' (self) means in this context.",
+      steps:[
+        "'Autonomy' = self-governance, reasoning through ethics yourself",
+        "'Heteronomy' = following rules handed down by an external authority",
+        "Nowell-Smith says true morality requires autonomy — think about why receiving rules from God would be heteronomous."
+      ],
+      note:"Kant also stressed moral autonomy. Nowell-Smith is drawing on this tradition to critique religious ethics."
+    },
+    solution:{steps:[
+      "Heteronomous = governed by external law. Autonomous = self-governed.",
+      "Nowell-Smith argues that religious morality is heteronomous because people follow rules given by God (an external authority) rather than reasoning through ethics themselves.",
+      "Answer: Religious people follow moral rules given by an external authority rather than reasoning for themselves."
+    ]}
+  },
+  {
+    tag:"Critics of Religious Morality",
+    q:"According to Nowell-Smith, what is the core problem with following God's commands in order to reach heaven or avoid hell?",
+    type:"mc",
+    options:[
+      "It makes morality too dependent on which religion a person follows",
+      "Following rules for reward or to avoid punishment is not genuine moral behavior — it's self-interest",
+      "God's promises of heaven cannot be verified empirically",
+      "Religious commandments are culturally outdated and no longer applicable"
+    ],
+    answer:"Following rules for reward or to avoid punishment is not genuine moral behavior — it's self-interest",
+    hint:{
+      concept:"Nowell-Smith asks: if someone behaves morally ONLY to get into heaven or avoid hell, are they truly moral? Think about what distinguishes genuinely moral motivation from self-interested motivation.",
+      steps:[
+        "Genuine morality = doing the right thing because it IS right",
+        "Self-interest = doing the right thing for personal benefit (heaven) or to avoid harm (hell)",
+        "Which of these does Nowell-Smith think religious morality often reduces to?"
+      ],
+      note:"This mirrors Kant's point that acting from duty is what makes an action moral — acting from desire for reward is not."
+    },
+    solution:{steps:[
+      "Nowell-Smith argues that when people follow God's commands to earn heaven or avoid hell, they are acting from self-interest — not genuine moral motivation.",
+      "True morality requires acting because something is right, not for personal reward or to avoid punishment.",
+      "Answer: Following rules for reward or to avoid punishment is not genuine moral behavior — it's self-interest."
+    ]}
+  },
+  {
+    tag:"Critics of Religious Morality",
+    q:"James Rachels argues that if Divine Command Theory is correct, a serious problem follows. What is it?",
+    type:"mc",
+    options:[
+      "It makes morality objective and universal, which removes the need for individual moral reasoning",
+      "God could command anything — including genocide or torture — and it would be morally right, making morality arbitrary",
+      "Only religious people would be capable of making correct moral judgments",
+      "Humans would need to constantly update their moral beliefs as God reveals new commands"
+    ],
+    answer:"God could command anything — including genocide or torture — and it would be morally right, making morality arbitrary",
+    hint:{
+      concept:"Rachels exposes a troubling consequence of DCT: if God's will creates morality, then there's nothing God 'can't' command. Think about what that means for the content of morality.",
+      steps:[
+        "Under DCT: 'right' = 'God commands it' — there's no independent standard above God",
+        "If God commanded something we consider horrific, would it then be moral under DCT?",
+        "Rachels says this shows morality becomes arbitrary — dependent on an unconstrained will."
+      ],
+      note:"Rachels uses examples like God commanding child sacrifice (as He did with Abraham) to press this point."
+    },
+    solution:{steps:[
+      "Rachels argues that if DCT is true, God could command literally anything — including genocide, torture, or murder — and it would automatically be morally right.",
+      "This makes morality completely arbitrary, depending on whatever God happens to will.",
+      "Answer: God could command anything — including genocide or torture — and it would be morally right, making morality arbitrary."
+    ]}
+  },
+  {
+    tag:"Critics of Religious Morality",
+    q:"Friedrich Nietzsche's critique of Christian morality centers on the concept of:",
+    type:"mc",
+    options:[
+      "The categorical imperative and its failure to account for human emotion",
+      "Slave morality versus master morality",
+      "The veil of ignorance and unfair social contracts",
+      "The Principle of Double Effect and its misuse by the Church"
+    ],
+    answer:"Slave morality versus master morality",
+    hint:{
+      concept:"Nietzsche was a radical critic of Christianity who argued it had corrupted humanity's values. He contrasted two types of morality — one created by the powerful, one created by the weak as a reaction.",
+      steps:[
+        "Master morality: values like strength, nobility, power — created by those who are dominant",
+        "Slave morality: values like humility, meekness, pity — created by the weak as a way to cope",
+        "Which concept captures Nietzsche's central critique of Christian ethics?"
+      ],
+      note:"'Ressentiment' is Nietzsche's term for the resentment and revenge-fantasy that he says drives slave morality."
+    },
+    solution:{steps:[
+      "Nietzsche argued that Christianity promotes 'slave morality' — values invented by the weak and powerless to restrain and guilt the strong.",
+      "He contrasted this with 'master morality' — the values of strength, nobility, and self-affirmation.",
+      "Answer: Slave morality versus master morality."
+    ]}
+  },
+  {
+    tag:"Critics of Religious Morality",
+    q:"According to Nietzsche, why does 'slave morality' praise humility, meekness, and self-denial?",
+    type:"mc",
+    options:[
+      "These qualities produce the greatest happiness for the most people",
+      "These are the qualities directly commanded by God in the Sermon on the Mount",
+      "The weak and powerless invented these values to make the powerful feel guilty and to restrain them",
+      "These qualities are naturally selected for and ensure social cooperation"
+    ],
+    answer:"The weak and powerless invented these values to make the powerful feel guilty and to restrain them",
+    hint:{
+      concept:"Nietzsche sees slave morality as a form of psychological revenge — a way for those who cannot overpower the strong to undermine them. Think about why the weak would praise the very qualities they're forced to have.",
+      steps:[
+        "The weak can't win through power, so they redefine what 'winning' means",
+        "They declare the strong's values (power, pride) to be evil, and their own limitations (meekness, suffering) to be virtuous",
+        "This is what Nietzsche calls 'ressentiment' — resentment disguised as morality."
+      ],
+      note:"For Nietzsche, praising humility is the slave saying 'my weakness is actually a virtue' — a coping strategy, not a genuine moral insight."
+    },
+    solution:{steps:[
+      "Nietzsche argues that humility, meekness, and self-denial are praised by slave morality because the weak invented these values to cope with and restrain the powerful.",
+      "By calling strength and pride 'evil' and weakness 'virtuous,' the powerless achieve a psychological victory over those who dominate them.",
+      "Answer: The weak and powerless invented these values to make the powerful feel guilty and to restrain them."
+    ]}
+  },
+
+  // ── NATURAL LAW ────────────────────────────────────────────────────
+  {
+    tag:"Natural Law",
+    q:"What is the fundamental premise of Natural Law ethics?",
+    type:"mc",
+    options:[
+      "Laws passed by governments determine what is morally right for citizens",
+      "Humans have a God-given nature with specific purposes, and what fulfills those purposes is good",
+      "Morality is determined by whatever produces the most happiness for the most people",
+      "Reason alone — without reference to nature or God — determines moral truth"
+    ],
+    answer:"Humans have a God-given nature with specific purposes, and what fulfills those purposes is good",
+    hint:{
+      concept:"Natural Law (associated with Aquinas) is a teleological theory — it says things have natural purposes (telos/ends), and goodness consists in fulfilling those ends. Think about where it locates the source of moral value.",
+      steps:[
+        "Teleology = things have built-in purposes/ends",
+        "Aquinas: God designed human nature with specific ends (reason, reproduction, community, etc.)",
+        "What aligns with and fulfills those natural ends is morally good. Which answer captures this?"
+      ],
+      note:"'Natural' in Natural Law doesn't mean 'what happens in nature' — it means fulfilling the nature/purpose God built into humans."
+    },
+    solution:{steps:[
+      "Natural Law holds that humans have a God-given nature with built-in purposes (telos).",
+      "What fulfills those natural purposes is morally good; what frustrates them is morally wrong.",
+      "Answer: Humans have a God-given nature with specific purposes, and what fulfills those purposes is good."
+    ]}
+  },
+  {
+    tag:"Natural Law",
+    q:"According to Natural Law theory, what makes an action morally good?",
+    type:"mc",
+    options:[
+      "It is commanded directly by God through scripture or revelation",
+      "It produces good consequences for the majority of people",
+      "It aligns with and fulfills human nature's proper ends (telos)",
+      "It conforms to the social contract agreed upon by rational citizens"
+    ],
+    answer:"It aligns with and fulfills human nature's proper ends (telos)",
+    hint:{
+      concept:"Don't confuse Natural Law with Divine Command Theory — in Natural Law, the standard is human nature and its purposes, not direct divine commands. Ask: what is the measuring stick for goodness in Natural Law?",
+      steps:[
+        "DCT: good = whatever God commands",
+        "Utilitarianism: good = whatever produces most happiness",
+        "Natural Law: good = whatever fulfills human nature's proper ends",
+        "Which answer describes this third option?"
+      ],
+      note:"Aquinas said natural law is how rational creatures participate in God's eternal law — through their built-in nature, not through direct revelation."
+    },
+    solution:{steps:[
+      "In Natural Law ethics, an action is good if it fulfills human nature's proper ends (telos) — the purposes built into human nature by God.",
+      "This is distinct from DCT (which appeals to commands) and Utilitarianism (which appeals to consequences).",
+      "Answer: It aligns with and fulfills human nature's proper ends (telos)."
+    ]}
+  },
+  {
+    tag:"Natural Law",
+    q:"Natural Law uses a specific process to resolve moral dilemmas involving harmful side effects. What is this process called?",
+    type:"mc",
+    options:[
+      "The Categorical Imperative",
+      "The Principle of Double Effect",
+      "The Greatest Happiness Principle",
+      "The Teleological Suspension of the Ethical"
+    ],
+    answer:"The Principle of Double Effect",
+    hint:{
+      concept:"When an action has both a good intended effect and a harmful side effect (a 'double effect'), Natural Law needs a principled way to decide if the action is permissible. There's a named principle for this.",
+      steps:[
+        "The scenario: a doctor gives a dying patient pain medication, which also shortens life — one good effect, one bad",
+        "Natural Law has 4 conditions to test whether such an action is permissible",
+        "What is this principle called? (Hint: it refers to the two effects the action produces.)"
+      ],
+      note:"The Principle of Double Effect is used in medical ethics, military ethics, and other fields where actions have both good and harmful outcomes."
+    },
+    solution:{steps:[
+      "The Principle of Double Effect (PDE) is Natural Law's framework for evaluating actions that have both a good intended effect and an unavoidable harmful side effect.",
+      "Answer: The Principle of Double Effect."
+    ]}
+  },
+  {
+    tag:"Natural Law",
+    q:"Which of the following is NOT one of the four conditions of the Principle of Double Effect?",
+    type:"mc",
+    options:[
+      "The act itself must not be intrinsically evil",
+      "The agent must intend only the good effect, not the bad effect (even if the bad is foreseen)",
+      "The bad effect must be greater than the good effect to justify the sacrifice",
+      "There must be a proportionate reason — the good must outweigh the bad"
+    ],
+    answer:"The bad effect must be greater than the good effect to justify the sacrifice",
+    hint:{
+      concept:"The four conditions of the PDE are positive requirements — things that must be true. One answer here gets the logic backwards. Think carefully about what each condition actually requires.",
+      steps:[
+        "Condition 1: the act itself is not intrinsically evil (it must be neutral or good)",
+        "Condition 2: you intend the good effect, not the bad (even if the bad is foreseen)",
+        "Condition 3: the bad effect is not the means to the good effect",
+        "Condition 4: proportionate reason — the good outweighs the bad",
+        "Which answer contradicts or inverts one of these conditions?"
+      ],
+      note:"The PDE allows harmful side effects only when necessary and proportionate — it never requires the bad to EXCEED the good."
+    },
+    solution:{steps:[
+      "The four actual conditions are: (1) the act is not intrinsically evil, (2) only the good is intended, (3) the bad is not the means to the good, (4) the good outweighs the bad.",
+      "'The bad effect must be GREATER than the good' reverses condition 4 — that is NOT a condition.",
+      "Answer: The bad effect must be greater than the good effect to justify the sacrifice."
+    ]}
+  },
+
+  // ── KIERKEGAARD ────────────────────────────────────────────────────
+  {
+    tag:"Kierkegaard",
+    q:"In 'Fear and Trembling,' what is the central moral problem Kierkegaard identifies with God commanding Abraham to sacrifice Isaac?",
+    type:"mc",
+    options:[
+      "Abraham lacked sufficient faith to trust God's promise that Isaac would be spared",
+      "God is commanding Abraham to commit murder — an act that violates universal ethical law",
+      "Abraham was motivated by self-interest rather than genuine obedience to God",
+      "Isaac was too young to have committed any wrong that would justify his sacrifice"
+    ],
+    answer:"God is commanding Abraham to commit murder — an act that violates universal ethical law",
+    hint:{
+      concept:"Kierkegaard does not dismiss the moral tension in Abraham's situation — he takes it seriously. The problem he identifies is the direct conflict between a divine command and a clear ethical prohibition.",
+      steps:[
+        "Universal ethics says: do not murder — this is a basic moral law",
+        "God commands Abraham to kill Isaac — this directly violates that universal law",
+        "Kierkegaard calls this the 'teleological suspension of the ethical' — faith seems to require suspending ethics",
+        "Which answer identifies this conflict as the core problem?"
+      ],
+      note:"Kierkegaard is not saying Abraham was wrong — he's analyzing HOW DIFFICULT and morally troubling the situation truly is."
+    },
+    solution:{steps:[
+      "The central moral problem Kierkegaard identifies is that God is commanding Abraham to commit murder — an act that violates universal ethical law.",
+      "This creates a profound conflict: Abraham must either follow the universal ethical command ('do not kill') or obey God's direct command.",
+      "Answer: God is commanding Abraham to commit murder — an act that violates universal ethical law."
+    ]}
+  },
+  {
+    tag:"Kierkegaard",
+    q:"What does Kierkegaard mean by the 'teleological suspension of the ethical'?",
+    type:"mc",
+    options:[
+      "Ethics should always override religious commands when the two conflict",
+      "God temporarily suspends all laws of nature during miraculous events",
+      "Abraham must suspend universal ethical principles in order to fulfill God's higher command",
+      "The telos (purpose) of ethics is to eventually be replaced by faith"
+    ],
+    answer:"Abraham must suspend universal ethical principles in order to fulfill God's higher command",
+    hint:{
+      concept:"Teleological means 'for the sake of a higher end.' Kierkegaard is saying Abraham suspends the ethical SPHERE of existence for the sake of a higher religious sphere. Think about what is being suspended and why.",
+      steps:[
+        "'Suspension' = temporarily setting aside or overriding",
+        "'The ethical' = universal moral laws (like 'do not kill')",
+        "Abraham must set aside the universal ethical law in order to obey God — the religious demand overrides the ethical one",
+        "Which answer captures this idea of ethics being set aside for a higher religious obligation?"
+      ],
+      note:"For Kierkegaard, there are three 'stages' of existence: aesthetic, ethical, and religious. Abraham operates at the religious stage, which can override the ethical."
+    },
+    solution:{steps:[
+      "The 'teleological suspension of the ethical' means that Abraham must suspend — temporarily set aside — universal ethical principles (do not murder) in order to fulfill God's command.",
+      "The 'telos' here is the higher religious purpose that overrides ordinary ethics.",
+      "Answer: Abraham must suspend universal ethical principles in order to fulfill God's higher command."
+    ]}
+  },
+  {
+    tag:"Kierkegaard",
+    q:"True or False: According to Kierkegaard, Abraham's willingness to sacrifice Isaac presents no moral problems — it is simply an act of pure, straightforward obedience to God.",
+    type:"mc",
+    options:["True","False"],
+    answer:"False",
+    hint:{
+      concept:"Kierkegaard's entire project in 'Fear and Trembling' is to show just HOW morally difficult and troubling Abraham's situation is. He's not dismissing the ethical tension.",
+      steps:[
+        "If there were no moral problem, there would be no 'fear and trembling' — the title itself signals anguish",
+        "Kierkegaard explicitly identifies the conflict between the ethical (don't murder) and the divine command",
+        "He considers Abraham's situation to be one of the most morally troubling possible — not simple at all."
+      ],
+      note:"Kierkegaard ultimately calls Abraham a 'knight of faith' — but he gets there by fully acknowledging how morally outrageous the command appears to be."
+    },
+    solution:{steps:[
+      "FALSE. Kierkegaard's entire analysis in 'Fear and Trembling' is devoted to showing the profound moral tension and difficulty in Abraham's situation.",
+      "He explicitly identifies that God is commanding what appears to be murder, creating a genuine conflict with universal ethics.",
+      "Abraham's situation is not simple obedience — it involves the terrifying suspension of ethical norms."
+    ]}
+  },
+
+  // ── UTILITARIANISM ─────────────────────────────────────────────────
+  {
+    tag:"Utilitarianism",
+    q:"The guiding principle of Utilitarianism is specifically called:",
+    type:"mc",
+    options:[
+      "The Categorical Imperative",
+      "The Principle of Natural Law",
+      "The Principle of Utility (The Greatest Happiness Principle)",
+      "The Principle of Double Effect"
+    ],
+    answer:"The Principle of Utility (The Greatest Happiness Principle)",
+    hint:{
+      concept:"Every ethical theory has a central principle that drives it. For Utilitarianism, there is one specific named principle — it describes what makes an action right by referring to happiness and numbers of people affected.",
+      steps:[
+        "Utilitarianism = maximize utility = maximize happiness/well-being",
+        "Bentham stated this as producing the greatest happiness for the greatest number",
+        "What is this specific principle called?"
+      ],
+      note:"'Utility' in philosophy refers to happiness, well-being, or preference satisfaction — whatever makes life go better."
+    },
+    solution:{steps:[
+      "Utilitarianism's guiding principle is called the Principle of Utility, also known as The Greatest Happiness Principle.",
+      "It states that an action is right if it produces the greatest good (happiness) for the greatest number of people.",
+      "Answer: The Principle of Utility (The Greatest Happiness Principle)."
+    ]}
+  },
+  {
+    tag:"Utilitarianism",
+    q:"What is the main difference between John Stuart Mill's utilitarianism and Jeremy Bentham's?",
+    type:"mc",
+    options:[
+      "Mill believed only actions with no bad effects are moral; Bentham allowed for trade-offs",
+      "Mill introduced a qualitative distinction between higher and lower pleasures; Bentham treated all pleasures as quantitatively equal",
+      "Mill limited moral consideration to humans only; Bentham included animals",
+      "Mill focused entirely on rules; Bentham focused on individual acts"
+    ],
+    answer:"Mill introduced a qualitative distinction between higher and lower pleasures; Bentham treated all pleasures as quantitatively equal",
+    hint:{
+      concept:"Bentham: pleasure is pleasure — what matters is quantity (how much, how long, how intense). Mill disagreed, arguing that the TYPE of pleasure matters. Think quality vs. quantity.",
+      steps:[
+        "Bentham: pushpin (a simple game) = poetry, if they produce equal amounts of pleasure",
+        "Mill disagreed — he said intellectual pleasures are HIGHER, more valuable in kind",
+        "Mill's famous line: 'Better to be Socrates dissatisfied than a fool satisfied'",
+        "Which answer captures this quality vs. quantity distinction?"
+      ],
+      note:"Mill's move allows us to say that a life of cheap entertainment, even if it produces lots of pleasure, is less valuable than a life of intellectual and moral engagement."
+    },
+    solution:{steps:[
+      "Bentham treated all pleasures as equal — only the quantity (amount, duration, intensity) mattered.",
+      "Mill introduced a qualitative distinction: some pleasures are higher (intellectual, moral) and some are lower (bodily, simple).",
+      "Mill: 'Better to be Socrates dissatisfied than a fool satisfied.'",
+      "Answer: Mill introduced a qualitative distinction between higher and lower pleasures; Bentham treated all pleasures as quantitatively equal."
+    ]}
+  },
+  {
+    tag:"Utilitarianism",
+    q:"What is the key difference between Act Utilitarianism and Rule Utilitarianism?",
+    type:"mc",
+    options:[
+      "Act Utilitarianism applies only to individual private actions; Rule Utilitarianism only applies to government policy",
+      "Act Utilitarianism judges each individual action by whether it maximizes utility; Rule Utilitarianism follows rules that, if generally followed, would maximize utility",
+      "Act Utilitarianism is Bentham's version; Rule Utilitarianism is Mill's version — they differ only by who created them",
+      "They differ only in how they count happiness: Act counts everyone equally, Rule weights by social role"
+    ],
+    answer:"Act Utilitarianism judges each individual action by whether it maximizes utility; Rule Utilitarianism follows rules that, if generally followed, would maximize utility",
+    hint:{
+      concept:"The Act/Rule distinction is about what level the utility calculation is applied at: individual action by action, or at the level of general rules.",
+      steps:[
+        "Act Utilitarianism: for each specific situation, ask 'which action produces the most utility right now?'",
+        "Rule Utilitarianism: identify rules that would maximize utility if everyone followed them, then follow those rules",
+        "Example: 'Should I lie in this situation?' (Act) vs. 'Should we have a rule against lying?' (Rule)",
+        "Which answer captures this distinction?"
+      ],
+      note:"Rule Utilitarianism avoids some of Act Utilitarianism's problems — like justifying clearly wrong actions in individual cases."
+    },
+    solution:{steps:[
+      "Act Utilitarianism: each individual action is evaluated directly by whether it maximizes utility in that specific situation.",
+      "Rule Utilitarianism: we follow general rules (like 'don't lie') because those rules, if generally adopted, would maximize utility overall.",
+      "Answer: Act Utilitarianism judges each individual action by whether it maximizes utility; Rule Utilitarianism follows rules that, if generally followed, would maximize utility."
+    ]}
+  },
+  {
+    tag:"Utilitarianism",
+    q:"A common objection to Utilitarianism is that it:",
+    type:"mc",
+    options:[
+      "Relies too heavily on God's commands to determine right and wrong actions",
+      "Can justify morally horrifying acts — like torturing one innocent person — if doing so produces the greatest overall happiness",
+      "Gives too much weight to individual rights at the expense of collective well-being",
+      "Is too strict and inflexible, never allowing any exceptions to its rules"
+    ],
+    answer:"Can justify morally horrifying acts — like torturing one innocent person — if doing so produces the greatest overall happiness",
+    hint:{
+      concept:"Critics argue that strict Utilitarianism has no absolute prohibitions — if the math works out, even terrible acts become permissible. Think about what happens when maximizing overall happiness conflicts with justice to individuals.",
+      steps:[
+        "Scenario: torturing one innocent person would somehow save 100 lives — Utilitarianism seems to say: do it",
+        "This conflicts with our strong intuition that some acts are just wrong, regardless of consequences",
+        "Critics say Utilitarianism ignores individual rights and justice in favor of aggregate outcomes",
+        "Which answer identifies this problem?"
+      ],
+      note:"This is sometimes called the 'utility monster' problem or the 'scapegoating' objection — maximizing the total can justify horrific treatment of individuals."
+    },
+    solution:{steps:[
+      "A major objection to Utilitarianism is that it can justify morally horrifying acts if they produce the greatest overall happiness.",
+      "For example: torturing one innocent person to prevent suffering for many others might maximize utility — but it violates basic justice and rights.",
+      "Answer: Can justify morally horrifying acts — like torturing one innocent person — if doing so produces the greatest overall happiness."
+    ]}
+  },
+  {
+    tag:"Utilitarianism",
+    q:"True or False: Act Utilitarianism holds that we should always follow the rule that generally produces the most happiness, rather than calculating the utility of each individual situation.",
+    type:"mc",
+    options:["True","False"],
+    answer:"False",
+    hint:{
+      concept:"Pay close attention to the labels: 'Act' vs. 'Rule.' The answer described in this statement — following general rules — is the defining feature of one of these, not the other.",
+      steps:[
+        "ACT Utilitarianism: calculate utility for each individual act, situation by situation",
+        "RULE Utilitarianism: follow rules that maximize utility if generally followed",
+        "The statement describes following general rules — which type does that define?"
+      ],
+      note:"If the statement described ACT Utilitarianism correctly, it would say 'calculate the utility of each individual action separately.'"
+    },
+    solution:{steps:[
+      "FALSE. What the statement describes — always following the rule that generally produces the most happiness — is Rule Utilitarianism, NOT Act Utilitarianism.",
+      "Act Utilitarianism requires calculating the utility of each individual action in each specific situation.",
+      "Answer: False."
+    ]}
+  }
+];
+
+const SECTIONS = ["All", "Euthyphro Dilemma", "Critics of Religious Morality", "Natural Law", "Kierkegaard", "Utilitarianism"];
+
+let activeSection = "All";
+let questions = [...ALL_Q];
+let current = 0, roundNum = 1, history = [], state = {}, scores = { correct: 0, attempted: 0 };
+
+function buildFilters() {
+  const container = document.getElementById('filters');
+  SECTIONS.forEach(s => {
+    const btn = document.createElement('button');
+    btn.className = 'fbtn' + (s === activeSection ? ' active' : '');
+    btn.textContent = s;
+    btn.onclick = () => {
+      activeSection = s;
+      questions = s === 'All' ? [...ALL_Q] : ALL_Q.filter(q => q.tag === s);
+      current = 0; scores = { correct: 0, attempted: 0 }; state = {}; roundNum = 1;
+      document.getElementById('banner').style.display = 'none';
+      document.getElementById('btn-redo').style.display = 'none';
+      document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderQ(); updateStats(); showHistory();
+    };
+    container.appendChild(btn);
+  });
+}
+
+function key(i) { return activeSection + '||' + roundNum + '||' + i; }
+function done(i) { const s = state[key(i)]; return s && s.done; }
+function allDone() { return questions.length > 0 && questions.every((_, i) => done(i)); }
+
+function updateStats() {
+  document.getElementById('s-correct').textContent = scores.correct;
+  document.getElementById('s-attempted').textContent = scores.attempted;
+  document.getElementById('s-pct').textContent = scores.attempted > 0 ? Math.round(scores.correct / scores.attempted * 100) + '%' : '—';
+  document.getElementById('s-round').textContent = roundNum;
+  const d = questions.filter((_, i) => done(i)).length;
+  document.getElementById('prog').style.width = (questions.length ? Math.round(d / questions.length * 100) : 0) + '%';
+  if (allDone()) {
+    const pct = Math.round(scores.correct / scores.attempted * 100);
+    if (!history.find(r => r.round === roundNum && r.section === activeSection)) {
+      history.push({ round: roundNum, correct: scores.correct, attempted: scores.attempted, pct, section: activeSection });
+      showHistory(); showBanner(pct);
+      document.getElementById('btn-redo').style.display = 'inline-block';
+    }
+  }
+}
+
+function showHistory() {
+  const panel = document.getElementById('history-panel'), row = document.getElementById('history-row');
+  const relevant = history.filter(r => r.section === activeSection);
+  if (!relevant.length) { panel.style.display = 'none'; return; }
+  panel.style.display = 'block'; row.innerHTML = '';
+  const best = Math.max(...relevant.map(r => r.pct));
+  relevant.forEach(r => {
+    const c = document.createElement('span');
+    c.className = 'hchip' + (r.pct === best ? ' best' : '');
+    c.textContent = 'Round ' + r.round + ': ' + r.correct + '/' + r.attempted + ' (' + r.pct + '%)';
+    row.appendChild(c);
+  });
+}
+
+function showBanner(pct) {
+  document.getElementById('banner').style.display = 'block';
+  document.getElementById('banner-title').textContent = 'Section complete!';
+  document.getElementById('banner-msg').textContent = pct === 100 ? 'Perfect score! Run it again to cement it.' : pct >= 80 ? 'Strong — ' + pct + '%. One more round will lock it in.' : pct >= 60 ? pct + '% — review the explanations, then retry.' : pct + '% — read the worked solutions carefully, then try again.';
+}
+
+function newRound() {
+  roundNum++; scores = { correct: 0, attempted: 0 }; current = 0;
+  document.getElementById('banner').style.display = 'none';
+  document.getElementById('btn-redo').style.display = 'none';
+  renderQ(); updateStats(); showHistory();
+}
+
+function renderQ() {
+  if (!questions.length) { document.getElementById('q-area').innerHTML = '<p style="color:#888;font-size:14px;padding:1rem 0;">No questions in this section.</p>'; return; }
+  const q = questions[current];
+  const k = key(current);
+  const s = state[k] || { attempts: 0, done: false, wrongChoices: [], feedbackMsg: '', feedbackColor: '' };
+  document.getElementById('qcounter').textContent = (current + 1) + ' / ' + questions.length;
+
+  let attTag = s.attempts > 0 ? `<span class="atag">(${s.attempts} attempt${s.attempts > 1 ? 's' : ''})</span>` : '';
+  let html = `<div class="qcard"><div><span class="qtag">${q.tag}</span>${attTag}</div><p class="qtext">${q.q}</p><div class="options">`;
+  q.options.forEach((opt, i) => {
+    let cls = 'obtn', dis = '';
+    if (s.done) { if (opt === q.answer) cls += ' reveal-correct'; else if (s.wrongChoices.includes(opt)) cls += ' dwrong'; dis = 'disabled'; }
+    else if (s.wrongChoices.includes(opt)) { cls += ' dwrong'; dis = 'disabled'; }
+    html += `<button class="${cls}" data-opt="${i}" ${dis}>${opt}</button>`;
+  });
+  html += `</div><div class="btn-row"><button class="abtn" id="btn-hint">💡 how to approach</button></div>`;
+
+  const h = q.hint;
+  html += `<div class="hint-box" id="hint-box"><h4>💡 How to Approach This Question</h4><div class="hint-concept"><strong>Background:</strong> ${h.concept}</div><strong style="font-size:13px;color:#534AB7;">Think through it:</strong><ol class="hint-steps">`;
+  h.steps.forEach(step => { html += `<li>${step}</li>`; });
+  html += `</ol>`;
+  if (h.note) html += `<div class="hint-note">💬 ${h.note}</div>`;
+  html += `</div>`;
+
+  if (s.done && s.wrongChoices.length >= 2) {
+    const sol = q.solution;
+    html += `<div class="solution-box" style="display:block"><h4>📝 Full Explanation</h4>`;
+    sol.steps.forEach(step => { html += `<div class="sol-step">${step}</div>`; });
+    html += `<div class="sol-answer">✓ Answer: ${q.answer}</div></div>`;
+  }
+
+  html += `<div class="feedback" id="feedback" style="display:${s.feedbackMsg ? 'block' : 'none'};color:${s.feedbackColor || 'inherit'}">${s.feedbackMsg || ''}</div>`;
+  html += `</div>`;
+  document.getElementById('q-area').innerHTML = html;
+
+  document.getElementById('btn-hint').onclick = () => {
+    const hb = document.getElementById('hint-box');
+    hb.style.display = hb.style.display === 'block' ? 'none' : 'block';
+  };
+
+  function showFeedback(msg, type) {
+    const fb = document.getElementById('feedback');
+    fb.style.display = 'block';
+    const colors = { correct: '#2d2480', tryagain: '#854f0b', wrong: '#791F1F' };
+    fb.style.color = colors[type];
+    fb.textContent = type === 'correct' ? '✓ Correct!' : msg;
+    state[k].feedbackMsg = fb.textContent; state[k].feedbackColor = fb.style.color;
+  }
+
+  function handleAnswer(chosen, correct) {
+    if (!state[k]) state[k] = { attempts: 0, done: false, wrongChoices: [], feedbackMsg: '', feedbackColor: '' };
+    const st = state[k];
+    if (st.attempts === 0) scores.attempted++;
+    st.attempts++;
+    if (correct) {
+      if (st.attempts === 1) scores.correct++;
+      st.done = true; showFeedback('', 'correct'); updateStats(); renderQ();
+    } else {
+      st.wrongChoices.push(chosen);
+      if (st.attempts >= 2) {
+        st.done = true;
+        showFeedback('✗ Incorrect. See the full explanation below.', 'wrong');
+        updateStats(); renderQ();
+      } else {
+        showFeedback('✗ Not quite — try once more. Use the hint if you need context.', 'tryagain');
+        updateStats();
+        document.querySelectorAll('.obtn').forEach(b => {
+          if (st.wrongChoices.includes(q.options[parseInt(b.dataset.opt)])) { b.classList.add('dwrong'); b.disabled = true; }
+        });
+      }
+    }
+  }
+
+  if (!s.done) {
+    document.querySelectorAll('.obtn:not([disabled])').forEach(btn => {
+      btn.onclick = () => handleAnswer(q.options[parseInt(btn.dataset.opt)], q.options[parseInt(btn.dataset.opt)] === q.answer);
+    });
+  }
+}
+
+document.getElementById('btn-prev').onclick = () => { if (current > 0) { current--; renderQ(); } };
+document.getElementById('btn-next').onclick = () => { if (current < questions.length - 1) { current++; renderQ(); } };
+document.getElementById('btn-rand').onclick = () => { current = Math.floor(Math.random() * questions.length); renderQ(); };
+document.getElementById('btn-redo').onclick = () => newRound();
+
+buildFilters();
+renderQ();
+updateStats();
+</script>
+</body>
+</html>
