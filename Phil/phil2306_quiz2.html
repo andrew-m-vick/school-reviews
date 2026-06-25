@@ -126,7 +126,7 @@
   <header>
     <div class="eyebrow">PHIL 2306 — Introduction to Ethics</div>
     <h1>Quiz 2 Practice</h1>
-    <p>20 questions · Euthyphro Dilemma, Religious Morality Critics, Natural Law, Kierkegaard, Utilitarianism</p>
+    <p>30 questions · Euthyphro Dilemma, Religious Morality Critics, Natural Law, Kierkegaard, Utilitarianism</p>
   </header>
 
   <div class="filters" id="filters"></div>
@@ -685,6 +685,267 @@ const ALL_Q = [
       "FALSE. What the statement describes — always following the rule that generally produces the most happiness — is Rule Utilitarianism, NOT Act Utilitarianism.",
       "Act Utilitarianism requires calculating the utility of each individual action in each specific situation.",
       "Answer: False."
+    ]}
+  },
+
+  // ── UTILITARIANISM (additional) ────────────────────────────────────
+  {
+    tag:"Utilitarianism",
+    q:"Under Act Utilitarianism, if secretly framing an innocent person would prevent riots that kill many people, what should you do?",
+    type:"mc",
+    options:[
+      "Don't frame them — individual rights always trump consequences no matter what",
+      "Frame them — Act Utilitarianism says do whatever maximizes overall utility in this specific situation",
+      "Follow the rule against framing innocent people — Rule Utilitarianism applies here",
+      "Consult religious commands to determine the right course of action"
+    ],
+    answer:"Frame them — Act Utilitarianism says do whatever maximizes overall utility in this specific situation",
+    hint:{
+      concept:"This is one of the famous objections TO Act Utilitarianism — it forces uncomfortable conclusions. Think about what Act Utilitarianism actually requires you to do in each individual situation.",
+      steps:[
+        "Act Utilitarianism: calculate utility for THIS specific act in THIS specific situation",
+        "If framing one innocent person prevents mass death, the utility calculation may favor framing",
+        "This is exactly why critics argue Act Utilitarianism can justify clearly wrong acts",
+        "What does Act Utilitarianism, applied strictly, tell you to do here?"
+      ],
+      note:"This scenario is meant to expose Act Utilitarianism's weakness — it illustrates the 'justifies horrifying acts' objection."
+    },
+    solution:{steps:[
+      "Act Utilitarianism requires you to do whatever maximizes utility in each individual situation.",
+      "If framing one innocent person produces more utility (fewer deaths, less suffering), Act Utilitarianism says to do it.",
+      "This is precisely what critics object to — it can justify framing, torturing, or killing innocents if the math works out.",
+      "Answer: Frame them — Act Utilitarianism says do whatever maximizes overall utility in this specific situation."
+    ]}
+  },
+  {
+    tag:"Utilitarianism",
+    q:"Mill said 'it is better to be Socrates dissatisfied than a fool satisfied.' What does this illustrate about his utilitarianism?",
+    type:"mc",
+    options:[
+      "That happiness is subjective and cannot meaningfully be compared across different people",
+      "That intellectual and moral pleasures are qualitatively superior — even if they bring more dissatisfaction",
+      "That the quantity of pleasure always outweighs its quality when calculating utility",
+      "That Socrates was the ideal role model for utilitarian moral reasoning"
+    ],
+    answer:"That intellectual and moral pleasures are qualitatively superior — even if they bring more dissatisfaction",
+    hint:{
+      concept:"This quote is Mill's most famous illustration of the quality/quantity distinction that separates him from Bentham. Think about what it means to prefer Socrates's dissatisfied life over a fool's satisfied one.",
+      steps:[
+        "Bentham: the fool, if happier, wins — more pleasure = better, period",
+        "Mill: Socrates, though less satisfied, has a richer, higher-quality life",
+        "The key word is 'qualitatively' — Mill says some pleasures are better in KIND, not just in amount",
+        "What is Mill illustrating about the nature of pleasure with this comparison?"
+      ],
+      note:"Mill: 'It is better to be a human dissatisfied than a pig satisfied; better to be Socrates dissatisfied than a fool satisfied.'"
+    },
+    solution:{steps:[
+      "Mill's quote illustrates his qualitative distinction between pleasures — some pleasures are higher (intellectual, moral) and others lower (purely bodily or mindless).",
+      "Unlike Bentham, Mill does not say more pleasure automatically wins. A life of deep intellectual engagement is better even if it comes with more dissatisfaction.",
+      "Answer: That intellectual and moral pleasures are qualitatively superior — even if they bring more dissatisfaction."
+    ]}
+  },
+  {
+    tag:"Utilitarianism",
+    q:"Why is Rule Utilitarianism generally considered an improvement over Act Utilitarianism?",
+    type:"mc",
+    options:[
+      "Rule Utilitarianism appeals to God's commands, giving it a more stable moral foundation",
+      "Rule Utilitarianism avoids justifying clearly wrong individual acts by following rules that maximize utility when generally followed",
+      "Rule Utilitarianism is less demanding because you only follow simple rules and never need to calculate outcomes",
+      "Rule Utilitarianism applies only to governments, leaving individuals free to act however they choose"
+    ],
+    answer:"Rule Utilitarianism avoids justifying clearly wrong individual acts by following rules that maximize utility when generally followed",
+    hint:{
+      concept:"Think about the problem Act Utilitarianism creates (it can justify horrifying individual acts). Rule Utilitarianism tries to fix this by shifting the utility calculation to the level of rules rather than individual acts.",
+      steps:[
+        "Act Utilitarianism problem: 'Frame the innocent person' could be required if it maximizes utility",
+        "Rule Utilitarianism asks: what RULE, if generally followed, maximizes utility?",
+        "'Don't frame innocent people' is a rule that, if universally followed, produces better outcomes overall",
+        "So Rule Utilitarianism can prohibit framing even when Act Utilitarianism would permit it — why?"
+      ],
+      note:"Rule Utilitarianism is closer to common moral intuitions — it respects rules like 'don't lie' and 'don't harm innocents' even when breaking them might produce better outcomes in a specific case."
+    },
+    solution:{steps:[
+      "Act Utilitarianism can justify horrifying acts if they happen to maximize utility in a specific case.",
+      "Rule Utilitarianism fixes this by asking: what rules, if generally followed, maximize utility? It then requires following those rules — even in individual cases where breaking them might produce more utility.",
+      "This prevents the 'frame the innocent person' type conclusion.",
+      "Answer: Rule Utilitarianism avoids justifying clearly wrong individual acts by following rules that maximize utility when generally followed."
+    ]}
+  },
+
+  // ── NATURAL LAW (additional) ───────────────────────────────────────
+  {
+    tag:"Natural Law",
+    q:"A doctor gives a terminally ill patient a large dose of morphine to relieve severe pain, knowing it will also hasten death. Under the Principle of Double Effect, is this permissible?",
+    type:"mc",
+    options:[
+      "No — any action that causes death is intrinsically evil and can never be permitted",
+      "Yes — the act (pain relief) is not evil, the doctor intends relief not death, death is not the means to relief, and the reason is proportionate",
+      "No — the bad effect (hastened death) is the means by which the patient's suffering is ended",
+      "Yes — but only if the patient consents, which the PDE requires as a fifth condition"
+    ],
+    answer:"Yes — the act (pain relief) is not evil, the doctor intends relief not death, death is not the means to relief, and the reason is proportionate",
+    hint:{
+      concept:"Run this scenario through all four conditions of the PDE one by one. The key question is: is hastened death the MEANS to pain relief, or merely a foreseen side effect?",
+      steps:[
+        "Condition 1: Is the act (giving morphine for pain) intrinsically evil? Or is it neutral/good?",
+        "Condition 2: Does the doctor intend the death, or intend the pain relief? (The death is foreseen but is it intended?)",
+        "Condition 3: Is the death the MEANS by which pain is relieved? Or does pain relief happen independently?",
+        "Condition 4: Is relieving severe terminal pain a proportionate reason for the risk of hastened death?",
+        "Check all four — does this pass?"
+      ],
+      note:"The morphine scenario is the classic teaching example for the PDE in medical ethics. Pain is relieved by the drug itself — the death is a side effect, not the mechanism."
+    },
+    solution:{steps:[
+      "Condition 1: Giving morphine for pain relief is not intrinsically evil ✓",
+      "Condition 2: The doctor intends pain relief, not death — death is foreseen but not intended ✓",
+      "Condition 3: Death is not the means to pain relief — the morphine relieves pain directly; death is a side effect ✓",
+      "Condition 4: Relieving severe terminal suffering is a proportionate reason ✓",
+      "All four conditions are met → permissible under the PDE.",
+      "Answer: Yes — the act is not evil, only good is intended, death is not the means, and the reason is proportionate."
+    ]}
+  },
+  {
+    tag:"Natural Law",
+    q:"A soldier fires a missile at an enemy weapons depot, knowing nearby civilians will be killed. Under the Principle of Double Effect, this would be impermissible if:",
+    type:"mc",
+    options:[
+      "The soldier feels personal remorse about the civilian deaths",
+      "The civilian deaths are the means by which the weapons depot is destroyed — not merely a side effect",
+      "The military advantage gained is proportionate to the civilian casualties",
+      "The soldier intends to destroy the depot rather than harm civilians"
+    ],
+    answer:"The civilian deaths are the means by which the weapons depot is destroyed — not merely a side effect",
+    hint:{
+      concept:"The third condition of the PDE is the key here: the bad effect cannot be the MEANS to the good effect. Think about the causal structure — what causes what?",
+      steps:[
+        "Good effect: destroying the weapons depot",
+        "Bad effect: civilian deaths",
+        "Ask: do the civilian deaths CAUSE or ENABLE the depot's destruction? Or does the explosion do both independently?",
+        "If killing civilians IS the mechanism that destroys the depot, that violates condition 3",
+        "Which answer describes this condition 3 violation?"
+      ],
+      note:"Compare: bombing a depot where civilians happen to be nearby (side effect) vs. using civilians as human shields to force surrender (means). The PDE permits the first, not the second."
+    },
+    solution:{steps:[
+      "The PDE's third condition states: the bad effect must not be the means to the good effect.",
+      "If the civilian deaths are what cause or enable the depot's destruction (not merely a foreseen side effect), condition 3 is violated.",
+      "This makes the action impermissible regardless of intention or proportionality.",
+      "Answer: The civilian deaths are the means by which the weapons depot is destroyed — not merely a side effect."
+    ]}
+  },
+
+  // ── KIERKEGAARD (additional) ───────────────────────────────────────
+  {
+    tag:"Kierkegaard",
+    q:"Kierkegaard notes that Abraham cannot explain or justify his plan to Sarah, Isaac, or anyone else. Why does this represent a moral problem?",
+    type:"mc",
+    options:[
+      "It shows Abraham lacked confidence in God's promise that Isaac would survive",
+      "Morality normally requires that we can articulate and justify our actions to others using universal reasons — Abraham's silence violates this",
+      "It proves Abraham was acting from selfish motives he wanted to conceal from his family",
+      "It means the sacrifice would be legally invalid under ancient Hebrew law without witnesses present"
+    ],
+    answer:"Morality normally requires that we can articulate and justify our actions to others using universal reasons — Abraham's silence violates this",
+    hint:{
+      concept:"Think about what 'moral' action normally looks like: you should be able to explain WHY you're doing it in terms others can understand and evaluate. Abraham's situation makes this impossible.",
+      steps:[
+        "Universal ethics: moral actions can be justified using reasons anyone could understand",
+        "Abraham's reason: 'God told me to' — but this isn't something he can demonstrate or verify to others",
+        "He cannot tell Isaac 'I'm about to kill you because God commanded it' in a way that makes ethical sense",
+        "Which answer captures why this inability to justify is itself a moral problem?"
+      ],
+      note:"Kierkegaard contrasts the 'knight of infinite resignation' (who can explain himself) with the 'knight of faith' (Abraham) who cannot."
+    },
+    solution:{steps:[
+      "In normal moral life, we can explain our actions using universal reasons others can evaluate.",
+      "Abraham cannot justify killing Isaac to anyone — not to Sarah, not to Isaac, not to bystanders — because his reason (a private divine command) transcends universal ethics.",
+      "This violates the normal requirement that moral actions be publicly justifiable.",
+      "Answer: Morality normally requires that we can articulate and justify our actions to others using universal reasons — Abraham's silence violates this."
+    ]}
+  },
+  {
+    tag:"Kierkegaard",
+    q:"Kierkegaard ultimately calls Abraham a 'knight of faith.' What does this suggest about his final assessment of Abraham?",
+    type:"mc",
+    options:[
+      "Abraham failed the ethical test and should have refused God's command to protect Isaac",
+      "Abraham's act was straightforwardly ethical and the moral tension was actually an illusion",
+      "Abraham exemplifies a higher religious mode of existence that transcends universal ethics — but only through tremendous personal anguish",
+      "Abraham earned the title because he was a literal knight who had special authority to act outside normal law"
+    ],
+    answer:"Abraham exemplifies a higher religious mode of existence that transcends universal ethics — but only through tremendous personal anguish",
+    hint:{
+      concept:"Kierkegaard doesn't condemn Abraham — but he also doesn't pretend it was easy or ethically simple. The 'knight of faith' title signals that Abraham operates at a higher level of existence, but at great cost.",
+      steps:[
+        "Kierkegaard identifies three stages: aesthetic → ethical → religious",
+        "Abraham doesn't violate ethics accidentally — he surpasses it through faith, moving to the religious stage",
+        "'Knight of faith' = someone who holds faith even when it conflicts with universal ethics",
+        "Does Kierkegaard condemn Abraham, or does he describe a tragic but ultimately higher form of existence?"
+      ],
+      note:"The 'fear and trembling' of the title IS Abraham's anguish — Kierkegaard insists this move to faith is not painless or simple."
+    },
+    solution:{steps:[
+      "Kierkegaard ultimately views Abraham as a 'knight of faith' — someone who transcends the ethical stage of existence through a direct, anguished relationship with God.",
+      "This is the highest mode of existence in Kierkegaard's framework, but it comes with the terrible personal cost of acting in a way that cannot be explained or justified to others.",
+      "Answer: Abraham exemplifies a higher religious mode of existence that transcends universal ethics — but only through tremendous personal anguish."
+    ]}
+  },
+
+  // ── CRITICS OF RELIGIOUS MORALITY (differentiation) ───────────────
+  {
+    tag:"Critics of Religious Morality",
+    q:"Which critic specifically focuses on the problem of moral autonomy — arguing that following God's commands makes religious people morally inferior because they don't reason for themselves?",
+    type:"mc",
+    options:[
+      "Friedrich Nietzsche",
+      "James Rachels",
+      "P.H. Nowell-Smith",
+      "Søren Kierkegaard"
+    ],
+    answer:"P.H. Nowell-Smith",
+    hint:{
+      concept:"Each critic has a distinct angle. One focuses on autonomy vs. heteronomy. One focuses on the arbitrariness of divine commands. One focuses on slave morality and resentment. Think about who owns the autonomy argument.",
+      steps:[
+        "Nowell-Smith's key term: 'heteronomy' — following external rules vs. 'autonomy' — reasoning for yourself",
+        "Rachels' key argument: DCT makes morality arbitrary (God could command anything)",
+        "Nietzsche's key concept: slave morality vs. master morality",
+        "Which of these three critics is making an argument about autonomy and self-governance?"
+      ],
+      note:"Nowell-Smith draws on the Kantian tradition that genuine morality requires autonomy — self-legislation through reason."
+    },
+    solution:{steps:[
+      "P.H. Nowell-Smith argues that religious morality is heteronomous — people follow rules from an external authority (God) rather than reasoning through ethics themselves.",
+      "This lack of moral autonomy is, for Nowell-Smith, what makes religious morality inferior.",
+      "Answer: P.H. Nowell-Smith."
+    ]}
+  },
+  {
+    tag:"Critics of Religious Morality",
+    q:"Match each critic to their core argument against religious morality:",
+    type:"mc",
+    options:[
+      "Rachels → slave morality; Nietzsche → heteronomy; Nowell-Smith → arbitrary divine commands",
+      "Nowell-Smith → heteronomy/lack of autonomy; Rachels → DCT makes morality arbitrary; Nietzsche → slave morality devalues strength",
+      "Nowell-Smith → arbitrary commands; Rachels → slave morality; Nietzsche → heteronomy",
+      "Nietzsche → arbitrary commands; Nowell-Smith → slave morality; Rachels → heteronomy"
+    ],
+    answer:"Nowell-Smith → heteronomy/lack of autonomy; Rachels → DCT makes morality arbitrary; Nietzsche → slave morality devalues strength",
+    hint:{
+      concept:"Each of the three critics has a distinct, non-overlapping argument. Work through each one individually.",
+      steps:[
+        "Nowell-Smith: the key word is 'heteronomous' — following external rules, no autonomous reasoning",
+        "Rachels: his argument focuses on Divine Command Theory and what happens if God could command anything",
+        "Nietzsche: his argument is about power, weakness, and 'slave morality' vs 'master morality'",
+        "Match each critic to their signature concept."
+      ],
+      note:"These three arguments are independent — don't mix them up. Each targets a different aspect of religious ethics."
+    },
+    solution:{steps:[
+      "Nowell-Smith → heteronomy: religious people follow rules from an external authority (God) instead of reasoning autonomously.",
+      "Rachels → arbitrary commands: if DCT is true, God could command anything and it would be 'moral,' making morality arbitrary.",
+      "Nietzsche → slave morality: Christianity promotes the weak's values (humility, meekness) as a form of revenge against the strong.",
+      "Answer: Nowell-Smith → heteronomy; Rachels → DCT makes morality arbitrary; Nietzsche → slave morality devalues strength."
     ]}
   }
 ];
