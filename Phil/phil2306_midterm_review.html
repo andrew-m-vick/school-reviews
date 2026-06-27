@@ -72,7 +72,7 @@
   <header>
     <div class="eyebrow">PHIL 2306 — Introduction to Ethics</div>
     <h1>Midterm Review</h1>
-    <p>38 questions · Hobbes, Values, Relativism, Egoism, Euthyphro, Religious Critics, Natural Law, Utilitarianism</p>
+    <p>46 questions · Hobbes, Values, Relativism, Egoism, Euthyphro, Religious Critics, Natural Law, Kierkegaard, Utilitarianism</p>
   </header>
 
   <div class="filters" id="filters"></div>
@@ -780,11 +780,156 @@ const ALL_Q = [
       note:"This is why some philosophers argue that rights and justice must constrain the utility calculation — they can't be overridden simply because the math works out."
     },
     solution:{steps:["The scapegoating objection: Utilitarianism can require horrifying acts (torturing, framing, or harming innocents) if doing so produces greater overall happiness.","This conflicts with the intuition that individuals have rights that can't be sacrificed for aggregate benefit.","Answer: Utilitarianism can justify torturing or punishing an innocent person if doing so produces greater overall happiness."]}
+  },
+
+  // ── DDE CONDITIONS 1 & 4 (added depth) ─────────────────────────────
+  {
+    tag:"Natural Law",
+    q:"The FIRST condition of the Doctrine of Double Effect requires that:",
+    type:"mc",
+    options:[
+      "Only the good effect is intended — the harmful side effect must be unintended",
+      "The act itself must not be intrinsically evil — it must be morally neutral or good in itself",
+      "The harmful effect must not be the means by which the good effect is achieved",
+      "There must be proportionate reason justifying acceptance of the harm"
+    ],
+    answer:"The act itself must not be intrinsically evil — it must be morally neutral or good in itself",
+    hint:{
+      concept:"The four conditions are sequential gates — an action must pass ALL four. The first gate deals with the nature of the act itself, before you even look at intentions or consequences.",
+      steps:["Ask: is the action being considered (e.g., giving morphine, using military force) evil BY ITSELF, regardless of intent?","If yes → it fails Condition 1 immediately and the DDE cannot permit it","If the act is neutral or good in itself, it passes Condition 1 and you move to the next gate","Example: torture is intrinsically evil → fails Condition 1 no matter what the intended outcome"],
+      note:"Condition 1 rules out a whole class of actions without needing to check intent or consequences — some acts are just off the table entirely."
+    },
+    solution:{steps:["Condition 1: The act itself must not be intrinsically evil — it must be morally neutral or good by its own nature.","If the act is inherently wrong (like torture or deliberately targeting civilians), the DDE cannot make it permissible, regardless of the good intended.","Answer: The act itself must not be intrinsically evil — it must be morally neutral or good in itself."]}
+  },
+  {
+    tag:"Natural Law",
+    q:"The FOURTH condition of the Doctrine of Double Effect requires that:",
+    type:"mc",
+    options:[
+      "The act itself must not be intrinsically evil",
+      "Only the good effect is intended by the agent",
+      "The harmful effect is not the means to the good effect",
+      "There is proportionate reason — the good produced must be serious enough to justify accepting the harmful side effect"
+    ],
+    answer:"There is proportionate reason — the good produced must be serious enough to justify accepting the harmful side effect",
+    hint:{
+      concept:"Even if an action passes Conditions 1–3, it still needs a final proportionality check. You can't accept ANY harmful side effect — only one proportionate to the good achieved.",
+      steps:["Ask: is the good produced by this action significant enough to outweigh or justify the harm caused as a side effect?","Killing one person to prevent extreme boredom → does not meet proportionate reason","Killing one person (side effect) to save 1,000 lives (good) → proportionate reason may apply","This is a balancing judgment — the stakes on each side must be weighed"],
+      note:"Condition 4 is a proportionality check — it prevents the DDE from being used to justify trivial goods that don't warrant serious harmful side effects."
+    },
+    solution:{steps:["Condition 4 (Proportionate Reason): the good effect must be significant enough — proportionate — to justify accepting the harmful side effect.","Even if Conditions 1–3 are met, a trivial benefit cannot justify a serious harm.","Answer: There is proportionate reason — the good produced must be serious enough to justify accepting the harmful side effect."]}
+  },
+
+  // ── NIETZSCHE GOD IS DEAD (deeper) ──────────────────────────────────
+  {
+    tag:"Hobbes & State of Nature",
+    q:"When Nietzsche writes 'we have killed him' — who is 'we' and what does this mean?",
+    type:"mc",
+    options:[
+      "'We' = professional atheist philosophers who wrote arguments disproving God's existence through logic",
+      "'We' = Western civilization broadly — through the Enlightenment, science, and rationalism, humanity collectively abandoned God as the foundation of truth and value",
+      "'We' = Nietzsche and a specific circle of European intellectuals who rejected religion",
+      "'We' = the Christian church itself, which distorted and killed the authentic teaching of Jesus"
+    ],
+    answer:"'We' = Western civilization broadly — through the Enlightenment, science, and rationalism, humanity collectively abandoned God as the foundation of truth and value",
+    hint:{
+      concept:"Nietzsche's 'we' is not pointing fingers at atheists specifically — he's describing a cultural and historical shift that everyone participated in, even believers. The death of God isn't an event; it's a process.",
+      steps:["The Enlightenment elevated reason and science over faith and revelation","Even religious people adopted rational, empirical frameworks for understanding the world","God was slowly displaced as the foundation of knowledge, morality, and meaning — not by one group, but by Western civilization collectively","'We' = all of us, whether we know it or not"],
+      note:"This is why the madman says 'you and I' — Nietzsche isn't exempting anyone. Even those who still believe have lost God as the unquestioned, absolute foundation of Western civilization."
+    },
+    solution:{steps:["'We' = Western civilization as a whole. The death of God is a cultural and historical process — the Enlightenment, science, and rationalism collectively displaced God as the unquestioned foundation of truth and morality.","It isn't the act of any particular group; everyone participated in this shift, consciously or not.","Answer: 'We' = Western civilization broadly — humanity collectively abandoned God as the foundation of truth and value through rationalism and the Enlightenment."]}
+  },
+
+  // ── KIERKEGAARD (Fear and Trembling) ────────────────────────────────
+  {
+    tag:"Kierkegaard",
+    q:"What is the central moral problem Kierkegaard examines in Fear and Trembling?",
+    type:"mc",
+    options:[
+      "Whether religious faith can be proven to be rational through philosophical argument",
+      "God commanding Abraham to murder his own son Isaac — an act that appears to directly violate universal moral law",
+      "Whether an individual can find personal meaning in a secular world without God",
+      "How religious communities should resolve conflicts between scripture and established ethics"
+    ],
+    answer:"God commanding Abraham to murder his own son Isaac — an act that appears to directly violate universal moral law",
+    hint:{
+      concept:"Fear and Trembling opens with Kierkegaard retelling the story of Abraham and Isaac multiple ways. The problem is a collision between two authorities: God's direct command and universal morality.",
+      steps:["Genesis 22: God commands Abraham to sacrifice (murder) his son Isaac","Universally, killing your child is murder — one of the clearest moral wrongs","But Abraham is commanded to do it by God — the highest religious authority","This creates the central problem: what do you do when God commands something morally wrong?"],
+      note:"This isn't abstract — Kierkegaard is probing whether there's a sphere (the religious) that can override universal ethics, and what that means."
+    },
+    solution:{steps:["The central problem in Fear and Trembling: God commands Abraham to murder his son Isaac, which seems to violate universal moral law against killing.","Kierkegaard uses this to examine whether religious obligation can ever override universal ethics — and what that means for reason, morality, and faith.","Answer: God commanding Abraham to murder his own son Isaac — an act that appears to directly violate universal moral law."]}
+  },
+  {
+    tag:"Kierkegaard",
+    q:"What does Kierkegaard mean by the 'teleological suspension of the ethical'?",
+    type:"mc",
+    options:[
+      "The belief that consequences (telos = end) always override moral rules in ethical decisions",
+      "In Abraham's case, God's direct command suspended universal moral law for a higher religious purpose — placing the individual's absolute duty to God above the universal ethical",
+      "Kierkegaard's proposal that religious people should stop making ethical judgments entirely",
+      "The principle that ethical rules are only temporary and will eventually be replaced by religious ones"
+    ],
+    answer:"In Abraham's case, God's direct command suspended universal moral law for a higher religious purpose — placing the individual's absolute duty to God above the universal ethical",
+    hint:{
+      concept:"Break down the phrase: 'teleological' = purposive/goal-directed; 'suspension of the ethical' = temporarily overriding universal morality. For whose higher telos (purpose)?",
+      steps:["The 'ethical' for Kierkegaard = the universal — moral rules that apply to everyone (like 'don't murder')","'Suspension' = overriding or setting aside, not destroying","'Teleological' = for a higher purpose or end — in this case, Abraham's absolute relationship with God","The suspension only makes sense if there is a sphere ABOVE the universal — the religious sphere of the individual's direct duty to God"],
+      note:"This is Kierkegaard's key move: there are three stages — aesthetic, ethical, and religious. Abraham has moved to the religious stage, which transcends but doesn't negate the ethical."
+    },
+    solution:{steps:["'Teleological suspension of the ethical' = God's command places Abraham's individual religious duty ABOVE universal moral law — the ethical is 'suspended' for the higher purpose of Abraham's absolute relationship to God.","This is only possible if the religious sphere is higher than the ethical sphere.","Answer: In Abraham's case, God's direct command suspended universal moral law for a higher religious purpose — placing the individual's absolute duty to God above the universal ethical."]}
+  },
+  {
+    tag:"Kierkegaard",
+    q:"Why can't Abraham explain or justify his intended action to anyone — not to Sarah, not to the servants traveling with him?",
+    type:"mc",
+    options:[
+      "Abraham doesn't speak the same language as those traveling with him",
+      "Abraham himself doesn't fully understand what God is asking of him",
+      "The act lies entirely outside the universal ethical framework — it belongs to an absolute, private relationship with God that no ethical language can express or justify",
+      "God specifically commanded Abraham to keep the plan secret as part of the test of faith"
+    ],
+    answer:"The act lies entirely outside the universal ethical framework — it belongs to an absolute, private relationship with God that no ethical language can express or justify",
+    hint:{
+      concept:"Language and justification belong to the universal — the ethical. If Abraham's act is a suspension of the universal, then universal language (moral reasoning) cannot reach it. Think about the relationship between reason, language, and the religious sphere.",
+      steps:["Justification requires appealing to shared moral standards — 'this is right because...'","But Abraham's act is NOT grounded in universal moral standards — it's grounded in an absolute private command from God","To justify it to others, Abraham would need to translate the religious back into the ethical — but that would be a lie, because the two spheres are incommensurable","So Abraham walks in silence — he cannot speak, and speaking would misrepresent what he's doing"],
+      note:"This is why Abraham's situation causes Kierkegaard such dread — he's completely alone, beyond the reach of human community, language, and moral justification."
+    },
+    solution:{steps:["Abraham cannot justify his action because it belongs to the sphere of the religious, which transcends the universal ethical — and justification only works within the universal.","No moral language can reach his situation. To explain it in ethical terms would be to falsify it.","Answer: The act lies outside the universal ethical framework — it belongs to an absolute, private relationship with God that no ethical language can express or justify."]}
+  },
+  {
+    tag:"Kierkegaard",
+    q:"True or False: Kierkegaard argues that Abraham's willingness to sacrifice Isaac is simply a noble example of moral obedience — the same kind any virtuous ethical person should display.",
+    type:"mc",
+    options:["True","False"],
+    answer:"False",
+    hint:{
+      concept:"Kierkegaard specifically argues that what Abraham does is NOT ordinary ethical obedience — and that's exactly what makes it so disturbing and philosophically significant. If it were just ethics, it wouldn't be 'fear and trembling.'",
+      steps:["A morally obedient person follows universal ethical rules — and those rules say 'don't murder your child'","Abraham isn't following universal ethics — he's SUSPENDING them for a direct divine command","Kierkegaard would say: a hero of ethics (like Agamemnon) sacrifices the particular for the universal; Abraham sacrifices the universal for the particular (his relationship with God)","These are opposite movements — not the same thing at all"],
+      note:"Kierkegaard distinguishes Abraham sharply from tragic heroes. A tragic hero acts within the ethical — Abraham moves beyond it entirely, into the religious."
+    },
+    solution:{steps:["FALSE. Kierkegaard explicitly argues that Abraham's act is NOT ethical obedience — it is a 'teleological suspension of the ethical,' where religious obligation overrides universal moral law.","Ordinary virtue stays within the ethical sphere. Abraham moves beyond it — which is what makes his case so philosophically troubling.","Answer: False."]}
+  },
+  {
+    tag:"Kierkegaard",
+    q:"The 'Knight of Faith' in Fear and Trembling is distinguished by what double movement?",
+    type:"mc",
+    options:[
+      "Believing in God intellectually, then also acting on that belief in daily life",
+      "First making the movement of infinite resignation (giving up everything to God), AND THEN believing by virtue of the absurd that everything will be returned — holding both simultaneously",
+      "Alternating between the aesthetic and ethical stages of existence without settling in either",
+      "Accepting suffering willingly AND seeking to alleviate the suffering of others through moral action"
+    ],
+    answer:"First making the movement of infinite resignation (giving up everything to God), AND THEN believing by virtue of the absurd that everything will be returned — holding both simultaneously",
+    hint:{
+      concept:"Kierkegaard contrasts the Knight of Faith with the Knight of Infinite Resignation. The Knight of Resignation gives everything up to God — that's impressive but one movement. The Knight of Faith does that AND something more paradoxical.",
+      steps:["Knight of Infinite Resignation: accepts the loss (e.g., 'I give up Isaac to God') — this is noble but tragic","Knight of Faith: makes that same surrender AND simultaneously believes — against all reason and expectation — that he will receive it back ('I will get Isaac back')","This second belief is 'by virtue of the absurd' — it's not rational, it contradicts everything, but Abraham holds both at once","That combination is what makes the Knight of Faith extraordinary — and nearly incomprehensible to ordinary people"],
+      note:"Abraham is the exemplary Knight of Faith. He fully accepts Isaac's death AND believes Isaac will live — 'by virtue of the absurd.'"
+    },
+    solution:{steps:["The Knight of Faith makes TWO movements: (1) infinite resignation — completely surrendering everything to God, as if it's already lost — AND (2) believing by virtue of the absurd that it will be returned.","Abraham gives up Isaac (resignation) AND believes Isaac will live (faith in the absurd). Holding both simultaneously is what defines the Knight of Faith.","Answer: First making the movement of infinite resignation, AND THEN believing by virtue of the absurd that everything will be returned — holding both simultaneously."]}
   }
 
 ];
 
-const SECTIONS = ["All","Hobbes & State of Nature","Values & Universalizability","Relativism & Objectivism","Altruism vs Egoism","Euthyphro Dilemma","Critics of Religious Morality","Natural Law","Utilitarianism"];
+const SECTIONS = ["All","Hobbes & State of Nature","Values & Universalizability","Relativism & Objectivism","Altruism vs Egoism","Euthyphro Dilemma","Critics of Religious Morality","Natural Law","Kierkegaard","Utilitarianism"];
 
 let activeSection = "All";
 let questions = [...ALL_Q];
