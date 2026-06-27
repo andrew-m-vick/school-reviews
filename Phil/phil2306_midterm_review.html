@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PHIL 2306 — Midterm Review</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; background: #f5f4f0; color: #1a1a1a; min-height: 100vh; padding: 2rem 1rem; }
+    .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #888; text-decoration: none; margin-bottom: 1.25rem; }
+    .back-link:hover { color: #1a1a1a; }
+    .quiz-wrap { max-width: 640px; margin: 0 auto; }
+    header { margin-bottom: 2rem; }
+    header .eyebrow { font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #534AB7; margin-bottom: 0.4rem; }
+    header h1 { font-size: 22px; font-weight: 600; color: #1a1a1a; line-height: 1.3; }
+    header p { font-size: 14px; color: #666; margin-top: 0.35rem; }
+    .score-row { display: flex; gap: 10px; margin-bottom: 1.25rem; }
+    .scard { flex: 1; background: #fff; border: 1px solid #d8d6ce; border-radius: 10px; padding: 0.75rem 1rem; }
+    .slabel { font-size: 11px; color: #888; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.04em; }
+    .sval { font-size: 22px; font-weight: 600; color: #1a1a1a; }
+    .pbar-bg { height: 5px; background: #e2e0d8; border-radius: 999px; margin-bottom: 1.25rem; overflow: hidden; }
+    .pbar-fill { height: 100%; background: #534AB7; border-radius: 999px; transition: width 0.4s; }
+    .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.25rem; }
+    .fbtn { font-size: 12px; font-weight: 500; padding: 5px 14px; border-radius: 999px; border: 1px solid #d8d6ce; background: #fff; color: #888; cursor: pointer; transition: background 0.12s, border-color 0.12s, color 0.12s; }
+    .fbtn:hover { background: #f0eeea; }
+    .fbtn.active { background: #EEEDFE; border-color: #a89cf5; color: #534AB7; }
+    .history-panel { margin-bottom: 1.25rem; display: none; }
+    .history-label { font-size: 11px; font-weight: 500; color: #888; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+    .history-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .hchip { font-size: 12px; padding: 4px 12px; border-radius: 999px; border: 1px solid #e2e0d8; background: #f0eeea; color: #888; }
+    .hchip.best { border-color: #534AB7; color: #534AB7; font-weight: 500; }
+    .banner { background: #EEEDFE; border: 1px solid #a89cf5; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.25rem; display: none; }
+    .banner h3 { font-size: 15px; font-weight: 600; color: #2d2480; margin-bottom: 4px; }
+    .banner p { font-size: 13px; color: #2d2480; opacity: 0.9; }
+    .qcard { background: #fff; border: 1px solid #d8d6ce; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; }
+    .qtag { font-size: 11px; font-weight: 500; color: #534AB7; background: #EEEDFE; padding: 3px 9px; border-radius: 8px; display: inline-block; margin-bottom: 0.75rem; }
+    .atag { font-size: 11px; color: #888; margin-left: 8px; }
+    .qtext { font-size: 16px; font-weight: 500; color: #1a1a1a; line-height: 1.6; margin-bottom: 1.25rem; }
+    .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1rem; }
+    .obtn { background: #f7f6f2; border: 1px solid #c8c6be; border-radius: 12px; padding: 0.85rem 1rem; font-size: 15px; font-family: inherit; color: #1a1a1a; text-align: left; cursor: pointer; transition: background 0.15s, border-color 0.15s; line-height: 1.5; }
+    .obtn:hover:not(:disabled) { background: #eceae4; border-color: #a8a69e; }
+    .obtn.reveal-correct { background: #EEEDFE; border-color: #a89cf5; color: #2d2480; }
+    .obtn.dwrong { opacity: 0.35; cursor: not-allowed; text-decoration: line-through; }
+    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+    .abtn { border: 1px solid #d8d6ce; border-radius: 8px; padding: 8px 14px; font-size: 13px; font-family: inherit; cursor: pointer; background: #fff; color: #1a1a1a; transition: background 0.15s; }
+    .abtn:hover { background: #f0eeea; }
+    .abtn.redo { border-color: #534AB7; color: #534AB7; font-weight: 500; }
+    .abtn.redo:hover { background: #EEEDFE; }
+    #btn-hint { background: #EEEDFE; border-color: #c4b5fd; color: #534AB7; font-weight: 500; }
+    #btn-hint:hover { background: #e4e2fe; }
+    .hint-box { margin-top: 1rem; background: #EEEDFE; border: 1px solid #c4b5fd; border-radius: 12px; padding: 1.25rem; display: none; }
+    .hint-box h4 { font-size: 13px; font-weight: 600; color: #534AB7; margin-bottom: 0.75rem; }
+    .hint-concept { font-size: 13px; color: #534AB7; line-height: 1.7; margin-bottom: 0.75rem; }
+    .hint-steps { list-style: none; padding: 0; counter-reset: step; }
+    .hint-steps li { font-size: 13px; color: #534AB7; line-height: 1.7; padding: 4px 0 4px 20px; position: relative; }
+    .hint-steps li::before { content: counter(step); counter-increment: step; position: absolute; left: 0; font-weight: 600; color: #534AB7; }
+    .hint-note { font-size: 12px; color: #534AB7; opacity: 0.8; margin-top: 0.5rem; font-style: italic; }
+    .solution-box { margin-top: 1rem; background: #FCEBEB; border: 1px solid #F09595; border-radius: 12px; padding: 1.25rem; display: none; }
+    .solution-box h4 { font-size: 13px; font-weight: 600; color: #791F1F; margin-bottom: 0.75rem; }
+    .sol-step { font-size: 13px; color: #791F1F; line-height: 1.8; padding: 2px 0; }
+    .sol-answer { margin-top: 0.75rem; font-size: 14px; font-weight: 600; color: #791F1F; background: rgba(255,255,255,0.5); border-radius: 8px; padding: 8px 12px; }
+    .feedback { margin-top: 0.75rem; font-size: 13px; font-weight: 500; display: none; }
+    .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; flex-wrap: wrap; gap: 8px; }
+    .qcounter { font-size: 13px; color: #888; }
+    .nav-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+    @media (max-width: 500px) { .sval { font-size: 18px; } header h1 { font-size: 18px; } }
+  </style>
+</head>
+<body>
+<a class="back-link" href="/">← School Reviews</a>
+<div class="quiz-wrap">
+  <header>
+    <div class="eyebrow">PHIL 2306 — Introduction to Ethics</div>
+    <h1>Midterm Review</h1>
+    <p>38 questions · Hobbes, Values, Relativism, Egoism, Euthyphro, Religious Critics, Natural Law, Utilitarianism</p>
+  </header>
+
+  <div class="filters" id="filters"></div>
+
+  <div class="history-panel" id="history-panel">
+    <div class="history-label">attempt history</div>
+    <div class="history-row" id="history-row"></div>
+  </div>
+
+  <div class="score-row">
+    <div class="scard"><div class="slabel">correct</div><div class="sval" id="s-correct">0</div></div>
+    <div class="scard"><div class="slabel">attempted</div><div class="sval" id="s-attempted">0</div></div>
+    <div class="scard"><div class="slabel">accuracy</div><div class="sval" id="s-pct">—</div></div>
+    <div class="scard"><div class="slabel">round</div><div class="sval" id="s-round">1</div></div>
+  </div>
+  <div class="pbar-bg"><div class="pbar-fill" id="prog" style="width:0%"></div></div>
+  <div class="banner" id="banner"><h3 id="banner-title"></h3><p id="banner-msg"></p></div>
+  <div id="q-area"></div>
+  <div class="nav-row">
+    <span class="qcounter" id="qcounter"></span>
+    <div class="nav-btns">
+      <button class="abtn" id="btn-prev">← prev</button>
+      <button class="abtn" id="btn-next">next →</button>
+      <button class="abtn" id="btn-rand">random</button>
+      <button class="abtn redo" id="btn-redo" style="display:none">↺ new round</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const ALL_Q = [
+
+  // ── HOBBES & STATE OF NATURE ────────────────────────────────────────
+  {
+    tag:"Hobbes & State of Nature",
+    q:"What is Hobbes' 'State of Nature'?",
+    type:"mc",
+    options:[
+      "A peaceful pre-political society governed by natural reason",
+      "The condition of human life without government or civil authority",
+      "A metaphor for humanity's relationship with the natural environment",
+      "The natural state of human goodness before the corrupting influence of society"
+    ],
+    answer:"The condition of human life without government or civil authority",
+    hint:{
+      concept:"Hobbes is asking a thought experiment: what would human life look like if there were NO government, no laws, no enforceable authority? Strip away all political structures — what's left?",
+      steps:["Think of the State of Nature as a baseline — life before any political society exists","There are no courts, no police, no laws — just individuals","What does Hobbes think that condition looks like?"],
+      note:"Hobbes is NOT describing a historical period — it's a philosophical thought experiment about why government is necessary."
+    },
+    solution:{steps:["The State of Nature is Hobbes' term for the hypothetical condition of human life without any political authority or civil government.","In it, there are no laws, no enforcement, no sovereign — just individuals in total freedom and total insecurity.","Answer: The condition of human life without government or civil authority."]}
+  },
+  {
+    tag:"Hobbes & State of Nature",
+    q:"Which of the following best describes Hobbes' assumptions about human nature?",
+    type:"mc",
+    options:[
+      "Humans are naturally social, cooperative, and inclined toward virtue",
+      "Humans are naturally good but corrupted by the institutions of society",
+      "Humans are roughly equal, naturally self-interested, and driven by competition, diffidence, and glory-seeking",
+      "Humans are naturally rational and will always choose peaceful cooperation over conflict"
+    ],
+    answer:"Humans are roughly equal, naturally self-interested, and driven by competition, diffidence, and glory-seeking",
+    hint:{
+      concept:"Hobbes is a psychological egoist — he thinks humans are fundamentally self-interested. He also makes a specific claim about equality that has important consequences for conflict.",
+      steps:["Hobbes: even the weakest person can kill the strongest through cunning or alliance","This rough equality means no one is naturally safe — everyone is a potential threat","Three root causes of conflict for Hobbes: competition (for resources), diffidence (fear), and glory (reputation)","Which answer captures this dark but specific view of human nature?"],
+      note:"Hobbes is NOT saying humans are evil — he's saying self-interest is natural and rational, which in a state without law leads to conflict."
+    },
+    solution:{steps:["Hobbes assumes: (1) humans are roughly equal in ability, (2) driven by self-interest, (3) motivated by competition (for goods), diffidence (fear of others), and glory (desire for recognition).","These assumptions lead inevitably to conflict in the State of Nature.","Answer: Humans are roughly equal, naturally self-interested, and driven by competition, diffidence, and glory-seeking."]}
+  },
+  {
+    tag:"Hobbes & State of Nature",
+    q:"How does Hobbes famously describe life in the State of Nature?",
+    type:"mc",
+    options:[
+      "Peaceful, simple, and free from the corruptions of civilization",
+      "Solitary, poor, nasty, brutish, and short",
+      "Governed by instinct and animal passions rather than reason",
+      "Rich with natural pleasures but lacking the refinements of culture"
+    ],
+    answer:"Solitary, poor, nasty, brutish, and short",
+    hint:{
+      concept:"This is one of the most famous phrases in political philosophy. Hobbes is describing the total misery of life when there is no sovereign to enforce peace.",
+      steps:["Solitary: no stable society or community","Poor: no industry or economy","Nasty: violent and dangerous","Brutish: driven by brute survival","Short: life ends quickly in constant conflict","Which answer matches Hobbes' exact phrasing?"],
+      note:"From Leviathan (1651), Ch. 13. These five words sum up Hobbes' entire argument for why government is necessary."
+    },
+    solution:{steps:["Hobbes writes in Leviathan: without a common power to keep all in awe, life is 'solitary, poor, nasty, brutish, and short.'","Answer: Solitary, poor, nasty, brutish, and short."]}
+  },
+  {
+    tag:"Hobbes & State of Nature",
+    q:"According to Hobbes, why do humans leave the State of Nature?",
+    type:"mc",
+    options:[
+      "Out of natural compassion and love for their fellow human beings",
+      "Because God commands them to form societies and obey rulers",
+      "Out of fear of violent death and the desire for comfortable living — reason points toward a social contract",
+      "Because the most powerful individuals force everyone else into submission"
+    ],
+    answer:"Out of fear of violent death and the desire for comfortable living — reason points toward a social contract",
+    hint:{
+      concept:"Hobbes' humans aren't social by nature — they enter society for purely self-interested reasons. What drives them is fear, not love or duty.",
+      steps:["The State of Nature is so dangerous that self-preservation demands an escape","Reason recognizes that agreeing to give up some freedom in exchange for protection is the best deal available","This agreement — the social contract — creates a sovereign with power to enforce peace","What motivates this move toward society, according to Hobbes?"],
+      note:"The Leviathan (sovereign) gets its power from the people giving up their natural freedom in exchange for security."
+    },
+    solution:{steps:["Hobbes says humans leave the State of Nature out of rational self-interest: fear of violent death and the desire for a comfortable, secure life.","Reason suggests agreeing to a social contract — surrendering some freedoms to a sovereign in exchange for peace and protection.","Answer: Out of fear of violent death and the desire for comfortable living — reason points toward a social contract."]}
+  },
+  {
+    tag:"Hobbes & State of Nature",
+    q:"In Nietzsche's 'Madman' parable, a madman runs through a marketplace crying 'God is dead.' What is Nietzsche's deeper concern behind this parable?",
+    type:"mc",
+    options:[
+      "Nietzsche believes God was literally murdered by atheist philosophers",
+      "Nietzsche is warning that atheism will lead to personal spiritual emptiness",
+      "Nietzsche is concerned that eliminating God eliminates the entire moral foundation of Western civilization, creating a catastrophic value vacuum",
+      "Nietzsche wants society to return to ancient Greek polytheism as a replacement"
+    ],
+    answer:"Nietzsche is concerned that eliminating God eliminates the entire moral foundation of Western civilization, creating a catastrophic value vacuum",
+    hint:{
+      concept:"Nietzsche is NOT celebrating God's death — he's sounding an alarm. Think about what God represented for Western morality, and what happens when that foundation disappears.",
+      steps:["Western morality was built on God as the ultimate foundation and authority","If God is 'dead' (i.e., no longer believed in, no longer the foundation), what happens to the moral system built on top of Him?","The madman is upset because nobody understands the consequences — people haven't grasped what they've destroyed","Is Nietzsche celebrating or warning?"],
+      note:"The madman cries: 'We have killed him — you and I!' The parable is Nietzsche's diagnosis of a cultural crisis, not a triumph."
+    },
+    solution:{steps:["Nietzsche's concern is that Western civilization has 'killed God' (rejected religious foundations) but hasn't replaced the moral framework God supported.","Without God, the entire moral system of the West loses its grounding — leading to nihilism, meaninglessness, and a crisis of values.","The madman represents someone who grasps this catastrophe while the crowd doesn't yet understand.","Answer: Nietzsche is concerned that eliminating God eliminates the entire moral foundation of Western civilization, creating a catastrophic value vacuum."]}
+  },
+
+  // ── VALUES & UNIVERSALIZABILITY ─────────────────────────────────────
+  {
+    tag:"Values & Universalizability",
+    q:"Which of the following is an example of a PRUDENTIAL value?",
+    type:"mc",
+    options:[
+      "You shouldn't lie — honesty is morally right",
+      "You should wear a seatbelt because it protects your own life",
+      "You should hold the door open for someone behind you",
+      "You should recycle because your city legally requires it"
+    ],
+    answer:"You should wear a seatbelt because it protects your own life",
+    hint:{
+      concept:"Prudential values concern what is good FOR YOU personally — your own well-being and self-interest. They're different from moral (right/wrong), etiquette (social norms), and legal (law) values.",
+      steps:["Moral value: concerns what's right or wrong, fair or harmful to others","Etiquette value: social conventions for polite behavior","Legal value: what the law requires","Prudential value: what's in your own best interest, good for you personally","Which of the options describes something done primarily for your own benefit?"],
+      note:"Prudential comes from 'prudence' — wise self-interest. It's not selfish in a negative sense; it just means taking care of yourself."
+    },
+    solution:{steps:["Wearing a seatbelt benefits you personally — it protects your life. That's a prudential value.","'Don't lie' is moral. 'Hold the door' is etiquette. 'Recycle because law requires it' is legal.","Answer: You should wear a seatbelt because it protects your own life."]}
+  },
+  {
+    tag:"Values & Universalizability",
+    q:"When moral values conflict with etiquette values, which takes precedence?",
+    type:"mc",
+    options:[
+      "Etiquette — social norms are the glue that holds civilization together",
+      "They are equal — context determines which matters more in a given situation",
+      "Moral values — they override etiquette, prudential, and legal values",
+      "Legal values — law is always the highest standard we can apply"
+    ],
+    answer:"Moral values — they override etiquette, prudential, and legal values",
+    hint:{
+      concept:"Think about a case where being polite (etiquette) would require you to do something morally wrong. Which wins? The hierarchy of values matters here.",
+      steps:["Example: etiquette says 'don't embarrass a guest.' Morality says 'don't let someone spread harmful misinformation.'","If you had to choose between politeness and doing what's right, which should win?","This reflects the ranking: moral > legal > etiquette > prudential (in terms of override priority)"],
+      note:"A law can be immoral (e.g., unjust laws). Etiquette is culturally specific and trivial compared to moral harm. Morality sits at the top."
+    },
+    solution:{steps:["Moral values take precedence over all other kinds of values — etiquette, prudential, and even legal.","If following a law or social norm requires doing something morally wrong, morality wins.","Answer: Moral values — they override etiquette, prudential, and legal values."]}
+  },
+  {
+    tag:"Values & Universalizability",
+    q:"What does 'universalizability' mean in ethics?",
+    type:"mc",
+    options:[
+      "All ethical theories must be applicable across all cultures simultaneously",
+      "If an action is right (or wrong) for you, it must be right (or wrong) for anyone in relevantly similar circumstances",
+      "Moral rules must be simple enough for every person to understand and follow",
+      "Universal agreement among people is required before a moral claim is valid"
+    ],
+    answer:"If an action is right (or wrong) for you, it must be right (or wrong) for anyone in relevantly similar circumstances",
+    hint:{
+      concept:"Universalizability is about consistency — you can't make an exception for yourself that you wouldn't make for anyone else in the same situation. It's the 'what if everyone did that?' principle.",
+      steps:["If lying is wrong for Person B in situation X, then it's wrong for YOU in situation X too","You can't say 'it's okay when I do it but not when others do it' without special justification","Think: does this relate to any famous philosopher's test for moral rules?"],
+      note:"This connects closely to Kant's Categorical Imperative: 'Act only according to that maxim by which you can at the same time will that it should become a universal law.'"
+    },
+    solution:{steps:["Universalizability means: if something is morally right (or wrong) for one person in a given situation, it must be right (or wrong) for anyone in relevantly similar circumstances.","You cannot make arbitrary exceptions for yourself.","Answer: If an action is right (or wrong) for you, it must be right (or wrong) for anyone in relevantly similar circumstances."]}
+  },
+  {
+    tag:"Values & Universalizability",
+    q:"What does universalizability ENTAIL about making moral judgments about others?",
+    type:"mc",
+    options:[
+      "You can only judge actions you have personally experienced yourself",
+      "You cannot make exceptions for yourself — any rule you apply to others also applies to you in similar situations",
+      "Moral judgments must be approved by a majority before they carry weight",
+      "Only trained ethicists are in a position to make universalizable moral judgments"
+    ],
+    answer:"You cannot make exceptions for yourself — any rule you apply to others also applies to you in similar situations",
+    hint:{
+      concept:"Universalizability cuts both ways — it's not just about applying rules to others, it's about applying the SAME rules to yourself. Think about what consistency requires.",
+      steps:["If you judge someone else's lying as wrong, you're implying lying is wrong in that type of situation","Universalizability requires you to apply that same standard to yourself when YOU lie in a similar situation","You can't hold others to a standard you exempt yourself from"],
+      note:"This is why 'do as I say, not as I do' is a moral failure — it violates universalizability."
+    },
+    solution:{steps:["Universalizability entails that the moral standards you apply to others must also apply to you in similar circumstances.","You cannot make a special exception for yourself without a principled reason that would apply to others too.","Answer: You cannot make exceptions for yourself — any rule you apply to others also applies to you in similar situations."]}
+  },
+
+  // ── RELATIVISM, SUBJECTIVISM & OBJECTIVISM ─────────────────────────
+  {
+    tag:"Relativism & Objectivism",
+    q:"What is the key difference between cultural relativism and moral relativism?",
+    type:"mc",
+    options:[
+      "They are the same thing — just different names for the same position",
+      "Cultural relativism is a descriptive observation that cultures differ in their moral codes; moral relativism is the normative claim that there is no objective moral truth",
+      "Cultural relativism applies to whole societies; moral relativism applies only to individuals",
+      "Cultural relativism supports objective morality; moral relativism denies it"
+    ],
+    answer:"Cultural relativism is a descriptive observation that cultures differ in their moral codes; moral relativism is the normative claim that there is no objective moral truth",
+    hint:{
+      concept:"One of these is a factual claim about the world; the other is a moral/philosophical position. Keep them separate.",
+      steps:["Cultural relativism: an anthropological/sociological FACT — different cultures do have different moral codes","This is just an observation, not a moral theory","Moral relativism: a philosophical position claiming that moral truth IS relative — there's no objective right or wrong","Observing that cultures differ doesn't automatically prove there's no objective morality — that's the difference"],
+      note:"You can observe cultural relativism (fact) while still believing in moral objectivism — the two don't contradict each other."
+    },
+    solution:{steps:["Cultural relativism = descriptive: cultures simply DO have different moral codes (an observation).","Moral relativism = normative: there IS no objective moral truth — rightness is relative to culture or individual.","Answer: Cultural relativism is descriptive (observation); moral relativism is a normative philosophical position."]}
+  },
+  {
+    tag:"Relativism & Objectivism",
+    q:"Moral subjectivism holds that moral statements like 'stealing is wrong' really mean:",
+    type:"mc",
+    options:[
+      "Stealing violates a universal law that all rational beings must respect",
+      "The culture I belong to disapproves of stealing",
+      "I personally disapprove of stealing — it expresses my feeling, not a fact",
+      "Stealing produces bad consequences for the most people"
+    ],
+    answer:"I personally disapprove of stealing — it expresses my feeling, not a fact",
+    hint:{
+      concept:"Subjectivism locates moral truth in the SUBJECT — the individual person's feelings or attitudes. Moral statements aren't true/false facts; they're expressions of personal sentiment.",
+      steps:["Compare: 'The sky is blue' (a fact) vs. 'Stealing is wrong' (for a subjectivist, this is like saying 'Yuck!' to stealing)","The subjectivist translates moral claims into statements about the speaker's inner states","It's not about culture (that's relativism) or consequences (that's utilitarianism) — it's about individual feeling"],
+      note:"This is also called 'emotivism' — moral statements express emotions rather than describe facts."
+    },
+    solution:{steps:["Moral subjectivism: moral statements express the speaker's personal feelings or attitudes, not objective facts.","'Stealing is wrong' = 'I disapprove of stealing' — it reports my inner state, not a moral truth.","Answer: I personally disapprove of stealing — it expresses my feeling, not a fact."]}
+  },
+  {
+    tag:"Relativism & Objectivism",
+    q:"Moral objectivism (absolutism) holds that:",
+    type:"mc",
+    options:[
+      "Moral truths vary based on cultural context and historical period",
+      "There are objective moral truths that are true regardless of what any individual or culture thinks",
+      "Only religious authorities can determine what is morally true",
+      "Moral truth is discovered through democratic consensus"
+    ],
+    answer:"There are objective moral truths that are true regardless of what any individual or culture thinks",
+    hint:{
+      concept:"Objectivism says morality is like math or physical fact — it exists independently of what anyone believes. Something can be wrong even if an entire culture approves of it.",
+      steps:["Compare to factual claims: 'The Earth is round' is true even if everyone believed it was flat","Moral objectivism makes the same move: 'Slavery is wrong' is true even if a culture endorsed it","This is the OPPOSITE of both relativism and subjectivism — morality doesn't depend on feelings or culture"],
+      note:"Most major ethical theories (Natural Law, Kantian ethics, Utilitarianism) are forms of moral objectivism."
+    },
+    solution:{steps:["Moral objectivism holds that moral truths exist independently — they're true regardless of what any individual, culture, or majority believes.","Something can be morally wrong even if everyone disagrees.","Answer: There are objective moral truths that are true regardless of what any individual or culture thinks."]}
+  },
+  {
+    tag:"Relativism & Objectivism",
+    q:"Moral nihilism is the view that:",
+    type:"mc",
+    options:[
+      "Morality is relative to the individual — each person creates their own moral truth",
+      "Only negative moral rules (prohibitions) are real; positive duties don't exist",
+      "Moral claims are neither true nor false — there are no moral facts whatsoever",
+      "Morality is created by governments and holds only within legal systems"
+    ],
+    answer:"Moral claims are neither true nor false — there are no moral facts whatsoever",
+    hint:{
+      concept:"Nihilism goes further than relativism or subjectivism. It doesn't say morality is relative or personal — it says moral claims don't even have truth values. They're not just subjective; they're meaningless as fact-claims.",
+      steps:["Relativism: morality exists but differs by culture/person","Subjectivism: morality exists but is personal feeling","Nihilism: morality doesn't exist as a category of facts at all — 'stealing is wrong' is neither true nor false","Which answer captures this most radical position?"],
+      note:"Moral nihilism is sometimes called 'error theory' — moral statements CLAIM to be facts but there are no moral facts to make them true or false."
+    },
+    solution:{steps:["Moral nihilism holds that moral claims are not true or false — there are simply no moral facts in the world.","It's more radical than relativism (which says morality exists but varies) or subjectivism (which roots morality in feelings).","Answer: Moral claims are neither true nor false — there are no moral facts whatsoever."]}
+  },
+  {
+    tag:"Relativism & Objectivism",
+    q:"To make a moral judgment under moral relativism, what information is most essential?",
+    type:"mc",
+    options:[
+      "The objective moral facts as determined by reason or natural law",
+      "The consequences the action will produce for the greatest number of people",
+      "What the relevant culture or individual holds to be right or wrong",
+      "What God has commanded regarding that type of action"
+    ],
+    answer:"What the relevant culture or individual holds to be right or wrong",
+    hint:{
+      concept:"For a relativist, 'right' means 'right according to the relevant culture (or individual).' So to assess any action, you need to know what THAT group or person believes.",
+      steps:["Relativism: moral truth is relative to a framework (culture or individual)","To judge an action as right or wrong, you need to consult that framework","For cultural relativism: what does the culture say?","For individual relativism: what does the person believe?","The objective facts, consequences, or divine commands are irrelevant — only the framework matters"],
+      note:"This is also why moral relativism makes cross-cultural moral criticism difficult — by what standard do you judge another culture?"
+    },
+    solution:{steps:["Under moral relativism, right and wrong are determined by the relevant cultural or individual framework.","To judge an action morally, you need to know what the applicable culture (or person) believes about it.","Answer: What the relevant culture or individual holds to be right or wrong."]}
+  },
+
+  // ── ALTRUISM vs EGOISM ──────────────────────────────────────────────
+  {
+    tag:"Altruism vs Egoism",
+    q:"What is the core difference between altruism and egoism?",
+    type:"mc",
+    options:[
+      "Altruism is practiced by religious people; egoism is the philosophy of atheists",
+      "Altruism means acting primarily for others' benefit; egoism means acting primarily for your own benefit",
+      "Altruism requires self-destruction; egoism requires harming others",
+      "Altruism is a social policy; egoism is a personal lifestyle choice"
+    ],
+    answer:"Altruism means acting primarily for others' benefit; egoism means acting primarily for your own benefit",
+    hint:{
+      concept:"Both terms describe motivations for action. Focus on whose interests are being served: the actor's own, or others'?",
+      steps:["Altruism: from Latin 'alteri' (others) — placing others' interests above your own","Egoism: from Latin 'ego' (self) — prioritizing your own interests","Neither requires being extreme — the question is about whose interests take priority"],
+      note:"Psychological egoism (Hobbes) says humans CAN ONLY act selfishly. Ethical egoism (Rand) says we SHOULD act selfishly. These are different claims."
+    },
+    solution:{steps:["Altruism = acting for the benefit of others, even at cost to yourself.","Egoism = acting for your own benefit, prioritizing self-interest.","Answer: Altruism means acting primarily for others' benefit; egoism means acting primarily for your own benefit."]}
+  },
+  {
+    tag:"Altruism vs Egoism",
+    q:"Ayn Rand argues that altruism is:",
+    type:"mc",
+    options:[
+      "The highest moral ideal — self-sacrifice is the purest expression of virtue",
+      "Acceptable only when practiced voluntarily, not when imposed by government",
+      "Immoral — it demands self-sacrifice, which Rand views as destructive and exploitative",
+      "Unnecessary in a free-market society where self-interest automatically benefits everyone"
+    ],
+    answer:"Immoral — it demands self-sacrifice, which Rand views as destructive and exploitative",
+    hint:{
+      concept:"Rand is famous for flipping the conventional moral script — she argues the opposite of what most people assume. She doesn't mildly criticize altruism; she calls it fundamentally WRONG.",
+      steps:["Rand: altruism holds 'live for others' as the moral ideal","But Rand thinks your life and its value belong to YOU — sacrificing it for others is a form of self-destruction","She argues altruism actually serves those who benefit from others' sacrifice — it's exploitative","Which answer captures her strong rejection of altruism?"],
+      note:"Rand's book is literally called 'The Virtue of Selfishness' — she inverts the usual moral valuation entirely."
+    },
+    solution:{steps:["Rand argues altruism is immoral because it demands self-sacrifice — treating yourself as a means to others' ends rather than as a valuable end in yourself.","She views altruism as exploitative: it benefits those who receive the sacrifice at the expense of those who give.","Answer: Immoral — it demands self-sacrifice, which Rand views as destructive and exploitative."]}
+  },
+  {
+    tag:"Altruism vs Egoism",
+    q:"Ayn Rand's ethical philosophy promotes:",
+    type:"mc",
+    options:[
+      "Utilitarianism — maximizing happiness for the greatest number of people",
+      "Rational egoism — each person should pursue their own rational long-term self-interest",
+      "Religious morality — following divine commands leads to the best life",
+      "Cultural relativism — each society should develop its own moral standards"
+    ],
+    answer:"Rational egoism — each person should pursue their own rational long-term self-interest",
+    hint:{
+      concept:"Rand calls her ethics 'Objectivism.' She promotes a specific form of self-interest — not random impulses, but RATIONAL self-interest. Think about what the opposite of altruism looks like for her.",
+      steps:["Rand: your primary moral obligation is to your own flourishing and happiness","'Rational' is important — she doesn't endorse impulsive selfishness, but long-term reasoned self-interest","She argues that a society of rational egoists, each pursuing their own interests, is more ethical than one built on self-sacrifice"],
+      note:"Rand's rational egoism is different from Hobbes' psychological egoism — Rand prescribes it as a moral ideal, not just describes it as a fact of human nature."
+    },
+    solution:{steps:["Rand promotes rational egoism: the view that each person should pursue their own rational long-term self-interest as a moral ideal.","This is the 'virtue of selfishness' — not impulsive greed, but principled self-regard.","Answer: Rational egoism — each person should pursue their own rational long-term self-interest."]}
+  },
+  {
+    tag:"Altruism vs Egoism",
+    q:"True or False: According to Ayn Rand, selfishness is a virtue.",
+    type:"mc",
+    options:["True","False"],
+    answer:"True",
+    hint:{
+      concept:"Rand literally titled her collection of essays 'The Virtue of Selfishness.' Think about whether she embraces or rejects self-interest as a moral ideal.",
+      steps:["Rand explicitly argues that rational self-interest is not a vice but a virtue","She's inverting conventional morality which treats selfishness as inherently wrong","For Rand, properly understood selfishness — pursuing your own rational interests — is the cornerstone of a moral life"],
+      note:"Rand is careful: 'selfishness' for her means rational self-interest, not cruelty or disregard for rights. But yes — she calls it a virtue."
+    },
+    solution:{steps:["TRUE. Ayn Rand explicitly argues in 'The Virtue of Selfishness' that rational self-interest is a virtue, not a vice.","She believes pursuing your own flourishing is the proper moral goal — not self-sacrifice for others.","Answer: True."]}
+  },
+
+  // ── EUTHYPHRO DILEMMA ───────────────────────────────────────────────
+  {
+    tag:"Euthyphro Dilemma",
+    q:"What are Euthyphro and Socrates discussing when the dilemma arises, and why is it significant?",
+    type:"mc",
+    options:[
+      "Whether God exists — Euthyphro is defending the existence of the gods to a skeptical Socrates",
+      "The definition of piety — Euthyphro is about to prosecute his own father, and Socrates presses him to define what makes an act holy",
+      "Whether citizens should obey unjust laws — Socrates is facing his own trial",
+      "The proper way to worship — Euthyphro is designing a new religious ritual"
+    ],
+    answer:"The definition of piety — Euthyphro is about to prosecute his own father, and Socrates presses him to define what makes an act holy",
+    hint:{
+      concept:"The Euthyphro dialogue begins with a specific, concrete situation. Euthyphro is doing something controversial, and Socrates (ever the philosophical gadfly) turns it into a question about definition.",
+      steps:["Euthyphro is going to court to prosecute his own father for impiety (a controversial move)","He claims he knows what piety/holiness is — otherwise how could he charge his own father?","Socrates challenges him: 'What IS piety?' — and the dilemma emerges when Euthyphro appeals to what the gods love"],
+      note:"The dialogue is called 'Euthyphro' and was written by Plato. It takes place just before Socrates' own trial."
+    },
+    solution:{steps:["Euthyphro is about to prosecute his own father for impiety. Socrates asks him to define piety — what makes an act holy?","When Euthyphro says 'what the gods love,' Socrates presses: do the gods love it BECAUSE it's holy, or is it holy BECAUSE the gods love it?","This question becomes the Euthyphro Dilemma.","Answer: The definition of piety — Euthyphro is about to prosecute his father and Socrates presses him to define what makes an act holy."]}
+  },
+  {
+    tag:"Euthyphro Dilemma",
+    q:"What is the modern phrasing of the Euthyphro Dilemma?",
+    type:"mc",
+    options:[
+      "Is something morally right because God commands it, or does God command it because it is morally right?",
+      "Does God exist, or has science and reason replaced the need for religion?",
+      "Should we follow natural law or divine commands when the two conflict?",
+      "Is religious belief ultimately a matter of faith or rational argument?"
+    ],
+    answer:"Is something morally right because God commands it, or does God command it because it is morally right?",
+    hint:{
+      concept:"The dilemma creates an either/or: either morality flows from God's will, or God's will tracks something independent. Both options create problems for religious ethics.",
+      steps:["Option 1: Right BECAUSE God commands it → morality is whatever God says (Divine Command Theory)","Option 2: God commands it BECAUSE it's right → something other than God's will determines rightness","Which answer captures this exact fork in the road?"],
+      note:"This dilemma is devastating for Divine Command Theory — both horns create serious philosophical problems."
+    },
+    solution:{steps:["The Euthyphro Dilemma, modernized: 'Is something morally right because God commands it, or does God command it because it is morally right?'","Answer: Is something morally right because God commands it, or does God command it because it is morally right?"]}
+  },
+  {
+    tag:"Euthyphro Dilemma",
+    q:"Divine Command Theory (DCT) falls under which horn of the Euthyphro Dilemma?",
+    type:"mc",
+    options:[
+      "God commands things because they are already morally right — God tracks independent moral truths",
+      "Things are morally right BECAUSE God commands them — morality flows entirely from God's will",
+      "DCT rejects the dilemma by arguing God and morality are identical",
+      "DCT takes neither horn — it denies that God issues commands about morality"
+    ],
+    answer:"Things are morally right BECAUSE God commands them — morality flows entirely from God's will",
+    hint:{
+      concept:"DCT stands for 'Divine COMMAND Theory' — the commands come first and create moral facts. Think about which horn puts God's will in the driver's seat.",
+      steps:["Horn 1: Right BECAUSE God commands it → God's will CREATES moral facts (this is DCT)","Horn 2: God commands things BECAUSE they're right → moral facts exist independently of God","DCT clearly falls under Horn 1 — morality is entirely dependent on God's will, not the other way around"],
+      note:"The problem with DCT (Horn 1): if God's will creates morality, then if God commanded cruelty, cruelty would be moral — making morality seem arbitrary."
+    },
+    solution:{steps:["DCT holds that things are morally right BECAUSE God commands them — God's will is the source and creator of moral facts.","This is Horn 1 of the dilemma.","Answer: Things are morally right BECAUSE God commands them — morality flows entirely from God's will."]}
+  },
+
+  // ── CRITICS OF RELIGIOUS MORALITY ───────────────────────────────────
+  {
+    tag:"Critics of Religious Morality",
+    q:"P.H. Nowell-Smith uses whose theory to make his criticism of religious morality?",
+    type:"mc",
+    options:[
+      "Jeremy Bentham's utilitarian calculus",
+      "Immanuel Kant's concept of moral autonomy",
+      "Thomas Aquinas's Natural Law",
+      "John Stuart Mill's distinction between higher and lower pleasures"
+    ],
+    answer:"Immanuel Kant's concept of moral autonomy",
+    hint:{
+      concept:"Nowell-Smith's criticism is about autonomy vs. heteronomy — doing things because YOU reasoned them out vs. following external commands. Which philosopher made autonomy central to moral worth?",
+      steps:["Nowell-Smith argues religious people are 'heteronomous' — they follow God's rules rather than reasoning for themselves","'Autonomy' = self-governance; 'heteronomy' = governed by another","This language and concept comes directly from a specific philosopher — who made autonomy the cornerstone of moral worth?"],
+      note:"Kant's Categorical Imperative requires that you reason through moral duties yourself — acting from duty, not from external command or desire for reward."
+    },
+    solution:{steps:["Nowell-Smith uses Kant's concept of moral autonomy to criticize religious morality.","Kant held that genuine morality requires autonomy — self-legislation through reason. Nowell-Smith argues religious people are heteronomous (following God's commands) and therefore not truly moral.","Answer: Immanuel Kant's concept of moral autonomy."]}
+  },
+  {
+    tag:"Critics of Religious Morality",
+    q:"James Rachels argues that if Divine Command Theory is true, a serious problem follows. What is it?",
+    type:"mc",
+    options:[
+      "It makes moral knowledge impossible since we can't verify God's commands",
+      "God could command anything — including genocide — and it would be 'morally right,' making morality completely arbitrary",
+      "It makes morality too demanding since God's commands are always absolute",
+      "It removes individual moral responsibility since God decides everything"
+    ],
+    answer:"God could command anything — including genocide — and it would be 'morally right,' making morality completely arbitrary",
+    hint:{
+      concept:"Rachels follows the implications of DCT to their logical conclusion. If God's will IS morality, then there's nothing outside God's will that constrains what God could command.",
+      steps:["Under DCT: 'right' = 'God commands it' — there's no independent standard","So if God commanded torture, deception, or genocide, those would automatically become moral","This means morality depends entirely on an unconstrained divine will — it could be anything","Which answer describes this troubling consequence?"],
+      note:"Rachels uses examples from scripture (like God commanding Abraham to sacrifice Isaac) to press this point."
+    },
+    solution:{steps:["Rachels argues that if DCT is true, God could command anything — and it would automatically be 'morally right.'","This makes morality arbitrary: it depends on whatever an unconstrained divine will happens to decree.","Answer: God could command anything — including genocide — and it would be 'morally right,' making morality completely arbitrary."]}
+  },
+  {
+    tag:"Critics of Religious Morality",
+    q:"According to Nietzsche, what did Jesus do to the Roman moral system?",
+    type:"mc",
+    options:[
+      "Jesus perfected Roman moral values by grounding them in divine authority",
+      "Jesus eliminated all moral distinctions, teaching that nothing is right or wrong",
+      "Jesus inverted Roman values — turning what Romans called 'bad' (humble, weak) into 'good,' and Roman 'good' (powerful, noble) into 'evil'",
+      "Jesus introduced Greek rational ethics to replace Roman religious tradition"
+    ],
+    answer:"Jesus inverted Roman values — turning what Romans called 'bad' (humble, weak) into 'good,' and Roman 'good' (powerful, noble) into 'evil'",
+    hint:{
+      concept:"Nietzsche calls this the 'slave revolt in morality.' Think about what Romans valued (the master morality) and what Christianity elevated instead.",
+      steps:["Roman 'Good' = powerful, noble, strong, aristocratic","Roman 'Bad' = weak, common, low, humble","Jesus/Christianity took those 'bad' qualities (meekness, poverty, humility) and called them VIRTUOUS — 'Blessed are the meek'","And took those 'good' qualities (pride, power, wealth) and called them SINFUL","What word describes taking something from bottom to top and vice versa?"],
+      note:"Nietzsche calls this 'transvaluation of values' — the complete reversal of the Roman value hierarchy."
+    },
+    solution:{steps:["Nietzsche argues Jesus inverted the Roman moral system — the 'transvaluation of values.'","Romans valued strength, power, and nobility as 'Good' and called weakness 'Bad.'","Jesus flipped this: weakness and humility became holy virtues ('Blessed are the meek'); pride and power became sins ('Evil').","Answer: Jesus inverted Roman values — turning 'bad' (humble, weak) into 'good,' and 'good' (powerful, noble) into 'evil.'"]}
+  },
+  {
+    tag:"Critics of Religious Morality",
+    q:"Nietzsche describes 'master morality' as:",
+    type:"mc",
+    options:[
+      "The morality taught by Jesus and practiced by the early Christian church",
+      "A moral code based on strength, nobility, and self-affirmation — created by the powerful to express their own excellence",
+      "A system in which those with political power make moral rules for everyone else",
+      "The morality of rational self-interest as described by Ayn Rand"
+    ],
+    answer:"A moral code based on strength, nobility, and self-affirmation — created by the powerful to express their own excellence",
+    hint:{
+      concept:"For Nietzsche, 'master morality' is the original, noble morality of the strong — before it was corrupted by the 'slave revolt.' Think about what the powerful would value about themselves.",
+      steps:["The 'masters' (noble warriors, aristocrats) define 'Good' based on their own qualities","Good = what they ARE: strong, generous, courageous, powerful, proud","'Bad' = what they are NOT: weak, cowardly, low","This is positive self-definition — they don't define themselves in reaction to others"],
+      note:"Master morality says 'I am good' first, then 'they are bad by comparison.' Slave morality starts with 'they are evil' — it's reactive."
+    },
+    solution:{steps:["Master morality is the value system of the powerful and noble — based on self-affirmation of strength, generosity, and excellence.","'Good' = what the master IS (strong, noble, courageous). 'Bad' = what they are NOT (weak, base).","It's positive and self-defining, not reactive.","Answer: A moral code based on strength, nobility, and self-affirmation — created by the powerful to express their own excellence."]}
+  },
+  {
+    tag:"Critics of Religious Morality",
+    q:"Which critic uses whose theory — correctly matched?",
+    type:"mc",
+    options:[
+      "Nowell-Smith uses Bentham; Rachels uses Nietzsche; Nietzsche uses Kant",
+      "Nowell-Smith uses Kant's autonomy; Rachels uses the Euthyphro argument (Socrates/Plato); Nietzsche develops his own original critique",
+      "Nowell-Smith uses Natural Law; Rachels uses utilitarianism; Nietzsche uses Kant",
+      "All three critics draw exclusively from Kantian ethics to make their arguments"
+    ],
+    answer:"Nowell-Smith uses Kant's autonomy; Rachels uses the Euthyphro argument (Socrates/Plato); Nietzsche develops his own original critique",
+    hint:{
+      concept:"Each critic draws on a different tradition. Match the critic to the philosophical framework behind their argument.",
+      steps:["Nowell-Smith: argues religious people are heteronomous — the autonomy/heteronomy distinction is Kantian","Rachels: shows DCT leads to arbitrary morality — this traces to the logic of the Euthyphro Dilemma (Plato/Socrates)","Nietzsche: master/slave morality, ressentiment, transvaluation of values — entirely original, his own framework"],
+      note:"Nietzsche doesn't work within existing traditions — he critiques them all and develops his own genealogical method."
+    },
+    solution:{steps:["Nowell-Smith → Kant's concept of moral autonomy (heteronomy vs. autonomy).","Rachels → draws on the Euthyphro Dilemma (Plato/Socrates) to show DCT makes morality arbitrary.","Nietzsche → his own original critique using master/slave morality and genealogy of morals.","Answer: Nowell-Smith uses Kant; Rachels uses the Euthyphro argument; Nietzsche develops his own critique."]}
+  },
+
+  // ── NATURAL LAW ─────────────────────────────────────────────────────
+  {
+    tag:"Natural Law",
+    q:"The basic historical foundation of Natural Law theory traces primarily to:",
+    type:"mc",
+    options:[
+      "Jean-Jacques Rousseau and the Enlightenment social contract tradition",
+      "Aristotle's teleological philosophy, later developed in a Christian framework by Thomas Aquinas",
+      "Immanuel Kant's rational ethics and the categorical imperative",
+      "John Stuart Mill's reform of Bentham's utilitarian calculus"
+    ],
+    answer:"Aristotle's teleological philosophy, later developed in a Christian framework by Thomas Aquinas",
+    hint:{
+      concept:"Natural Law has ancient roots and was later Christianized. Think about who introduced teleology (purposes/ends built into nature) and who brought it into Catholic theology.",
+      steps:["Aristotle: everything has a natural telos (purpose/end) — a thing is good when it fulfills its telos","Aquinas (13th c.): took Aristotle's teleology and built it into Catholic theology — God designed human nature with specific purposes","This combination of Greek teleology + Christian theology = Natural Law","Which answer identifies these two figures?"],
+      note:"Aquinas wrote Summa Theologica, where he argues natural law is how rational creatures participate in God's eternal law."
+    },
+    solution:{steps:["Natural Law theory traces to Aristotle's teleology (things have natural purposes/ends) and was developed into a Christian framework by Thomas Aquinas in the 13th century.","Answer: Aristotle's teleological philosophy, later developed in a Christian framework by Thomas Aquinas."]}
+  },
+  {
+    tag:"Natural Law",
+    q:"What is 'Forfeiture' in Natural Law ethics, and what does it allow?",
+    type:"mc",
+    options:[
+      "Forfeiture is when a government takes property from citizens — it allows taxation for public good",
+      "Forfeiture is when someone voluntarily gives up rights to join civil society — it allows government to exist",
+      "Forfeiture is the principle that by committing serious wrongs, a person forfeits their own natural rights — allowing, for example, capital punishment for murderers",
+      "Forfeiture is God removing rights as divine punishment — it allows the Church to condemn heretics"
+    ],
+    answer:"Forfeiture is the principle that by committing serious wrongs, a person forfeits their own natural rights — allowing, for example, capital punishment for murderers",
+    hint:{
+      concept:"Natural Law generally holds that life is sacred. But it permits capital punishment. How? Forfeiture bridges that gap — the murderer loses the right they violated in others.",
+      steps:["Natural Law: every person has a right to life","Problem: if life is sacred, how can capital punishment be justified?","Forfeiture: by taking another's life, a murderer forfeits their OWN right to life","This makes execution morally permissible — the murderer gave up their protection by their own actions"],
+      note:"Forfeiture is also used to justify war — an aggressor nation forfeits rights by initiating unjust violence."
+    },
+    solution:{steps:["Forfeiture: by committing serious wrongs (like murder), a person forfeits their own natural rights (like the right to life).","This allows Natural Law to permit capital punishment — the murderer forfeited the right they violated in others.","Answer: Forfeiture is the principle that serious wrongdoing causes a person to forfeit their own natural rights, allowing capital punishment for murderers."]}
+  },
+  {
+    tag:"Natural Law",
+    q:"The Doctrine of Double Effect (DDE) was developed to address what type of moral situation?",
+    type:"mc",
+    options:[
+      "How to calculate whether an action produces more pleasure than pain for the majority",
+      "How to handle situations where an action has both a good intended effect and an unavoidable harmful side effect",
+      "How to determine whether God's commands should override natural law when they conflict",
+      "How to justify breaking moral rules in emergencies"
+    ],
+    answer:"How to handle situations where an action has both a good intended effect and an unavoidable harmful side effect",
+    hint:{
+      concept:"The name gives it away: 'double effect' — one action, two effects. Natural Law needs a principled way to determine when the good effect justifies accepting the bad one.",
+      steps:["Example: giving a dying patient pain medication that also speeds up death","Good effect: pain relief (intended)","Bad effect: hastened death (unavoidable side effect)","The DDE provides conditions for deciding if such an action is morally permissible"],
+      note:"The DDE is used in medical ethics, just war theory, and other fields where good intentions can have harmful consequences."
+    },
+    solution:{steps:["The DDE addresses situations where a single action produces both a good intended effect and an unavoidable harmful side effect.","It provides four conditions for determining when such an action is morally permissible.","Answer: How to handle situations where an action has both a good intended effect and an unavoidable harmful side effect."]}
+  },
+  {
+    tag:"Natural Law",
+    q:"Which of the following correctly states the THIRD condition of the Doctrine of Double Effect?",
+    type:"mc",
+    options:[
+      "The act itself must not be intrinsically evil",
+      "The agent must intend only the good effect, not the harmful side effect",
+      "The harmful effect must not be the means by which the good effect is achieved",
+      "There must be proportionate reason — the good must outweigh the bad"
+    ],
+    answer:"The harmful effect must not be the means by which the good effect is achieved",
+    hint:{
+      concept:"The four conditions are sequential. The third one deals with the causal relationship between the good and bad effects. Think about how they connect.",
+      steps:["Condition 1: The act itself is not intrinsically evil","Condition 2: Only the good effect is intended (bad is foreseen but not willed)","Condition 3: The bad effect is not the MEANS to the good effect (they must be independent)","Condition 4: Proportionate reason — good outweighs bad","Which answer matches Condition 3?"],
+      note:"Why does Condition 3 matter? If the bad IS the means, you're using harm as a tool — even if you don't 'want' the harm, you're deliberately causing it to get what you want."
+    },
+    solution:{steps:["The third condition of the DDE: the harmful effect must not be the means by which the good effect is achieved.","If the harm IS the mechanism that produces the benefit, the action is impermissible even if the overall intent is good.","Answer: The harmful effect must not be the means by which the good effect is achieved."]}
+  },
+  {
+    tag:"Natural Law",
+    q:"A doctor gives a terminally ill patient high doses of morphine to relieve severe pain, knowing it will also hasten death. Running this through the DDE, this action is:",
+    type:"mc",
+    options:[
+      "Impermissible — any action that hastens death violates Natural Law absolutely",
+      "Permissible — the act is not evil, only relief is intended, death is not the means to relief, and the reason is proportionate",
+      "Impermissible — the hastened death IS the means by which the patient's suffering ends",
+      "Permissible — but only if the patient requests it, which adds a required fifth condition"
+    ],
+    answer:"Permissible — the act is not evil, only relief is intended, death is not the means to relief, and the reason is proportionate",
+    hint:{
+      concept:"Apply all four DDE conditions one at a time to this scenario. The key question for Condition 3: does death CAUSE the relief, or does the morphine cause the relief while also causing death?",
+      steps:["Condition 1: Is giving morphine for pain intrinsically evil? No — it's a medical act of care","Condition 2: Does the doctor intend death? No — she intends pain relief. Death is foreseen but not intended.","Condition 3: Is death the MEANS to pain relief? No — the drug relieves pain directly; death is a separate side effect","Condition 4: Is relieving terminal suffering a proportionate reason? Yes","All four pass — what's the verdict?"],
+      note:"This is the classic medical ethics application of the DDE. The morphine doesn't work BY killing the patient — it relieves pain and also happens to shorten life."
+    },
+    solution:{steps:["Condition 1: Giving morphine is not intrinsically evil ✓","Condition 2: Only pain relief is intended; death is foreseen but not willed ✓","Condition 3: The morphine relieves pain directly — death is a side effect, not the mechanism of relief ✓","Condition 4: Relieving severe terminal suffering is a proportionate reason ✓","All four conditions met → Permissible under the DDE."]}
+  },
+
+  // ── UTILITARIANISM ──────────────────────────────────────────────────
+  {
+    tag:"Utilitarianism",
+    q:"What is Bentham's Hedonic Calculus, and what is its purpose?",
+    type:"mc",
+    options:[
+      "A mathematical formula for proving God's existence through the quantity of happiness in the world",
+      "A system for measuring the pleasure and pain an action produces — across multiple factors — to determine the right course of action",
+      "A moral code focused on the quality of pleasures rather than their quantity",
+      "A method for ranking individuals by their capacity for happiness"
+    ],
+    answer:"A system for measuring the pleasure and pain an action produces — across multiple factors — to determine the right course of action",
+    hint:{
+      concept:"Bentham wanted to make ethics scientific — measurable. The Hedonic Calculus is his tool for doing that. Think about what 'calculus' means in this context.",
+      steps:["Hedonic = relating to pleasure/pain (from 'hedonism')","Bentham: to determine what's right, calculate which action produces the most pleasure (net of pain)","The Calculus has multiple factors for scoring pleasure/pain: intensity, duration, certainty, propinquity, fecundity, purity, extent","It's a decision tool — run your options through it and do whichever scores highest"],
+      note:"Bentham actually thought we could literally assign numerical values to pleasures and pains. Critics called this naive — which is partly why Mill refined the theory."
+    },
+    solution:{steps:["The Hedonic Calculus is Bentham's system for measuring the pleasure and pain produced by an action across multiple factors (intensity, duration, certainty, extent, etc.).","Its purpose: to determine which action produces the most overall happiness — and that action is the right one.","Answer: A system for measuring pleasure and pain across multiple factors to determine the right course of action."]}
+  },
+  {
+    tag:"Utilitarianism",
+    q:"Which of the following is NOT one of the factors in Bentham's Hedonic Calculus?",
+    type:"mc",
+    options:[
+      "Intensity — how strong is the pleasure or pain?",
+      "Duration — how long does the pleasure or pain last?",
+      "Novelty — how new or surprising is the pleasure?",
+      "Extent — how many people are affected by the pleasure or pain?"
+    ],
+    answer:"Novelty — how new or surprising is the pleasure?",
+    hint:{
+      concept:"Bentham's factors are all about the quantity and quality of the pleasure/pain experience and how far it spreads. One answer here is an invented factor that doesn't appear in his calculus.",
+      steps:["Real factors include: intensity, duration, certainty (how sure is it?), propinquity (how soon?), fecundity (will it produce more pleasure?), purity (will it be followed by pain?), extent (how many people?)","'Novelty' — how surprising a pleasure is — is NOT part of Bentham's original calculus","Which option describes something Bentham didn't include?"],
+      note:"Bentham listed exactly seven factors. 'Novelty' is not among them."
+    },
+    solution:{steps:["Bentham's factors: intensity, duration, certainty, propinquity (nearness in time), fecundity, purity, extent.","'Novelty' (how new or surprising a pleasure is) is NOT one of Bentham's factors.","Answer: Novelty — how new or surprising is the pleasure?"]}
+  },
+  {
+    tag:"Utilitarianism",
+    q:"'It is better to be a human being dissatisfied than a pig satisfied; better to be Socrates dissatisfied than a fool satisfied.' Who said this and what does it mean?",
+    type:"mc",
+    options:[
+      "Bentham — pleasures of the mind outweigh bodily pleasures in raw quantity",
+      "Mill — some pleasures are qualitatively higher and more valuable, even if they come with less satisfaction",
+      "Aristotle — virtue requires rejecting base pleasures in favor of contemplation",
+      "Nietzsche — suffering and dissatisfaction drive human greatness"
+    ],
+    answer:"Mill — some pleasures are qualitatively higher and more valuable, even if they come with less satisfaction",
+    hint:{
+      concept:"This is Mill's most famous quote from Utilitarianism. Think about who it is that introduced the quality/quantity distinction that separates him from Bentham.",
+      steps:["Bentham: pleasure is pleasure — what matters is how much (quantity)","Mill disagrees: a pig, fully satisfied with pig-pleasures, has less valuable pleasure than a dissatisfied human capable of intellectual life","Even Socrates, dissatisfied and troubled by deep questions, has a richer life than a happy fool","Who introduced this quality distinction?"],
+      note:"Mill: 'Competent judges' who have experienced both types of pleasure always prefer the higher kind — and their judgment is authoritative."
+    },
+    solution:{steps:["John Stuart Mill said this in Utilitarianism.","It illustrates his qualitative distinction: intellectual and moral pleasures are higher in KIND, not just quantity.","Even a dissatisfied Socrates lives a more valuable life than a satisfied pig or fool.","Answer: Mill — some pleasures are qualitatively higher and more valuable, even if they come with less satisfaction."]}
+  },
+  {
+    tag:"Utilitarianism",
+    q:"Apply utilitarianism to the classic 'trolley problem': a runaway trolley will kill 5 people. You can pull a lever to divert it, killing 1 person instead. What does Act Utilitarianism require?",
+    type:"mc",
+    options:[
+      "Do nothing — actively causing a death is always worse than passively allowing deaths",
+      "Pull the lever — saving 5 lives produces more overall utility than saving 1",
+      "Consult the rules for this type of situation rather than calculating outcomes directly",
+      "Refuse to participate — a utilitarian cannot endorse either option"
+    ],
+    answer:"Pull the lever — saving 5 lives produces more overall utility than saving 1",
+    hint:{
+      concept:"Act Utilitarianism: in THIS specific situation, which action maximizes utility (minimizes suffering/death)? Run the calculation directly.",
+      steps:["Option A: do nothing → 5 deaths","Option B: pull lever → 1 death","Utility calculation: 5 deaths produce more suffering than 1 death","Act Utilitarianism says do whatever maximizes utility in this situation — what does the math say?"],
+      note:"Act Utilitarianism gives a clear answer here. Rule Utilitarianism might too, but it gets there differently — through the rule 'minimize harm.'"
+    },
+    solution:{steps:["Act Utilitarianism: calculate utility for each option directly in this situation.","5 deaths > 1 death in terms of suffering produced → pulling the lever minimizes harm and maximizes utility.","Answer: Pull the lever — saving 5 lives produces more overall utility than saving 1."]}
+  },
+  {
+    tag:"Utilitarianism",
+    q:"What is the key difference between Act and Rule Utilitarianism?",
+    type:"mc",
+    options:[
+      "Act Utilitarianism applies only to personal actions; Rule Utilitarianism applies only to government policy",
+      "Act Utilitarianism judges each individual action by its own utility calculation; Rule Utilitarianism follows rules that maximize utility when generally adopted",
+      "Act Utilitarianism is Bentham's version; Rule Utilitarianism is exactly identical to Mill's version",
+      "They differ only in whether they count pleasures quantitatively or qualitatively"
+    ],
+    answer:"Act Utilitarianism judges each individual action by its own utility calculation; Rule Utilitarianism follows rules that maximize utility when generally adopted",
+    hint:{
+      concept:"The names give it away: Act = apply utility to each ACT. Rule = apply utility to RULES, then follow those rules in individual cases.",
+      steps:["Act Util: for every individual decision, ask 'does THIS act maximize utility right now?'","Rule Util: ask 'what RULE, if everyone followed it, would maximize utility?' Then follow that rule — even in individual cases where breaking it might produce more utility","Example: 'Should I lie?' Act: calculate this lie's utility. Rule: adopt 'don't lie' because that rule, universally followed, maximizes utility"],
+      note:"Rule Util avoids some of Act Util's ugly conclusions (like 'frame the innocent person if it helps the many')."
+    },
+    solution:{steps:["Act Utilitarianism: assess each individual action directly by its utility in that specific situation.","Rule Utilitarianism: identify which rules would maximize utility if generally followed, then follow those rules in all cases.","Answer: Act Utilitarianism judges each individual action by its own utility calculation; Rule Utilitarianism follows rules that maximize utility when generally adopted."]}
+  },
+  {
+    tag:"Utilitarianism",
+    q:"A major objection to Utilitarianism is the 'scapegoating' or 'innocent victim' problem. What is this objection?",
+    type:"mc",
+    options:[
+      "Utilitarianism is too lenient — it permits too many exceptions to moral rules",
+      "Utilitarianism can justify torturing or punishing an innocent person if doing so produces greater overall happiness",
+      "Utilitarianism ignores the role of intentions — only consequences matter",
+      "Utilitarianism makes morality too demanding, requiring constant sacrifice for others"
+    ],
+    answer:"Utilitarianism can justify torturing or punishing an innocent person if doing so produces greater overall happiness",
+    hint:{
+      concept:"This objection shows that Utilitarianism sometimes conflicts with basic intuitions about justice and individual rights. Think about what happens when maximizing overall utility conflicts with treating individuals fairly.",
+      steps:["Scenario: torturing one innocent person would somehow save 1,000 lives","Utility calculation: 1 person tortured < 1,000 people dying → utility says torture them","But this violates a deep intuition that innocent people shouldn't be tortured regardless of consequences","This is the 'scapegoating' problem — sacrifice the innocent for the greater good"],
+      note:"This is why some philosophers argue that rights and justice must constrain the utility calculation — they can't be overridden simply because the math works out."
+    },
+    solution:{steps:["The scapegoating objection: Utilitarianism can require horrifying acts (torturing, framing, or harming innocents) if doing so produces greater overall happiness.","This conflicts with the intuition that individuals have rights that can't be sacrificed for aggregate benefit.","Answer: Utilitarianism can justify torturing or punishing an innocent person if doing so produces greater overall happiness."]}
+  }
+
+];
+
+const SECTIONS = ["All","Hobbes & State of Nature","Values & Universalizability","Relativism & Objectivism","Altruism vs Egoism","Euthyphro Dilemma","Critics of Religious Morality","Natural Law","Utilitarianism"];
+
+let activeSection = "All";
+let questions = [...ALL_Q];
+let current = 0, roundNum = 1, history = [], state = {}, scores = { correct: 0, attempted: 0 };
+
+function buildFilters() {
+  const container = document.getElementById('filters');
+  SECTIONS.forEach(s => {
+    const btn = document.createElement('button');
+    btn.className = 'fbtn' + (s === activeSection ? ' active' : '');
+    btn.textContent = s;
+    btn.onclick = () => {
+      activeSection = s;
+      questions = s === 'All' ? [...ALL_Q] : ALL_Q.filter(q => q.tag === s);
+      current = 0; scores = { correct: 0, attempted: 0 }; state = {}; roundNum = 1;
+      document.getElementById('banner').style.display = 'none';
+      document.getElementById('btn-redo').style.display = 'none';
+      document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderQ(); updateStats(); showHistory();
+    };
+    container.appendChild(btn);
+  });
+}
+
+function key(i) { return activeSection + '||' + roundNum + '||' + i; }
+function done(i) { const s = state[key(i)]; return s && s.done; }
+function allDone() { return questions.length > 0 && questions.every((_, i) => done(i)); }
+
+function updateStats() {
+  document.getElementById('s-correct').textContent = scores.correct;
+  document.getElementById('s-attempted').textContent = scores.attempted;
+  document.getElementById('s-pct').textContent = scores.attempted > 0 ? Math.round(scores.correct / scores.attempted * 100) + '%' : '—';
+  document.getElementById('s-round').textContent = roundNum;
+  const d = questions.filter((_, i) => done(i)).length;
+  document.getElementById('prog').style.width = (questions.length ? Math.round(d / questions.length * 100) : 0) + '%';
+  if (allDone()) {
+    const pct = Math.round(scores.correct / scores.attempted * 100);
+    if (!history.find(r => r.round === roundNum && r.section === activeSection)) {
+      history.push({ round: roundNum, correct: scores.correct, attempted: scores.attempted, pct, section: activeSection });
+      showHistory(); showBanner(pct);
+      document.getElementById('btn-redo').style.display = 'inline-block';
+    }
+  }
+}
+
+function showHistory() {
+  const panel = document.getElementById('history-panel'), row = document.getElementById('history-row');
+  const relevant = history.filter(r => r.section === activeSection);
+  if (!relevant.length) { panel.style.display = 'none'; return; }
+  panel.style.display = 'block'; row.innerHTML = '';
+  const best = Math.max(...relevant.map(r => r.pct));
+  relevant.forEach(r => {
+    const c = document.createElement('span');
+    c.className = 'hchip' + (r.pct === best ? ' best' : '');
+    c.textContent = 'Round ' + r.round + ': ' + r.correct + '/' + r.attempted + ' (' + r.pct + '%)';
+    row.appendChild(c);
+  });
+}
+
+function showBanner(pct) {
+  document.getElementById('banner').style.display = 'block';
+  document.getElementById('banner-title').textContent = 'Section complete!';
+  document.getElementById('banner-msg').textContent = pct === 100 ? 'Perfect! Run it again to lock it in.' : pct >= 80 ? 'Strong — ' + pct + '%. One more round will cement it.' : pct >= 60 ? pct + '% — review the explanations, then retry.' : pct + '% — read the worked solutions carefully, then try again.';
+}
+
+function newRound() {
+  roundNum++; scores = { correct: 0, attempted: 0 }; current = 0;
+  document.getElementById('banner').style.display = 'none';
+  document.getElementById('btn-redo').style.display = 'none';
+  renderQ(); updateStats(); showHistory();
+}
+
+function renderQ() {
+  if (!questions.length) { document.getElementById('q-area').innerHTML = '<p style="color:#888;font-size:14px;padding:1rem 0;">No questions in this section.</p>'; return; }
+  const q = questions[current];
+  const k = key(current);
+  const s = state[k] || { attempts: 0, done: false, wrongChoices: [], feedbackMsg: '', feedbackColor: '' };
+  document.getElementById('qcounter').textContent = (current + 1) + ' / ' + questions.length;
+
+  let attTag = s.attempts > 0 ? `<span class="atag">(${s.attempts} attempt${s.attempts > 1 ? 's' : ''})</span>` : '';
+  let html = `<div class="qcard"><div><span class="qtag">${q.tag}</span>${attTag}</div><p class="qtext">${q.q}</p><div class="options">`;
+  q.options.forEach((opt, i) => {
+    let cls = 'obtn', dis = '';
+    if (s.done) { if (opt === q.answer) cls += ' reveal-correct'; else if (s.wrongChoices.includes(opt)) cls += ' dwrong'; dis = 'disabled'; }
+    else if (s.wrongChoices.includes(opt)) { cls += ' dwrong'; dis = 'disabled'; }
+    html += `<button class="${cls}" data-opt="${i}" ${dis}>${opt}</button>`;
+  });
+  html += `</div><div class="btn-row"><button class="abtn" id="btn-hint">💡 how to approach</button></div>`;
+  const h = q.hint;
+  html += `<div class="hint-box" id="hint-box"><h4>💡 How to Approach This Question</h4><div class="hint-concept"><strong>Background:</strong> ${h.concept}</div><strong style="font-size:13px;color:#534AB7;">Think through it:</strong><ol class="hint-steps">`;
+  h.steps.forEach(step => { html += `<li>${step}</li>`; });
+  html += `</ol>`;
+  if (h.note) html += `<div class="hint-note">💬 ${h.note}</div>`;
+  html += `</div>`;
+  if (s.done && s.wrongChoices.length >= 2) {
+    const sol = q.solution;
+    html += `<div class="solution-box" style="display:block"><h4>📝 Full Explanation</h4>`;
+    sol.steps.forEach(step => { html += `<div class="sol-step">${step}</div>`; });
+    html += `<div class="sol-answer">✓ Answer: ${q.answer}</div></div>`;
+  }
+  html += `<div class="feedback" id="feedback" style="display:${s.feedbackMsg ? 'block' : 'none'};color:${s.feedbackColor || 'inherit'}">${s.feedbackMsg || ''}</div>`;
+  html += `</div>`;
+  document.getElementById('q-area').innerHTML = html;
+
+  document.getElementById('btn-hint').onclick = () => {
+    const hb = document.getElementById('hint-box');
+    hb.style.display = hb.style.display === 'block' ? 'none' : 'block';
+  };
+
+  function showFeedback(msg, type) {
+    const fb = document.getElementById('feedback');
+    fb.style.display = 'block';
+    const colors = { correct: '#2d2480', tryagain: '#854f0b', wrong: '#791F1F' };
+    fb.style.color = colors[type];
+    fb.textContent = type === 'correct' ? '✓ Correct!' : msg;
+    state[k].feedbackMsg = fb.textContent; state[k].feedbackColor = fb.style.color;
+  }
+
+  function handleAnswer(chosen, correct) {
+    if (!state[k]) state[k] = { attempts: 0, done: false, wrongChoices: [], feedbackMsg: '', feedbackColor: '' };
+    const st = state[k];
+    if (st.attempts === 0) scores.attempted++;
+    st.attempts++;
+    if (correct) {
+      if (st.attempts === 1) scores.correct++;
+      st.done = true; showFeedback('', 'correct'); updateStats(); renderQ();
+    } else {
+      st.wrongChoices.push(chosen);
+      if (st.attempts >= 2) {
+        st.done = true;
+        showFeedback('✗ Incorrect. See the full explanation below.', 'wrong');
+        updateStats(); renderQ();
+      } else {
+        showFeedback('✗ Not quite — try once more. Use the hint if you need context.', 'tryagain');
+        updateStats();
+        document.querySelectorAll('.obtn').forEach(b => {
+          if (st.wrongChoices.includes(q.options[parseInt(b.dataset.opt)])) { b.classList.add('dwrong'); b.disabled = true; }
+        });
+      }
+    }
+  }
+
+  if (!s.done) {
+    document.querySelectorAll('.obtn:not([disabled])').forEach(btn => {
+      btn.onclick = () => handleAnswer(q.options[parseInt(btn.dataset.opt)], q.options[parseInt(btn.dataset.opt)] === q.answer);
+    });
+  }
+}
+
+document.getElementById('btn-prev').onclick = () => { if (current > 0) { current--; renderQ(); } };
+document.getElementById('btn-next').onclick = () => { if (current < questions.length - 1) { current++; renderQ(); } };
+document.getElementById('btn-rand').onclick = () => { current = Math.floor(Math.random() * questions.length); renderQ(); };
+document.getElementById('btn-redo').onclick = () => newRound();
+
+buildFilters(); renderQ(); updateStats();
+</script>
+</body>
+</html>
