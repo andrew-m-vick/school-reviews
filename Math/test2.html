@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Math 1324 — Test 2 Review</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; background: #f5f4f0; color: #1a1a1a; min-height: 100vh; padding: 2rem 1rem; }
+    .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #888; text-decoration: none; margin-bottom: 1.25rem; }
+    .back-link:hover { color: #1a1a1a; }
+    .quiz-wrap { max-width: 680px; margin: 0 auto; }
+    header { margin-bottom: 2rem; }
+    header .eyebrow { font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #1D9E75; margin-bottom: 0.4rem; }
+    header h1 { font-size: 22px; font-weight: 600; color: #1a1a1a; line-height: 1.3; }
+    header p { font-size: 14px; color: #666; margin-top: 0.35rem; }
+    .score-row { display: flex; gap: 10px; margin-bottom: 1.25rem; }
+    .scard { flex: 1; background: #fff; border: 1px solid #d8d6ce; border-radius: 10px; padding: 0.75rem 1rem; }
+    .slabel { font-size: 11px; color: #888; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.04em; }
+    .sval { font-size: 22px; font-weight: 600; color: #1a1a1a; }
+    .pbar-bg { height: 5px; background: #e2e0d8; border-radius: 999px; margin-bottom: 1.25rem; overflow: hidden; }
+    .pbar-fill { height: 100%; background: #1D9E75; border-radius: 999px; transition: width 0.4s; }
+    .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.25rem; }
+    .fbtn { font-size: 12px; font-weight: 500; padding: 5px 14px; border-radius: 999px; border: 1px solid #d8d6ce; background: #fff; color: #888; cursor: pointer; transition: background 0.12s, border-color 0.12s, color 0.12s; }
+    .fbtn:hover { background: #f0eeea; }
+    .fbtn.active { background: #E8F5EE; border-color: #1D9E75; color: #1D9E75; }
+    .history-panel { margin-bottom: 1.25rem; display: none; }
+    .history-label { font-size: 11px; font-weight: 500; color: #888; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+    .history-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .hchip { font-size: 12px; padding: 4px 12px; border-radius: 999px; border: 1px solid #e2e0d8; background: #f0eeea; color: #888; }
+    .hchip.best { border-color: #1D9E75; color: #1D9E75; font-weight: 500; }
+    .banner { background: #E8F5EE; border: 1px solid #1D9E75; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.25rem; display: none; }
+    .banner h3 { font-size: 15px; font-weight: 600; color: #0d5c3a; margin-bottom: 4px; }
+    .banner p { font-size: 13px; color: #0d5c3a; opacity: 0.9; }
+    .qcard { background: #fff; border: 1px solid #d8d6ce; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; }
+    .qtag { font-size: 11px; font-weight: 500; color: #1D9E75; background: #E8F5EE; padding: 3px 9px; border-radius: 8px; display: inline-block; margin-bottom: 0.75rem; }
+    .atag { font-size: 11px; color: #888; margin-left: 8px; }
+    .qtext { font-size: 15px; font-weight: 500; color: #1a1a1a; line-height: 1.7; margin-bottom: 1.25rem; }
+    .qtext code, .qtext .mx { font-family: 'SF Mono', Menlo, monospace; background: #f0eeea; padding: 2px 6px; border-radius: 4px; font-size: 13px; white-space: pre; display: inline-block; line-height: 1.6; }
+    .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1rem; }
+    .obtn { background: #f7f6f2; border: 1px solid #c8c6be; border-radius: 12px; padding: 0.85rem 1rem; font-size: 14px; font-family: inherit; color: #1a1a1a; text-align: left; cursor: pointer; transition: background 0.15s, border-color 0.15s; line-height: 1.6; }
+    .obtn code { font-family: 'SF Mono', Menlo, monospace; font-size: 13px; display: block; margin-top: 4px; white-space: pre; line-height: 1.7; }
+    .obtn:hover:not(:disabled) { background: #eceae4; border-color: #a8a69e; }
+    .obtn.reveal-correct { background: #E8F5EE; border-color: #1D9E75; color: #0d5c3a; }
+    .obtn.dwrong { opacity: 0.35; cursor: not-allowed; text-decoration: line-through; }
+    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+    .abtn { border: 1px solid #d8d6ce; border-radius: 8px; padding: 8px 14px; font-size: 13px; font-family: inherit; cursor: pointer; background: #fff; color: #1a1a1a; transition: background 0.15s; }
+    .abtn:hover { background: #f0eeea; }
+    .abtn.redo { border-color: #1D9E75; color: #1D9E75; font-weight: 500; }
+    .abtn.redo:hover { background: #E8F5EE; }
+    #btn-hint { background: #E8F5EE; border-color: #a3d9c0; color: #1D9E75; font-weight: 500; }
+    #btn-hint:hover { background: #d4f0e4; }
+    .hint-box { margin-top: 1rem; background: #E8F5EE; border: 1px solid #a3d9c0; border-radius: 12px; padding: 1.25rem; display: none; }
+    .hint-box h4 { font-size: 13px; font-weight: 600; color: #0d5c3a; margin-bottom: 0.75rem; }
+    .hint-concept { font-size: 13px; color: #0d5c3a; line-height: 1.7; margin-bottom: 0.75rem; }
+    .hint-steps { list-style: none; padding: 0; counter-reset: step; }
+    .hint-steps li { font-size: 13px; color: #0d5c3a; line-height: 1.7; padding: 4px 0 4px 20px; position: relative; }
+    .hint-steps li::before { content: counter(step); counter-increment: step; position: absolute; left: 0; font-weight: 600; }
+    .hint-note { font-size: 12px; color: #0d5c3a; opacity: 0.8; margin-top: 0.5rem; font-style: italic; }
+    .solution-box { margin-top: 1rem; background: #FCEBEB; border: 1px solid #F09595; border-radius: 12px; padding: 1.25rem; display: none; }
+    .solution-box h4 { font-size: 13px; font-weight: 600; color: #791F1F; margin-bottom: 0.75rem; }
+    .sol-step { font-size: 13px; color: #791F1F; line-height: 1.8; padding: 2px 0; }
+    .sol-step code { font-family: 'SF Mono', Menlo, monospace; font-size: 12px; white-space: pre; display: inline-block; }
+    .sol-answer { margin-top: 0.75rem; font-size: 14px; font-weight: 600; color: #791F1F; background: rgba(255,255,255,0.5); border-radius: 8px; padding: 8px 12px; }
+    .feedback { margin-top: 0.75rem; font-size: 13px; font-weight: 500; display: none; }
+    .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; flex-wrap: wrap; gap: 8px; }
+    .qcounter { font-size: 13px; color: #888; }
+    .nav-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+    @media (max-width: 500px) { .sval { font-size: 18px; } header h1 { font-size: 18px; } }
+  </style>
+</head>
+<body>
+<a class="back-link" href="/">← School Reviews</a>
+<div class="quiz-wrap">
+  <header>
+    <div class="eyebrow">Math 1324 — Finite Mathematics</div>
+    <h1>Test 2 Review</h1>
+    <p>51 questions · Lines, Quadratics, Rational Functions, Systems, Matrices</p>
+  </header>
+
+  <div class="filters" id="filters"></div>
+  <div class="history-panel" id="history-panel">
+    <div class="history-label">attempt history</div>
+    <div class="history-row" id="history-row"></div>
+  </div>
+  <div class="score-row">
+    <div class="scard"><div class="slabel">correct</div><div class="sval" id="s-correct">0</div></div>
+    <div class="scard"><div class="slabel">attempted</div><div class="sval" id="s-attempted">0</div></div>
+    <div class="scard"><div class="slabel">accuracy</div><div class="sval" id="s-pct">—</div></div>
+    <div class="scard"><div class="slabel">round</div><div class="sval" id="s-round">1</div></div>
+  </div>
+  <div class="pbar-bg"><div class="pbar-fill" id="prog" style="width:0%"></div></div>
+  <div class="banner" id="banner"><h3 id="banner-title"></h3><p id="banner-msg"></p></div>
+  <div id="q-area"></div>
+  <div class="nav-row">
+    <span class="qcounter" id="qcounter"></span>
+    <div class="nav-btns">
+      <button class="abtn" id="btn-prev">← prev</button>
+      <button class="abtn" id="btn-next">next →</button>
+      <button class="abtn" id="btn-rand">random</button>
+      <button class="abtn redo" id="btn-redo" style="display:none">↺ new round</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const ALL_Q = [
+
+// ── 2.1 GRAPH ──────────────────────────────────────────────────────────
+{
+  tag:"2.1 Graph",
+  q:"Is (4, −2) a solution to x² + y² − 4x + 8y = −12?",
+  options:["No","Yes"],
+  answer:"Yes",
+  hint:{
+    concept:"To test whether an ordered pair is a solution, substitute the x and y values into every term and check whether the equation holds.",
+    steps:["Substitute x = 4 and y = −2 into the left side","Compute term by term: 4² = 16, (−2)² = 4, −4(4) = −16, 8(−2) = −16","Sum all four terms and compare the result to −12"],
+    note:"Don't forget to square the entire y value including its sign: (−2)² = +4, not −4."
+  },
+  solution:{steps:["4² + (−2)² − 4(4) + 8(−2)","= 16 + 4 − 16 − 16","= −12 ✓","Answer: Yes — (4, −2) is a solution."]}
+},
+{
+  tag:"2.1 Graph",
+  q:"The line 2x = y − 8 is written in slope-intercept form as:",
+  options:["y = 2x − 8   (slope 2, y-int −8)","y = 2x + 8   (slope 2, y-int 8)","y = −2x + 8  (slope −2, y-int 8)","y = ½x − 8  (slope ½, y-int −8)"],
+  answer:"y = 2x + 8   (slope 2, y-int 8)",
+  hint:{
+    concept:"Slope-intercept form is y = mx + b. Solve the given equation for y by adding 8 to both sides.",
+    steps:["Start: 2x = y − 8","Add 8 to both sides: 2x + 8 = y","Rewrite as y = 2x + 8","Read off slope m and y-intercept b"],
+    note:"Don't confuse the sign — adding 8 to move it to the other side gives +8, not −8."
+  },
+  solution:{steps:["2x = y − 8  →  y = 2x + 8","Slope m = 2, y-intercept b = 8."]}
+},
+{
+  tag:"2.1 Graph",
+  q:"A parabola crosses the x-axis at x = −2 and x = 2, and crosses the y-axis at y = −4. Which correctly states the intercepts?",
+  options:["x-intercepts: −2, 2;  y-intercept: −4","x-intercept: −2;  y-intercepts: 4","x-intercept: 2;  y-intercepts: −4","x-intercept: 4;  y-intercepts: −2, 2"],
+  answer:"x-intercepts: −2, 2;  y-intercept: −4",
+  hint:{
+    concept:"x-intercepts: where the curve crosses the x-axis (there can be more than one). y-intercept: where it crosses the y-axis (only one for a function).",
+    steps:["The curve crosses the x-axis at x = −2 AND x = 2 → two x-intercepts","The curve crosses the y-axis at y = −4 → one y-intercept","Pair them correctly in the answer"],
+    note:"A parabola can have 0, 1, or 2 x-intercepts but always exactly one y-intercept."
+  },
+  solution:{steps:["x-intercepts (y = 0): x = −2 and x = 2","y-intercept (x = 0): y = −4","Answer: x-intercepts −2, 2; y-intercept −4."]}
+},
+{
+  tag:"2.1 Graph",
+  q:"Find the x-intercept and y-intercept of 2x + y = 6.",
+  options:["x-intercept: 6;  y-intercept: −6","x-intercept: 3;  y-intercept: 6","x-intercept: 6;  y-intercept: 3","x-intercept: −6;  y-intercept: 6"],
+  answer:"x-intercept: 3;  y-intercept: 6",
+  hint:{
+    concept:"To find the x-intercept, set y = 0 and solve. To find the y-intercept, set x = 0 and solve.",
+    steps:["x-intercept: set y = 0 → 2x = 6 → solve for x","y-intercept: set x = 0 → y = 6 → solve for y","Report each intercept"],
+    note:"These are two separate substitutions — don't mix them up."
+  },
+  solution:{steps:["x-intercept: set y=0 → 2x = 6 → x = 3","y-intercept: set x=0 → y = 6","Answer: x-intercept 3;  y-intercept 6."]}
+},
+{
+  tag:"2.1 Graph",
+  q:"For the equation y = 3x², which statement is correct?",
+  options:["Opens downward; vertex at origin","Opens upward; vertex at origin; narrower than y = x²","Opens upward; vertex at (3, 0)","Opens downward; vertex at (0, 3)"],
+  answer:"Opens upward; vertex at origin; narrower than y = x²",
+  hint:{
+    concept:"In y = ax², the sign of a determines direction and |a| determines width relative to y = x².",
+    steps:["a = 3 → is a positive or negative?","Positive a → parabola opens upward","Vertex of y = ax² is always (0, 0)","|a| = 3 > 1 → narrower than y = x²"],
+    note:"If |a| > 1 the parabola is narrower; if |a| < 1 it's wider."
+  },
+  solution:{steps:["a = 3 > 0 → opens upward","Vertex: (0, 0) — no horizontal or vertical shift","|3| > 1 → narrower than y = x²","Answer: Opens upward; vertex at origin; narrower than y = x²."]}
+},
+{
+  tag:"2.1 Graph",
+  q:"Is (−2, 5) a solution to 3x − y = −11?",
+  options:["No","Yes"],
+  answer:"Yes",
+  hint:{
+    concept:"Plug both values directly into the equation and evaluate each side.",
+    steps:["Substitute x = −2 and y = 5 into the left side","3(−2) − 5 = ?","Compare the result to −11"],
+    note:"Remember to apply the negative sign to the substituted value: 3 times negative 2."
+  },
+  solution:{steps:["3(−2) − 5 = −6 − 5 = −11 ✓","Answer: Yes — (−2, 5) is a solution."]}
+},
+{
+  tag:"2.1 Graph",
+  q:"Find the x-intercept and y-intercept of 3x − 4y = 12.",
+  options:["x-intercept: 4;  y-intercept: −3","x-intercept: −3;  y-intercept: 4","x-intercept: 3;  y-intercept: −4","x-intercept: 12;  y-intercept: −12"],
+  answer:"x-intercept: 4;  y-intercept: −3",
+  hint:{
+    concept:"Set y = 0 for the x-intercept; set x = 0 for the y-intercept.",
+    steps:["x-intercept: set y = 0 → 3x = 12 → x = ?","y-intercept: set x = 0 → −4y = 12 → y = ?"],
+    note:"12 divided by −4 is negative — watch the sign."
+  },
+  solution:{steps:["x-intercept: 3x = 12 → x = 4","y-intercept: −4y = 12 → y = −3","Answer: x-intercept 4;  y-intercept −3."]}
+},
+
+// ── 2.2 EQUATIONS OF LINES ─────────────────────────────────────────────
+{
+  tag:"2.2 Equations of Lines",
+  q:"Find the slope of the line through (2, −3) and (−3, 7).",
+  options:["10","5","−2","2"],
+  answer:"−2",
+  hint:{
+    concept:"Slope formula: m = (y₂ − y₁) / (x₂ − x₁). Be careful with negatives.",
+    steps:["Label points: (x₁,y₁) = (2,−3) and (x₂,y₂) = (−3,7)","Numerator: y₂ − y₁ = 7 − (−3) = 10","Denominator: x₂ − x₁ = −3 − 2 = −5","Divide: 10 / −5 = ?"],
+    note:"A negative denominator makes the slope negative even if the numerator is positive."
+  },
+  solution:{steps:["m = (7 − (−3)) / (−3 − 2) = 10 / (−5) = −2","Answer: m = −2."]}
+},
+{
+  tag:"2.2 Equations of Lines",
+  q:"Find the slope of the line through (−5, −6) and (−5, 6).",
+  options:["2","Undefined","12","6"],
+  answer:"Undefined",
+  hint:{
+    concept:"When the two x-values are identical, the line is vertical. What is the slope of a vertical line?",
+    steps:["Denominator: x₂ − x₁ = −5 − (−5) = 0","Division by zero is undefined","A line with undefined slope is vertical"],
+    note:"Don't confuse undefined slope (vertical) with zero slope (horizontal)."
+  },
+  solution:{steps:["x₂ − x₁ = −5 − (−5) = 0 → denominator is 0","Division by zero → slope is undefined (vertical line)."]}
+},
+{
+  tag:"2.2 Equations of Lines",
+  q:"Find the slope and y-intercept of 4x + 5y = 18.",
+  options:["m = −4/5;  b = 18/5","m = 5/4;  b = 18/5","m = −5/4;  b = 5","m = 4/5;  b = 18"],
+  answer:"m = −4/5;  b = 18/5",
+  hint:{
+    concept:"Solve for y to get slope-intercept form y = mx + b.",
+    steps:["Start: 4x + 5y = 18","Subtract 4x: 5y = −4x + 18","Divide by 5: y = −4/5 x + 18/5","Read m and b directly"],
+    note:"Both the slope AND the y-intercept get divided by 5 — don't forget to divide the constant too."
+  },
+  solution:{steps:["5y = −4x + 18  →  y = −(4/5)x + 18/5","m = −4/5,  b = 18/5."]}
+},
+{
+  tag:"2.2 Equations of Lines",
+  q:"Write slope-intercept form for a line with m = −3/4 and b = 5.",
+  options:["y = (3/4)x + 5","y = −(3/4)x − 5","y = −(3/4)x + 5","y = (3/4)x − 5"],
+  answer:"y = −(3/4)x + 5",
+  hint:{
+    concept:"Slope-intercept form: y = mx + b. Substitute m and b directly.",
+    steps:["m = −3/4, b = 5","y = mx + b becomes y = −(3/4)x + 5"],
+    note:"Both the sign of m and the sign of b must match what was given."
+  },
+  solution:{steps:["y = −(3/4)x + 5."]}
+},
+{
+  tag:"2.2 Equations of Lines",
+  q:"Find an equation in slope-intercept form for the line through (4, 4) with m = −5/9.",
+  options:["y = (5/9)x + 56/9","y = −(5/9)x + 56/9","y = −(5/9)x − 56/9","y = (5/9)x − 56/9"],
+  answer:"y = −(5/9)x + 56/9",
+  hint:{
+    concept:"Use point-slope form: y − y₁ = m(x − x₁), then solve for y.",
+    steps:["Substitute: y − 4 = −(5/9)(x − 4)","Distribute: y − 4 = −(5/9)x + 20/9","Add 4 (= 36/9) to both sides","Combine the constant terms: 20/9 + 36/9 = ?"],
+    note:"Convert 4 to ninths (36/9) before adding to 20/9."
+  },
+  solution:{steps:["y − 4 = −(5/9)(x − 4)","y = −(5/9)x + 20/9 + 36/9","y = −(5/9)x + 56/9."]}
+},
+{
+  tag:"2.2 Equations of Lines",
+  q:"Write a standard-form equation (Ax + By = C) for the line through (−7, −2) and (0, −5).",
+  options:["3x − 7y = 35","5x − 5y = −25","−5x + 5y = −25","−3x − 7y = 35"],
+  answer:"−3x − 7y = 35",
+  hint:{
+    concept:"Find slope first, use the y-intercept to write slope-intercept form, then rearrange to standard form.",
+    steps:["Slope: m = (−5 − (−2)) / (0 − (−7)) = −3/7","y-intercept from point (0,−5): b = −5","Write: y = −(3/7)x − 5","Multiply every term by 7: 7y = −3x − 35","Rearrange: 3x + 7y = −35, then multiply by −1"],
+    note:"Standard form Ax + By = C typically has A > 0, so multiplying by −1 at the end is expected."
+  },
+  solution:{steps:["m = −3/7,  b = −5  →  y = −(3/7)x − 5","Multiply by 7: 7y = −3x − 35  →  3x + 7y = −35","Multiply by −1: −3x − 7y = 35."]}
+},
+{
+  tag:"2.2 Equations of Lines",
+  q:"Find the slope of the line through (1, 4) and (3, 8).",
+  options:["1","4","2","−2"],
+  answer:"2",
+  hint:{
+    concept:"Apply the slope formula m = (y₂ − y₁) / (x₂ − x₁).",
+    steps:["Numerator: 8 − 4 = 4","Denominator: 3 − 1 = 2","m = 4/2 = ?"],
+    note:""
+  },
+  solution:{steps:["m = (8−4)/(3−1) = 4/2 = 2."]}
+},
+{
+  tag:"2.2 Equations of Lines",
+  q:"A line has slope 3/4. What is the slope of a line perpendicular to it?",
+  options:["3/4","−3/4","4/3","−4/3"],
+  answer:"−4/3",
+  hint:{
+    concept:"Perpendicular lines have slopes that are negative reciprocals of each other.",
+    steps:["Start with m = 3/4","Take the reciprocal: 4/3","Negate it: −4/3","Check: (3/4)(−4/3) = −1 ✓"],
+    note:"Two slopes are perpendicular if their product equals −1."
+  },
+  solution:{steps:["Perpendicular slope = negative reciprocal of 3/4 = −4/3.","Check: (3/4)(−4/3) = −1 ✓."]}
+},
+
+// ── 3.4 QUADRATIC FUNCTIONS ────────────────────────────────────────────
+{
+  tag:"3.4 Quadratic Functions",
+  q:"Find the vertex of f(x) = x² − 20x + 106.",
+  options:["(6, 0)","(6, 10)","(0, 10)","(10, 6)"],
+  answer:"(10, 6)",
+  hint:{
+    concept:"Vertex formula: h = −b/(2a), then k = f(h).",
+    steps:["Identify a = 1, b = −20, c = 106","h = −(−20) / (2·1) = 20/2 = 10","k = f(10) = 100 − 200 + 106 = ?","Vertex is (h, k)"],
+    note:"Don't forget to evaluate f(h) for k — you can't just read k from the equation."
+  },
+  solution:{steps:["h = −(−20)/(2·1) = 10","k = f(10) = 100 − 200 + 106 = 6","Vertex: (10, 6)."]}
+},
+{
+  tag:"3.4 Quadratic Functions",
+  q:"Find the vertex of y = −4(x + 3)² − 4.",
+  options:["(−3, −4)","(4, 3)","(−4, −3)","(3, −4)"],
+  answer:"(−3, −4)",
+  hint:{
+    concept:"Vertex form is y = a(x − h)² + k. The vertex is (h, k). Watch signs carefully.",
+    steps:["Written as y = −4(x − (−3))² + (−4)","Compare: (x − h)² → h = −3","The constant term k = −4","Vertex: (h, k) = (−3, −4)"],
+    note:"Because of the minus sign inside: (x + 3) = (x − (−3)), so h = −3 not +3."
+  },
+  solution:{steps:["y = −4(x − (−3))² + (−4)","h = −3,  k = −4","Vertex: (−3, −4)."]}
+},
+{
+  tag:"3.4 Quadratic Functions",
+  q:"Find the rule of a quadratic with vertex (2, 7) that passes through (4, 11).",
+  options:["f(x) = (x + 2)² + 7","f(x) = (x − 2)² + 7","f(x) = 2(x + 2)² + 7","f(x) = (x − 2)² − 7"],
+  answer:"f(x) = (x − 2)² + 7",
+  hint:{
+    concept:"Start with vertex form f(x) = a(x − h)² + k, plug in the vertex for h and k, then use the given point to solve for a.",
+    steps:["Vertex (2, 7) → f(x) = a(x − 2)² + 7","Substitute the point (4, 11): 11 = a(4 − 2)² + 7","11 = 4a + 7  →  4a = 4  →  a = ?","Write the final equation"],
+    note:"a = 1 means the parabola is the standard width — the coefficient is not written when it equals 1."
+  },
+  solution:{steps:["f(x) = a(x−2)² + 7","11 = a(2)² + 7  →  4a = 4  →  a = 1","f(x) = (x − 2)² + 7.","Check: f(4) = 4 + 7 = 11 ✓."]}
+},
+{
+  tag:"3.4 Quadratic Functions",
+  q:"For f(x) = −2x² + 8x + 3, does the parabola open up or down, and what is its vertex?",
+  options:["Opens up;  vertex (2, 11)","Opens down;  vertex (2, 11)","Opens down;  vertex (−2, −21)","Opens up;  vertex (−2, 3)"],
+  answer:"Opens down;  vertex (2, 11)",
+  hint:{
+    concept:"Sign of a determines direction. Use vertex formula for h = −b/(2a), then evaluate k = f(h).",
+    steps:["a = −2 → negative → opens down","h = −8 / (2·(−2)) = −8/(−4) = 2","k = f(2) = −2(4) + 8(2) + 3 = −8 + 16 + 3 = ?","Vertex is (2, k)"],
+    note:""
+  },
+  solution:{steps:["a = −2 < 0 → opens down","h = 2,  k = f(2) = −8 + 16 + 3 = 11","Vertex: (2, 11)."]}
+},
+{
+  tag:"3.4 Quadratic Functions",
+  q:"What is the maximum value of f(x) = −x² + 6x − 5?",
+  options:["3","4","5","6"],
+  answer:"4",
+  hint:{
+    concept:"Since a < 0 the parabola opens down — the vertex is the maximum. Find the vertex y-value.",
+    steps:["a = −1, b = 6","h = −6 / (2·(−1)) = −6/(−2) = 3","k = f(3) = −(9) + 6(3) − 5 = −9 + 18 − 5 = ?","That k value is the maximum"],
+    note:""
+  },
+  solution:{steps:["h = 3","k = f(3) = −9 + 18 − 5 = 4","Maximum value = 4."]}
+},
+{
+  tag:"3.4 Quadratic Functions",
+  q:"Find the zeros (x-intercepts) of f(x) = x² − 7x + 12.",
+  options:["x = 3 and x = 4","x = −3 and x = −4","x = 6 and x = 2","x = 7 and x = −12"],
+  answer:"x = 3 and x = 4",
+  hint:{
+    concept:"Factor the quadratic: find two integers that multiply to +12 and add to −7.",
+    steps:["Pairs that multiply to 12: (1,12), (2,6), (3,4)","Which pair adds to −7? Use negatives: −3 and −4 add to −7, multiply to 12","Factor: (x − 3)(x − 4) = 0","Set each factor equal to zero"],
+    note:"Zeros are the x-values that make f(x) = 0."
+  },
+  solution:{steps:["f(x) = (x−3)(x−4)","x−3 = 0 → x = 3;  x−4 = 0 → x = 4","Zeros: x = 3 and x = 4."]}
+},
+
+// ── 3.6 RATIONAL FUNCTIONS ─────────────────────────────────────────────
+{
+  tag:"3.6 Rational Functions",
+  q:"Give the equation of the vertical asymptote of g(x) = 3 / (x + 6).",
+  options:["x = 6","x = −6","y = 0","y = −6"],
+  answer:"x = −6",
+  hint:{
+    concept:"Vertical asymptotes occur where the denominator equals zero (and the numerator does not also equal zero there).",
+    steps:["Set denominator equal to zero: x + 6 = 0","Solve: x = ?","Write as a vertical line equation"],
+    note:"The vertical asymptote is a line of the form x = c, not y = c."
+  },
+  solution:{steps:["x + 6 = 0  →  x = −6","Vertical asymptote: x = −6."]}
+},
+{
+  tag:"3.6 Rational Functions",
+  q:"Give the equation of the vertical asymptote of f(x) = (8x + 1) / (3x − 6).",
+  options:["x = −2","y = 8/3","x = 6","x = 2"],
+  answer:"x = 2",
+  hint:{
+    concept:"Set the denominator equal to zero and solve.",
+    steps:["Denominator: 3x − 6 = 0","3x = 6  →  x = ?"],
+    note:"The numerator (8x+1) is not zero at x = 2, so x = 2 is truly a vertical asymptote."
+  },
+  solution:{steps:["3x − 6 = 0  →  3x = 6  →  x = 2","Vertical asymptote: x = 2."]}
+},
+{
+  tag:"3.6 Rational Functions",
+  q:"Give the equation of the horizontal asymptote of g(x) = 3 / (x + 4).",
+  options:["y = 3","y = 3/4","x = −4","y = 0"],
+  answer:"y = 0",
+  hint:{
+    concept:"Compare degrees of numerator and denominator to determine the horizontal asymptote.",
+    steps:["Degree of numerator (3): 0  (it's a constant)","Degree of denominator (x+4): 1","When degree of top < degree of bottom → horizontal asymptote is y = 0"],
+    note:"Rule: top degree < bottom degree → y = 0. Top degree = bottom degree → y = ratio of leading coefficients. Top degree > bottom degree → no horizontal asymptote."
+  },
+  solution:{steps:["Degree top (0) < degree bottom (1)  →  horizontal asymptote y = 0."]}
+},
+{
+  tag:"3.6 Rational Functions",
+  q:"Give the equation of the horizontal asymptote of g(x) = (6x + 6) / (x − 2).",
+  options:["y = 2","x = 2","y = 0","y = 6"],
+  answer:"y = 6",
+  hint:{
+    concept:"Both numerator and denominator have degree 1 — equal degrees. Use the ratio of leading coefficients.",
+    steps:["Degree of 6x+6: 1  |  Degree of x−2: 1","Equal degrees → HA = (leading coeff of top) / (leading coeff of bottom)","Leading coeff of top: 6  |  Leading coeff of bottom: 1","HA = 6/1 = ?"],
+    note:"Only the leading coefficients matter for this rule — the other terms don't affect the HA."
+  },
+  solution:{steps:["Equal degrees (both 1) → HA = 6/1 = 6","Horizontal asymptote: y = 6."]}
+},
+{
+  tag:"3.6 Rational Functions",
+  q:"For f(x) = 1 / (x − 3), which statement is correct about its asymptotes and domain?",
+  options:["VA: x = 0;  HA: y = 3;  domain: all real x","VA: x = 3;  HA: y = 0;  domain: all x ≠ 3","VA: x = −3;  HA: y = 1;  domain: all x ≠ −3","No VA;  HA: y = 3;  domain: all real x"],
+  answer:"VA: x = 3;  HA: y = 0;  domain: all x ≠ 3",
+  hint:{
+    concept:"Find the VA (denominator = 0), the HA (degree rule), and the domain (exclude where denominator = 0).",
+    steps:["VA: x − 3 = 0 → x = 3","HA: degree top (0) < degree bottom (1) → y = 0","Domain: all x except where denominator = 0, so x ≠ 3"],
+    note:""
+  },
+  solution:{steps:["VA: x = 3.  HA: y = 0.  Domain: x ≠ 3."]}
+},
+{
+  tag:"3.6 Rational Functions",
+  q:"Find the vertical asymptote(s) and horizontal asymptote of f(x) = (2x + 4) / (x² − 9).",
+  options:["VA: x = 3 only;  HA: y = 2","VA: x = 3 and x = −3;  HA: y = 0","VA: x = −2;  HA: y = 2","VA: x = 9;  HA: y = 0"],
+  answer:"VA: x = 3 and x = −3;  HA: y = 0",
+  hint:{
+    concept:"Factor the denominator to find VAs. Apply the degree rule for the HA.",
+    steps:["Denominator: x² − 9 = (x − 3)(x + 3)","Set each factor to zero: x = 3 and x = −3","Degree of top: 1  |  Degree of bottom: 2","Since degree top < degree bottom → HA = ?"],
+    note:"Two factors in the denominator → two vertical asymptotes."
+  },
+  solution:{steps:["x² − 9 = (x−3)(x+3) → VA: x = 3 and x = −3","Degree top (1) < degree bottom (2) → HA: y = 0."]}
+},
+
+// ── 6.1 SYSTEMS OF TWO LINEAR EQUATIONS ───────────────────────────────
+{
+  tag:"6.1 Systems (2×2)",
+  q:"Is (4, 3) a solution to the system?  { 3x + y = 9    and    2x + 3y = −1 }",
+  options:["Yes","No"],
+  answer:"No",
+  hint:{
+    concept:"A solution must satisfy ALL equations in the system. Test the point in each equation.",
+    steps:["Equation 1: 3(4) + 3 = 12 + 3 = 15. Is 15 = 9?","If the first equation already fails, you don't need to check the second","A pair that fails any equation is not a solution"],
+    note:""
+  },
+  solution:{steps:["Eq 1: 3(4) + 3 = 15 ≠ 9 ✗","(4,3) fails the first equation → not a solution."]}
+},
+{
+  tag:"6.1 Systems (2×2)",
+  q:"Solve the system:   x − 3y = 10   and   −7x − 4y = 30",
+  options:["(−3, −3)","(2, −3)","No solution","(−2, −4)"],
+  answer:"(−2, −4)",
+  hint:{
+    concept:"Use substitution: solve the first equation for x, then substitute into the second.",
+    steps:["From eq 1: x = 10 + 3y","Substitute into eq 2: −7(10 + 3y) − 4y = 30","Distribute: −70 − 21y − 4y = 30","Combine: −25y = 100 → y = ?  Then find x"],
+    note:""
+  },
+  solution:{steps:["y = 100/(−25) = −4","x = 10 + 3(−4) = 10 − 12 = −2","Solution: (−2, −4)."]}
+},
+{
+  tag:"6.1 Systems (2×2)",
+  q:"Solve the system:   7x + 5y = −5   and   −3x − 2y = 2",
+  options:["(−1, 0)","No solution","(0, 0)","(0, −1)"],
+  answer:"(0, −1)",
+  hint:{
+    concept:"Eliminate one variable by multiplying equations to get matching coefficients.",
+    steps:["Multiply eq 1 by 2: 14x + 10y = −10","Multiply eq 2 by 5: −15x − 10y = 10","Add both equations to eliminate y","Solve for x, then back-substitute"],
+    note:""
+  },
+  solution:{steps:["14x + 10y = −10","−15x − 10y = 10","Add: −x = 0  →  x = 0","7(0) + 5y = −5  →  y = −1","Solution: (0, −1)."]}
+},
+{
+  tag:"6.1 Systems (2×2)",
+  q:"What does it mean graphically when a 2×2 linear system has NO solution?",
+  options:["The lines intersect at the origin","The lines are the same (they coincide)","The lines are parallel — they never intersect","One of the lines has a slope of zero"],
+  answer:"The lines are parallel — they never intersect",
+  hint:{
+    concept:"Each linear equation represents a line. The solution to the system is the intersection point.",
+    steps:["1 solution → lines cross at exactly one point","No solution → the lines never cross","What geometric relationship prevents two lines from ever sharing a point?"],
+    note:"Parallel lines have the same slope but different y-intercepts."
+  },
+  solution:{steps:["Parallel lines have the same slope but different y-intercepts — they never meet.","No intersection → no solution (inconsistent system)."]}
+},
+{
+  tag:"6.1 Systems (2×2)",
+  q:"Solve:   2x + y = 4   and   −4x − 2y = −8",
+  options:["(2, 0)","No solution","(0, 4)","Infinitely many solutions"],
+  answer:"Infinitely many solutions",
+  hint:{
+    concept:"Try to eliminate a variable and see what happens to the remaining equation.",
+    steps:["Multiply eq 1 by 2: 4x + 2y = 8","Multiply eq 2 by −1: 4x + 2y = 8","The two equations are identical","Two identical equations → every point on the line is a solution"],
+    note:"When the equations are multiples of each other, the system is dependent (infinite solutions)."
+  },
+  solution:{steps:["Eq 2 × (−1) = 4x + 2y = 8, which is identical to eq 1 × 2.","Same line → infinitely many solutions (dependent system)."]}
+},
+{
+  tag:"6.1 Systems (2×2)",
+  q:"Solve:   x + 2y = 7   and   3x − y = 7",
+  options:["(3, 2)","(2, 3)","No solution","(7, 0)"],
+  answer:"(3, 2)",
+  hint:{
+    concept:"Use substitution from the second equation or elimination.",
+    steps:["From eq 2: y = 3x − 7","Substitute into eq 1: x + 2(3x − 7) = 7","Expand: x + 6x − 14 = 7  →  7x = 21  →  x = ?","Find y using y = 3x − 7"],
+    note:""
+  },
+  solution:{steps:["x = 3","y = 3(3) − 7 = 2","Solution: (3, 2)."]}
+},
+
+// ── 6.2 LARGER SYSTEMS ────────────────────────────────────────────────
+{
+  tag:"6.2 Larger Systems",
+  q:"System: { x − 2y − 7z = 17;  −6x + 4y + 5z = −9;  8x + 7y − z = −4 }. Replace R₃ by R₃ + (−1)R₂. What is the new third equation?",
+  options:["−14x + 3y + 6z = 5","2x + 11y + 4z = −13","14x + 3y − 6z = 5","14x + 3y − 6z = 5  (same as C)"],
+  answer:"14x + 3y − 6z = 5",
+  hint:{
+    concept:"R₃ + (−1)R₂ means: new R₃ = (each coefficient in R₃) + (−1) × (corresponding coefficient in R₂).",
+    steps:["x-coefficient: 8 + (−1)(−6) = 8 + 6 = 14","y-coefficient: 7 + (−1)(4) = 7 − 4 = 3","z-coefficient: −1 + (−1)(5) = −1 − 5 = −6","constant: −4 + (−1)(−9) = −4 + 9 = 5"],
+    note:"Multiplying a row by −1 flips ALL its signs before adding."
+  },
+  solution:{steps:["New R₃ = R₃ + (−1)R₂:","x: 8 − (−6) = 14,  y: 7 − 4 = 3,  z: −1 − 5 = −6,  const: −4 − (−9) = 5","New equation: 14x + 3y − 6z = 5."]}
+},
+{
+  tag:"6.2 Larger Systems",
+  q:"Solve by back substitution:   x + 4y + 4z = 11,   3y + 5z = 17,   2z = 8.",
+  options:["No solution","(−6, −1, 4)","(−1, 4, −1)","(−1, −1, 4)"],
+  answer:"(−1, −1, 4)",
+  hint:{
+    concept:"Back substitution: start from the bottom equation (already solved for z), work upward.",
+    steps:["From eq 3: 2z = 8 → z = ?","Substitute z into eq 2: 3y + 5z = 17 → solve for y","Substitute both y and z into eq 1: solve for x"],
+    note:"Always work from bottom to top in back substitution."
+  },
+  solution:{steps:["z = 4","3y + 5(4) = 17 → 3y = −3 → y = −1","x + 4(−1) + 4(4) = 11 → x − 4 + 16 = 11 → x = −1","Solution: (−1, −1, 4)."]}
+},
+{
+  tag:"6.2 Larger Systems",
+  q:"Write the augmented matrix for:   9x + 4y = 5   and   8x − 2y = 10.",
+  options:[
+    "[5  4 | 9]\n[10  8 | −2]",
+    "[9  4 | 10]\n[−2  8 | 5]",
+    "[9  8 | 5]\n[4  −2 | 10]",
+    "[9   4 | 5]\n[8  −2 | 10]"
+  ],
+  answer:"[9   4 | 5]\n[8  −2 | 10]",
+  hint:{
+    concept:"Each equation becomes one row. Columns are: coefficient of x, coefficient of y, then the constant (after the | separator).",
+    steps:["Row 1 comes from eq 1: coefficient of x = 9, y = 4, constant = 5","Row 2 comes from eq 2: coefficient of x = 8, y = −2, constant = 10"],
+    note:"Don't rearrange the rows or swap coefficients with constants."
+  },
+  solution:{steps:["[9   4 | 5]\n[8  −2 | 10]"]}
+},
+{
+  tag:"6.2 Larger Systems",
+  q:"Starting matrix:\n[1  −3 | 4]\n[2   3 | 1]\n\nPerform R₂ → R₁ + (−1)R₂. What is the resulting matrix?",
+  options:[
+    "[1  −2 | 2]\n[3   1 | 3]",
+    "[1  −2 | 2]\n[2   3 | 1]",
+    "[1  −3 | 4]\n[−1  −6 | 3]",
+    "[1  −2 | 2]\n[1   5 | −1]"
+  ],
+  answer:"[1  −3 | 4]\n[−1  −6 | 3]",
+  hint:{
+    concept:"New R₂ = R₁ + (−1)×R₂. R₁ stays unchanged. Compute each entry of the new R₂.",
+    steps:["New R₂, entry 1: 1 + (−1)(2) = 1 − 2 = −1","New R₂, entry 2: −3 + (−1)(3) = −3 − 3 = −6","New R₂, entry 3 (constant): 4 + (−1)(1) = 4 − 1 = 3","R₁ stays as [1  −3 | 4]"],
+    note:""
+  },
+  solution:{steps:["New R₂ = [1−2, −3−3, 4−1] = [−1, −6, 3]","Result:\n[1  −3 | 4]\n[−1  −6 | 3]"]}
+},
+{
+  tag:"6.2 Larger Systems",
+  q:"The reduced row echelon form of a system's augmented matrix is:\n[1 0 0 0 | 12]\n[0 1 0 0 |  0]\n[0 0 1 0 | −8]\n[0 0 0 1 | 11/2]\n\nWhat is the solution?",
+  options:["(12, 0, −8, 11/2)","No solution","(12, w, −8, 11/2) for any real w","(12, −8, 11/2, 0)"],
+  answer:"(12, 0, −8, 11/2)",
+  hint:{
+    concept:"In RREF, each row directly gives one variable's value: row 1 → variable 1 = constant, etc.",
+    steps:["Row 1: x₁ = 12","Row 2: x₂ = 0","Row 3: x₃ = −8","Row 4: x₄ = 11/2"],
+    note:"A row [1 0 0 0 | c] means x₁ = c directly — read off constants from the right column."
+  },
+  solution:{steps:["x₁ = 12,  x₂ = 0,  x₃ = −8,  x₄ = 11/2","Solution: (12, 0, −8, 11/2)."]}
+},
+{
+  tag:"6.2 Larger Systems",
+  q:"Solve:   x + y + z = −3,   x − y + 2z = −1,   3x + y + z = −1.",
+  options:["(1, −2, −2)","(−3, −1, 1)","No solution","(−3, 1, −1)"],
+  answer:"(1, −2, −2)",
+  hint:{
+    concept:"Eliminate variables systematically using pairs of equations.",
+    steps:["Subtract eq 1 from eq 2: −2y + z = 2  (call this eq 4)","Subtract 3×eq 1 from eq 3: −2y − 2z = 8  (call this eq 5)","From eq 4: z = 2 + 2y. Substitute into eq 5 to find y","Then find z and x"],
+    note:""
+  },
+  solution:{steps:["Eq2−Eq1: −2y + z = 2  (4)","Eq3−3·Eq1: −2y − 2z = 8  (5)","Sub z=2+2y into (5): −2y−2(2+2y)=8 → −6y=12 → y=−2","z = 2+2(−2) = −2","x = −3−y−z = −3+2+2 = 1","Solution: (1, −2, −2)."]}
+},
+{
+  tag:"6.2 Larger Systems",
+  q:"A reduced row echelon matrix has a row [0  0  0 | 1]. What does this mean?",
+  options:["The system has infinitely many solutions","The system has a unique solution","The system has no solution — this row represents 0 = 1","The variable for that row equals zero"],
+  answer:"The system has no solution — this row represents 0 = 1",
+  hint:{
+    concept:"Translate the row back into an equation: 0x + 0y + 0z = 1.",
+    steps:["[0  0  0 | 1] means: 0x + 0y + 0z = 1","The left side always equals 0, but the right side is 1","0 = 1 is always false — a contradiction","A contradiction means the system is inconsistent"],
+    note:"This is the RREF signature of a system with no solution."
+  },
+  solution:{steps:["[0 0 0 | 1] → 0 = 1 → contradiction → no solution (inconsistent system)."]}
+},
+
+// ── 6.3 APPLICATIONS ──────────────────────────────────────────────────
+{
+  tag:"6.3 Applications",
+  q:"A store sells televisions for $360 and VCRs for $270. Total stock is worth $51,570. During the week, ¾ of the TVs and ⅓ of the VCRs are sold for $31,590. How many TVs and VCRs were in stock?",
+  options:["93 TVs; 67 VCRs","96 TVs; 63 VCRs","95 TVs; 66 VCRs","94 TVs; 69 VCRs"],
+  answer:"96 TVs; 63 VCRs",
+  hint:{
+    concept:"Set up two equations: one for total stock value, one for sales during the week.",
+    steps:["Let T = TVs, V = VCRs","Eq 1 (total value): 360T + 270V = 51,570","Eq 2 (sales): (3/4)(360)T + (1/3)(270)V = 31,590  →  270T + 90V = 31,590","Simplify eq 2 by dividing by 90: 3T + V = 351","Solve the system"],
+    note:"Dividing both equations by common factors before solving makes the arithmetic simpler."
+  },
+  solution:{steps:["360T + 270V = 51,570  (÷90)  →  4T + 3V = 573","270T + 90V = 31,590  (÷90)  →  3T + V = 351","From eq 2: V = 351 − 3T. Sub: 4T + 3(351−3T) = 573","4T + 1053 − 9T = 573  →  −5T = −480  →  T = 96","V = 351 − 288 = 63","Answer: 96 TVs;  63 VCRs."]}
+},
+{
+  tag:"6.3 Applications",
+  q:"A chemist needs 30 liters of a 30% acid solution. She has a 20% solution and a 50% solution. How many liters of each should she mix?",
+  options:["10 L of 20%;  20 L of 50%","15 L of each","20 L of 20%;  10 L of 50%","25 L of 20%;  5 L of 50%"],
+  answer:"20 L of 20%;  10 L of 50%",
+  hint:{
+    concept:"Set up two equations: one for total volume, one for the acid content.",
+    steps:["Let x = liters of 20%,  y = liters of 50%","Eq 1 (volume): x + y = 30","Eq 2 (acid): 0.20x + 0.50y = 0.30(30) = 9","Substitute x = 30 − y into eq 2"],
+    note:"0.30 × 30 = 9 liters of pure acid needed."
+  },
+  solution:{steps:["x + y = 30  and  0.20x + 0.50y = 9","Sub x = 30−y: 0.20(30−y) + 0.50y = 9","6 − 0.20y + 0.50y = 9  →  0.30y = 3  →  y = 10","x = 30 − 10 = 20","Answer: 20 L of 20% and 10 L of 50%."]}
+},
+{
+  tag:"6.3 Applications",
+  q:"A collection of nickels and dimes contains 20 coins worth $1.65. How many of each?",
+  options:["5 nickels; 15 dimes","10 of each","7 nickels; 13 dimes","3 nickels; 17 dimes"],
+  answer:"7 nickels; 13 dimes",
+  hint:{
+    concept:"Two equations: one for count, one for dollar value.",
+    steps:["Let n = nickels, d = dimes","Eq 1: n + d = 20","Eq 2 (in cents): 5n + 10d = 165","From eq 1: n = 20 − d. Substitute into eq 2"],
+    note:"Work in cents to avoid decimals: $1.65 = 165 cents."
+  },
+  solution:{steps:["n + d = 20  and  5n + 10d = 165","5(20−d) + 10d = 165  →  100 + 5d = 165  →  5d = 65  →  d = 13","n = 20 − 13 = 7","Answer: 7 nickels and 13 dimes."]}
+},
+{
+  tag:"6.3 Applications",
+  q:"$10,000 is invested in two accounts. Account A earns 4% annually; Account B earns 6%. Total interest after one year is $480. How much is in each account?",
+  options:["$4,000 at 4%;  $6,000 at 6%","$5,000 in each","$6,000 at 4%;  $4,000 at 6%","$8,000 at 4%;  $2,000 at 6%"],
+  answer:"$6,000 at 4%;  $4,000 at 6%",
+  hint:{
+    concept:"Two equations: total principal and total interest.",
+    steps:["Let x = amount at 4%, y = amount at 6%","Eq 1: x + y = 10,000","Eq 2: 0.04x + 0.06y = 480","Sub x = 10,000 − y into eq 2"],
+    note:"Multiply eq 2 by 100 to remove decimals: 4x + 6y = 48,000."
+  },
+  solution:{steps:["0.04(10,000−y) + 0.06y = 480","400 − 0.04y + 0.06y = 480  →  0.02y = 80  →  y = 4,000","x = 10,000 − 4,000 = 6,000","Answer: $6,000 at 4%; $4,000 at 6%."]}
+},
+{
+  tag:"6.3 Applications",
+  q:"Car Rental A charges $25/day + $0.10/mile. Rental B charges $20/day + $0.15/mile. For how many miles per day do they cost the same?",
+  options:["50 miles","75 miles","100 miles","200 miles"],
+  answer:"100 miles",
+  hint:{
+    concept:"Set the two cost expressions equal and solve for miles.",
+    steps:["Cost A: 25 + 0.10m","Cost B: 20 + 0.15m","Set equal: 25 + 0.10m = 20 + 0.15m","Solve for m"],
+    note:""
+  },
+  solution:{steps:["25 + 0.10m = 20 + 0.15m","5 = 0.05m  →  m = 100","Answer: 100 miles."]}
+},
+
+// ── 6.4 BASIC MATRIX OPERATIONS ───────────────────────────────────────
+{
+  tag:"6.4 Matrix Operations",
+  q:"Let A = [3  3 / 2  4] and B = [0  4 / −1  6]. Find 4A + B.\n(Each matrix shows [row 1 / row 2].)",
+  options:[
+    "[12  28]\n[ 4  40]",
+    "[12  16]\n[ 1  10]",
+    "[12   7]\n[ 7  10]",
+    "[12  16]\n[ 7  22]"
+  ],
+  answer:"[12  16]\n[ 7  22]",
+  hint:{
+    concept:"Scalar multiplication first: multiply every entry of A by 4. Then add B entry by entry.",
+    steps:["4A: multiply each entry of A by 4 → [12 12 / 8 16]","Add B entry by entry","Top-left: 12+0=12.  Top-right: 12+4=16","Bottom-left: 8+(−1)=7.  Bottom-right: 16+6=22"],
+    note:""
+  },
+  solution:{steps:["4A = [12  12 / 8  16]","4A + B = [12+0, 12+4 / 8+(−1), 16+6] = [12  16 / 7  22]."]}
+},
+{
+  tag:"6.4 Matrix Operations",
+  q:"A is a 4×1 matrix and B is a 1×4 matrix. What are the dimensions of AB and BA?",
+  options:["AB nonexistent; BA is 1×1","AB is 4×4; BA is 1×1","AB is 4×4; BA nonexistent","AB is 1×1; BA is 4×4"],
+  answer:"AB is 4×4; BA is 1×1",
+  hint:{
+    concept:"For a product to exist, the columns of the first matrix must equal the rows of the second. The result is (rows of first) × (columns of second).",
+    steps:["AB: A is 4×1, B is 1×4. Columns of A (1) = rows of B (1) ✓ → result is 4×4","BA: B is 1×4, A is 4×1. Columns of B (4) = rows of A (4) ✓ → result is 1×1"],
+    note:""
+  },
+  solution:{steps:["AB: (4×1)(1×4) → inner dimensions match → result is 4×4","BA: (1×4)(4×1) → inner dimensions match → result is 1×1."]}
+},
+{
+  tag:"6.4 Matrix Operations",
+  q:"When is the matrix product AB defined?",
+  options:["When A and B have the same dimensions","When the number of columns of A equals the number of rows of B","When both matrices are square","When A and B are both at least 2×2"],
+  answer:"When the number of columns of A equals the number of rows of B",
+  hint:{
+    concept:"Think about how matrix multiplication works: each entry of AB is a dot product of a row of A with a column of B.",
+    steps:["For a dot product to work, the row length must equal the column length","Row length of A = columns of A. Column length of B = rows of B","So: columns of A must equal rows of B"],
+    note:"This is the only requirement. A and B do NOT need to be square or the same size."
+  },
+  solution:{steps:["AB is defined when: (# columns of A) = (# rows of B).","The result has dimensions (# rows of A) × (# columns of B)."]}
+},
+{
+  tag:"6.4 Matrix Operations",
+  q:"Find 3A for A = [2  −1 / 3  0].",
+  options:[
+    "[5  2]\n[6  3]",
+    "[6  −3]\n[9   0]",
+    "[2  −3]\n[9   0]",
+    "[6  −1]\n[3   0]"
+  ],
+  answer:"[6  −3]\n[9   0]",
+  hint:{
+    concept:"Scalar multiplication: multiply every entry in the matrix by the scalar.",
+    steps:["3 × 2 = 6","3 × (−1) = −3","3 × 3 = 9","3 × 0 = 0"],
+    note:"Every single entry gets multiplied — including zeros."
+  },
+  solution:{steps:["3A = [3·2, 3·(−1) / 3·3, 3·0] = [6  −3 / 9  0]."]}
+},
+{
+  tag:"6.4 Matrix Operations",
+  q:"Find A + B for A = [1  −2 / 0  3] and B = [4  1 / −1  2].",
+  options:[
+    "[5  −1]\n[−1  5]",
+    "[4  −2]\n[0   6]",
+    "[5  1]\n[1  5]",
+    "[−3  −3]\n[1   1]"
+  ],
+  answer:"[5  −1]\n[−1  5]",
+  hint:{
+    concept:"Matrix addition: add corresponding entries — same row, same column.",
+    steps:["Top-left: 1 + 4 = 5","Top-right: −2 + 1 = −1","Bottom-left: 0 + (−1) = −1","Bottom-right: 3 + 2 = 5"],
+    note:"You can only add matrices of the same dimensions."
+  },
+  solution:{steps:["A+B = [1+4, −2+1 / 0+(−1), 3+2] = [5  −1 / −1  5]."]}
+},
+
+// ── 6.5 MATRIX PRODUCTS & INVERSES ────────────────────────────────────
+{
+  tag:"6.5 Matrix Products",
+  q:"Given A = [−1  3 / 3  2] and B = [−2  0 / −1  1], find AB.",
+  options:[
+    "[2   0]\n[−3  2]",
+    "[−1  3]\n[−8  2]",
+    "[3  −1]\n[2  −8]",
+    "[2  −6]\n[−2  −1]"
+  ],
+  answer:"[−1  3]\n[−8  2]",
+  hint:{
+    concept:"Each entry of AB: (row i of A) · (column j of B). Work through all four entries.",
+    steps:["Entry (1,1): (−1)(−2) + (3)(−1) = 2 − 3 = −1","Entry (1,2): (−1)(0) + (3)(1) = 0 + 3 = 3","Entry (2,1): (3)(−2) + (2)(−1) = −6 − 2 = −8","Entry (2,2): (3)(0) + (2)(1) = 0 + 2 = 2"],
+    note:""
+  },
+  solution:{steps:["AB = [−1  3 / −8  2]."]}
+},
+{
+  tag:"6.5 Matrix Products",
+  q:"Determine whether [5  3 / 3  2] and [2  −3 / −3  5] are inverses by computing their product.",
+  options:["No","Yes"],
+  answer:"Yes",
+  hint:{
+    concept:"Two matrices are inverses if their product is the identity matrix I = [1 0 / 0 1].",
+    steps:["Compute the product AB","Entry (1,1): 5(2) + 3(−3) = 10 − 9 = 1","Entry (1,2): 5(−3) + 3(5) = −15 + 15 = 0","Entry (2,1): 3(2) + 2(−3) = 6 − 6 = 0","Entry (2,2): 3(−3) + 2(5) = −9 + 10 = 1"],
+    note:"If AB = I = [1 0 / 0 1], they are inverses."
+  },
+  solution:{steps:["AB = [1 0 / 0 1] = I ✓","Answer: Yes, they are inverses."]}
+},
+{
+  tag:"6.5 Matrix Products",
+  q:"Find the inverse of A = [3  6 / −5  6], if it exists.",
+  options:[
+    "[1/8   −1/8]\n[5/48  1/16]",
+    "[5/48  1/16]\n[1/8   −1/8]",
+    "[1/16  −1/8]\n[5/48   1/8]",
+    "[1/8   1/8]\n[−5/48  1/16]"
+  ],
+  answer:"[1/8   −1/8]\n[5/48  1/16]",
+  hint:{
+    concept:"For A = [a b / c d], the formula is A⁻¹ = (1/det(A)) × [d  −b / −c  a], where det = ad − bc.",
+    steps:["det = (3)(6) − (6)(−5) = 18 + 30 = 48","Since det ≠ 0, inverse exists","Swap a and d: put 6 where 3 was, put 3 where 6 was","Negate b and c: b=6→−6, c=−5→+5","Multiply all entries by 1/48"],
+    note:"6/48 = 1/8. −6/48 = −1/8. 5/48 stays. 3/48 = 1/16."
+  },
+  solution:{steps:["det = 3(6) − 6(−5) = 18 + 30 = 48","A⁻¹ = (1/48)[6  −6 / 5  3]","= [6/48  −6/48 / 5/48  3/48]","= [1/8  −1/8 / 5/48  1/16]."]}
+},
+{
+  tag:"6.5 Matrix Products",
+  q:"Find AB for A = [2  1 / 3  −1] and B = [1  2 / −1  0].",
+  options:[
+    "[1  4]\n[4  6]",
+    "[2  4]\n[3  0]",
+    "[3  4]\n[2  6]",
+    "[1  4]\n[−4  6]"
+  ],
+  answer:"[1  4]\n[4  6]",
+  hint:{
+    concept:"Compute each entry: row of A dotted with column of B.",
+    steps:["(1,1): 2(1) + 1(−1) = 2 − 1 = 1","(1,2): 2(2) + 1(0) = 4 + 0 = 4","(2,1): 3(1) + (−1)(−1) = 3 + 1 = 4","(2,2): 3(2) + (−1)(0) = 6 + 0 = 6"],
+    note:""
+  },
+  solution:{steps:["AB = [1  4 / 4  6]."]}
+},
+{
+  tag:"6.5 Matrix Products",
+  q:"For a 2×2 matrix A = [a  b / c  d], the formula for A⁻¹ is:",
+  options:[
+    "(1/(ad+bc)) × [d  b / c  a]",
+    "(1/(ad−bc)) × [d  −b / −c  a]",
+    "(1/(ad−bc)) × [a  −b / −c  d]",
+    "(1/(ad−bc)) × [−d  b / c  −a]"
+  ],
+  answer:"(1/(ad−bc)) × [d  −b / −c  a]",
+  hint:{
+    concept:"The inverse formula involves: the determinant (ad − bc) and the adjugate matrix.",
+    steps:["The determinant of [a b / c d] is ad − bc","The adjugate is formed by: swapping a and d, negating b and c → [d −b / −c a]","A⁻¹ = (1/det) × adjugate"],
+    note:"If ad − bc = 0, the inverse doesn't exist."
+  },
+  solution:{steps:["A⁻¹ = (1/(ad−bc)) × [d  −b / −c  a]"]}
+},
+{
+  tag:"6.5 Matrix Products",
+  q:"Under what condition does a 2×2 matrix NOT have an inverse?",
+  options:["When all entries are positive","When the determinant equals zero","When the matrix is not square","When the matrix has any negative entries"],
+  answer:"When the determinant equals zero",
+  hint:{
+    concept:"Look at the inverse formula: A⁻¹ = (1/det) × adjugate. What happens if det = 0?",
+    steps:["If det(A) = 0, we'd be dividing by zero","Division by zero is undefined","Therefore no inverse exists when det = 0"],
+    note:"A matrix with det = 0 is called singular. A matrix with det ≠ 0 is non-singular (invertible)."
+  },
+  solution:{steps:["det(A) = ad − bc = 0 → inverse undefined (singular matrix)."]}
+}
+
+];
+
+const SECTIONS = ["All","2.1 Graph","2.2 Equations of Lines","3.4 Quadratic Functions","3.6 Rational Functions","6.1 Systems (2×2)","6.2 Larger Systems","6.3 Applications","6.4 Matrix Operations","6.5 Matrix Products"];
+
+let activeSection = "All";
+let questions = [...ALL_Q];
+let current = 0, roundNum = 1, history = [], state = {}, scores = { correct: 0, attempted: 0 };
+
+function buildFilters() {
+  const container = document.getElementById('filters');
+  SECTIONS.forEach(s => {
+    const btn = document.createElement('button');
+    btn.className = 'fbtn' + (s === activeSection ? ' active' : '');
+    btn.textContent = s;
+    btn.onclick = () => {
+      activeSection = s;
+      questions = s === 'All' ? [...ALL_Q] : ALL_Q.filter(q => q.tag === s);
+      current = 0; scores = { correct: 0, attempted: 0 }; state = {}; roundNum = 1;
+      document.getElementById('banner').style.display = 'none';
+      document.getElementById('btn-redo').style.display = 'none';
+      document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderQ(); updateStats(); showHistory();
+    };
+    container.appendChild(btn);
+  });
+}
+
+function key(i) { return activeSection + '||' + roundNum + '||' + i; }
+function done(i) { const s = state[key(i)]; return s && s.done; }
+function allDone() { return questions.length > 0 && questions.every((_, i) => done(i)); }
+
+function updateStats() {
+  document.getElementById('s-correct').textContent = scores.correct;
+  document.getElementById('s-attempted').textContent = scores.attempted;
+  document.getElementById('s-pct').textContent = scores.attempted > 0 ? Math.round(scores.correct / scores.attempted * 100) + '%' : '—';
+  document.getElementById('s-round').textContent = roundNum;
+  const d = questions.filter((_, i) => done(i)).length;
+  document.getElementById('prog').style.width = (questions.length ? Math.round(d / questions.length * 100) : 0) + '%';
+  if (allDone()) {
+    const pct = Math.round(scores.correct / scores.attempted * 100);
+    if (!history.find(r => r.round === roundNum && r.section === activeSection)) {
+      history.push({ round: roundNum, correct: scores.correct, attempted: scores.attempted, pct, section: activeSection });
+      showHistory(); showBanner(pct);
+      document.getElementById('btn-redo').style.display = 'inline-block';
+    }
+  }
+}
+
+function showHistory() {
+  const panel = document.getElementById('history-panel'), row = document.getElementById('history-row');
+  const relevant = history.filter(r => r.section === activeSection);
+  if (!relevant.length) { panel.style.display = 'none'; return; }
+  panel.style.display = 'block'; row.innerHTML = '';
+  const best = Math.max(...relevant.map(r => r.pct));
+  relevant.forEach(r => {
+    const c = document.createElement('span');
+    c.className = 'hchip' + (r.pct === best ? ' best' : '');
+    c.textContent = 'Round ' + r.round + ': ' + r.correct + '/' + r.attempted + ' (' + r.pct + '%)';
+    row.appendChild(c);
+  });
+}
+
+function showBanner(pct) {
+  document.getElementById('banner').style.display = 'block';
+  document.getElementById('banner-title').textContent = 'Section complete!';
+  document.getElementById('banner-msg').textContent = pct === 100 ? 'Perfect score! Run it again to lock it in.' : pct >= 80 ? pct + '% — strong work. One more round will cement it.' : pct >= 60 ? pct + '% — review the worked solutions, then retry.' : pct + '% — study the solution steps carefully before trying again.';
+}
+
+function newRound() {
+  roundNum++; scores = { correct: 0, attempted: 0 }; current = 0;
+  document.getElementById('banner').style.display = 'none';
+  document.getElementById('btn-redo').style.display = 'none';
+  renderQ(); updateStats(); showHistory();
+}
+
+function renderQ() {
+  if (!questions.length) { document.getElementById('q-area').innerHTML = '<p style="color:#888;font-size:14px;padding:1rem 0;">No questions in this section.</p>'; return; }
+  const q = questions[current];
+  const k = key(current);
+  const s = state[k] || { attempts: 0, done: false, wrongChoices: [], feedbackMsg: '', feedbackColor: '' };
+  document.getElementById('qcounter').textContent = (current + 1) + ' / ' + questions.length;
+
+  let attTag = s.attempts > 0 ? `<span class="atag">(${s.attempts} attempt${s.attempts > 1 ? 's' : ''})</span>` : '';
+  let html = `<div class="qcard"><div><span class="qtag">${q.tag}</span>${attTag}</div><p class="qtext">${q.q.replace(/\n/g,'<br>')}</p><div class="options">`;
+  q.options.forEach((opt, i) => {
+    let cls = 'obtn', dis = '';
+    if (s.done) { if (opt === q.answer) cls += ' reveal-correct'; else if (s.wrongChoices.includes(opt)) cls += ' dwrong'; dis = 'disabled'; }
+    else if (s.wrongChoices.includes(opt)) { cls += ' dwrong'; dis = 'disabled'; }
+    const optHtml = opt.includes('\n') ? opt.replace(/\n/g,'<br>') : opt;
+    html += `<button class="${cls}" data-opt="${i}" ${dis}>${optHtml}</button>`;
+  });
+  html += `</div><div class="btn-row"><button class="abtn" id="btn-hint">💡 how to approach</button></div>`;
+  const h = q.hint;
+  html += `<div class="hint-box" id="hint-box"><h4>💡 How to Approach This</h4><div class="hint-concept"><strong>Key idea:</strong> ${h.concept}</div><strong style="font-size:13px;color:#0d5c3a;">Step by step:</strong><ol class="hint-steps">`;
+  h.steps.forEach(step => { html += `<li>${step}</li>`; });
+  html += `</ol>`;
+  if (h.note) html += `<div class="hint-note">📝 ${h.note}</div>`;
+  html += `</div>`;
+  if (s.done && s.wrongChoices.length >= 2) {
+    const sol = q.solution;
+    html += `<div class="solution-box" style="display:block"><h4>📝 Full Solution</h4>`;
+    sol.steps.forEach(step => { html += `<div class="sol-step">${step.replace(/\n/g,'<br>')}</div>`; });
+    html += `<div class="sol-answer">✓ Answer: ${q.answer.replace(/\n/g,'<br>')}</div></div>`;
+  }
+  html += `<div class="feedback" id="feedback" style="display:${s.feedbackMsg ? 'block' : 'none'};color:${s.feedbackColor || 'inherit'}">${s.feedbackMsg || ''}</div>`;
+  html += `</div>`;
+  document.getElementById('q-area').innerHTML = html;
+
+  document.getElementById('btn-hint').onclick = () => {
+    const hb = document.getElementById('hint-box');
+    hb.style.display = hb.style.display === 'block' ? 'none' : 'block';
+  };
+
+  function showFeedback(msg, type) {
+    const fb = document.getElementById('feedback');
+    fb.style.display = 'block';
+    const colors = { correct: '#0d5c3a', tryagain: '#854f0b', wrong: '#791F1F' };
+    fb.style.color = colors[type];
+    fb.textContent = type === 'correct' ? '✓ Correct!' : msg;
+    state[k].feedbackMsg = fb.textContent; state[k].feedbackColor = fb.style.color;
+  }
+
+  function handleAnswer(chosen, correct) {
+    if (!state[k]) state[k] = { attempts: 0, done: false, wrongChoices: [], feedbackMsg: '', feedbackColor: '' };
+    const st = state[k];
+    if (st.attempts === 0) scores.attempted++;
+    st.attempts++;
+    if (correct) {
+      if (st.attempts === 1) scores.correct++;
+      st.done = true; showFeedback('', 'correct'); updateStats(); renderQ();
+    } else {
+      st.wrongChoices.push(chosen);
+      if (st.attempts >= 2) {
+        st.done = true;
+        showFeedback('✗ Incorrect. See the full solution below.', 'wrong');
+        updateStats(); renderQ();
+      } else {
+        showFeedback('✗ Not quite — one more try. Use the hint if needed.', 'tryagain');
+        updateStats();
+        document.querySelectorAll('.obtn').forEach(b => {
+          if (st.wrongChoices.includes(q.options[parseInt(b.dataset.opt)])) { b.classList.add('dwrong'); b.disabled = true; }
+        });
+      }
+    }
+  }
+
+  if (!s.done) {
+    document.querySelectorAll('.obtn:not([disabled])').forEach(btn => {
+      btn.onclick = () => handleAnswer(q.options[parseInt(btn.dataset.opt)], q.options[parseInt(btn.dataset.opt)] === q.answer);
+    });
+  }
+}
+
+document.getElementById('btn-prev').onclick = () => { if (current > 0) { current--; renderQ(); } };
+document.getElementById('btn-next').onclick = () => { if (current < questions.length - 1) { current++; renderQ(); } };
+document.getElementById('btn-rand').onclick = () => { current = Math.floor(Math.random() * questions.length); renderQ(); };
+document.getElementById('btn-redo').onclick = () => newRound();
+
+buildFilters(); renderQ(); updateStats();
+</script>
+</body>
+</html>
