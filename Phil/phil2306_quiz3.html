@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PHIL 2306 — Quiz 3 Review</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; background: #f5f4f0; color: #1a1a1a; min-height: 100vh; padding: 2rem 1rem; }
+    .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #888; text-decoration: none; margin-bottom: 1.25rem; }
+    .back-link:hover { color: #1a1a1a; }
+    .quiz-wrap { max-width: 640px; margin: 0 auto; }
+    header { margin-bottom: 2rem; }
+    header .eyebrow { font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #534AB7; margin-bottom: 0.4rem; }
+    header h1 { font-size: 22px; font-weight: 600; color: #1a1a1a; line-height: 1.3; }
+    header p { font-size: 14px; color: #666; margin-top: 0.35rem; }
+    .score-row { display: flex; gap: 10px; margin-bottom: 1.25rem; }
+    .scard { flex: 1; background: #fff; border: 1px solid #d8d6ce; border-radius: 10px; padding: 0.75rem 1rem; }
+    .slabel { font-size: 11px; color: #888; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.04em; }
+    .sval { font-size: 22px; font-weight: 600; color: #1a1a1a; }
+    .pbar-bg { height: 5px; background: #e2e0d8; border-radius: 999px; margin-bottom: 1.25rem; overflow: hidden; }
+    .pbar-fill { height: 100%; background: #534AB7; border-radius: 999px; transition: width 0.4s; }
+    .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.25rem; }
+    .fbtn { font-size: 12px; font-weight: 500; padding: 5px 14px; border-radius: 999px; border: 1px solid #d8d6ce; background: #fff; color: #888; cursor: pointer; transition: background 0.12s, border-color 0.12s, color 0.12s; }
+    .fbtn:hover { background: #f0eeea; }
+    .fbtn.active { background: #EEEDFE; border-color: #a89cf5; color: #534AB7; }
+    .history-panel { margin-bottom: 1.25rem; display: none; }
+    .history-label { font-size: 11px; font-weight: 500; color: #888; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+    .history-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .hchip { font-size: 12px; padding: 4px 12px; border-radius: 999px; border: 1px solid #e2e0d8; background: #f0eeea; color: #888; }
+    .hchip.best { border-color: #534AB7; color: #534AB7; font-weight: 500; }
+    .banner { background: #EEEDFE; border: 1px solid #a89cf5; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.25rem; display: none; }
+    .banner h3 { font-size: 15px; font-weight: 600; color: #2d2480; margin-bottom: 4px; }
+    .banner p { font-size: 13px; color: #2d2480; opacity: 0.9; }
+    .qcard { background: #fff; border: 1px solid #d8d6ce; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; }
+    .qtag { font-size: 11px; font-weight: 500; color: #534AB7; background: #EEEDFE; padding: 3px 9px; border-radius: 8px; display: inline-block; margin-bottom: 0.75rem; }
+    .atag { font-size: 11px; color: #888; margin-left: 8px; }
+    .qtext { font-size: 16px; font-weight: 500; color: #1a1a1a; line-height: 1.6; margin-bottom: 1.25rem; }
+    .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1rem; }
+    .obtn { background: #f7f6f2; border: 1px solid #c8c6be; border-radius: 12px; padding: 0.85rem 1rem; font-size: 15px; font-family: inherit; color: #1a1a1a; text-align: left; cursor: pointer; transition: background 0.15s, border-color 0.15s; line-height: 1.5; }
+    .obtn:hover:not(:disabled) { background: #eceae4; border-color: #a8a69e; }
+    .obtn.reveal-correct { background: #EEEDFE; border-color: #a89cf5; color: #2d2480; }
+    .obtn.dwrong { opacity: 0.35; cursor: not-allowed; text-decoration: line-through; }
+    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+    .abtn { border: 1px solid #d8d6ce; border-radius: 8px; padding: 8px 14px; font-size: 13px; font-family: inherit; cursor: pointer; background: #fff; color: #1a1a1a; transition: background 0.15s; }
+    .abtn:hover { background: #f0eeea; }
+    .abtn.redo { border-color: #534AB7; color: #534AB7; font-weight: 500; }
+    .abtn.redo:hover { background: #EEEDFE; }
+    #btn-hint { background: #EEEDFE; border-color: #c4b5fd; color: #534AB7; font-weight: 500; }
+    #btn-hint:hover { background: #e4e2fe; }
+    .hint-box { margin-top: 1rem; background: #EEEDFE; border: 1px solid #c4b5fd; border-radius: 12px; padding: 1.25rem; display: none; }
+    .hint-box h4 { font-size: 13px; font-weight: 600; color: #534AB7; margin-bottom: 0.75rem; }
+    .hint-concept { font-size: 13px; color: #534AB7; line-height: 1.7; margin-bottom: 0.75rem; }
+    .hint-steps { list-style: none; padding: 0; counter-reset: step; }
+    .hint-steps li { font-size: 13px; color: #534AB7; line-height: 1.7; padding: 4px 0 4px 20px; position: relative; }
+    .hint-steps li::before { content: counter(step); counter-increment: step; position: absolute; left: 0; font-weight: 600; color: #534AB7; }
+    .hint-note { font-size: 12px; color: #534AB7; opacity: 0.8; margin-top: 0.5rem; font-style: italic; }
+    .solution-box { margin-top: 1rem; background: #FCEBEB; border: 1px solid #F09595; border-radius: 12px; padding: 1.25rem; display: none; }
+    .solution-box h4 { font-size: 13px; font-weight: 600; color: #791F1F; margin-bottom: 0.75rem; }
+    .sol-step { font-size: 13px; color: #791F1F; line-height: 1.8; padding: 2px 0; }
+    .sol-answer { margin-top: 0.75rem; font-size: 14px; font-weight: 600; color: #791F1F; background: rgba(255,255,255,0.5); border-radius: 8px; padding: 8px 12px; }
+    .feedback { margin-top: 0.75rem; font-size: 13px; font-weight: 500; display: none; }
+    .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; flex-wrap: wrap; gap: 8px; }
+    .qcounter { font-size: 13px; color: #888; }
+    .nav-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+    @media (max-width: 500px) { .sval { font-size: 18px; } header h1 { font-size: 18px; } }
+  </style>
+</head>
+<body>
+<a class="back-link" href="/">← School Reviews</a>
+<div class="quiz-wrap">
+  <header>
+    <div class="eyebrow">PHIL 2306 — Introduction to Ethics</div>
+    <h1>Quiz 3 Review</h1>
+    <p>13 core concepts · Deontology (Kant, Intuitionism) &amp; Virtue Theory · shuffles every round</p>
+  </header>
+
+  <div class="filters" id="filters"></div>
+  <div class="history-panel" id="history-panel">
+    <div class="history-label">attempt history</div>
+    <div class="history-row" id="history-row"></div>
+  </div>
+  <div class="score-row">
+    <div class="scard"><div class="slabel">correct</div><div class="sval" id="s-correct">0</div></div>
+    <div class="scard"><div class="slabel">attempted</div><div class="sval" id="s-attempted">0</div></div>
+    <div class="scard"><div class="slabel">accuracy</div><div class="sval" id="s-pct">—</div></div>
+    <div class="scard"><div class="slabel">round</div><div class="sval" id="s-round">1</div></div>
+  </div>
+  <div class="pbar-bg"><div class="pbar-fill" id="prog" style="width:0%"></div></div>
+  <div class="banner" id="banner"><h3 id="banner-title"></h3><p id="banner-msg"></p></div>
+  <div id="q-area"></div>
+  <div class="nav-row">
+    <span class="qcounter" id="qcounter"></span>
+    <div class="nav-btns">
+      <button class="abtn" id="btn-prev">← prev</button>
+      <button class="abtn" id="btn-next">next →</button>
+      <button class="abtn" id="btn-rand">random</button>
+      <button class="abtn redo" id="btn-redo" style="display:none">↺ new round</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const POOLS = [
+
+// ── DEONTOLOGY ──────────────────────────────────────────────────────────
+{
+  tag:"Deontology",
+  pool:[
+    {
+      q:"What does the Greek root of “deontology” mean?",
+      options:["Duty / obligation","Virtue / excellence","Pleasure / happiness","Nature / law"],
+      answer:"Duty / obligation",
+      hint:{concept:"Deontology comes from the Greek “deon,” meaning duty, plus “logos,” meaning study.",
+        steps:["Break the word down: deon + logos","“deon” = that which is binding/necessary → duty","“logos” = study/account of"],
+        note:"This is why deontology is called “duty ethics” — the name itself points to obligation, not consequences."},
+      solution:{steps:["“Deon” = duty; “logos” = study of.","Deontology = the study/ethics of duty.","Answer: Duty / obligation."]}
+    },
+    {
+      q:"The term “deontology” comes from the Greek word “deon,” which translates most closely to:",
+      options:["Duty","The good","Character","Happiness"],
+      answer:"Duty",
+      hint:{concept:"“Deon” refers to what is binding or obligatory — i.e., duty.",
+        steps:["Recall the two Greek roots: deon + logos","“Deon” specifically means duty/what must be done"],
+        note:"Contrast with “areteic” (virtue) and “teleological” (end/goal) — different root words point to different ethical theories."},
+      solution:{steps:["“Deon” = duty.","Answer: Duty."]}
+    },
+    {
+      q:"Which concept is embedded in the very name “deontology,” making it central to the theory?",
+      options:["Duty","Pleasure","Wisdom","Habit"],
+      answer:"Duty",
+      hint:{concept:"The name of the theory is a direct clue to its core commitment.",
+        steps:["“Deontology” literally means “the study of duty”","This signals that duty/obligation — not outcomes or character — is what makes actions right or wrong"],
+        note:""},
+      solution:{steps:["The Greek root “deon” = duty.","Answer: Duty."]}
+    }
+  ]
+},
+{
+  tag:"Deontology",
+  pool:[
+    {
+      q:"Which philosopher is best classified as a rule-rationalist — deriving moral rules through reason rather than intuition?",
+      options:["Immanuel Kant","W.D. Ross","H.A. Prichard","Aristotle"],
+      answer:"Immanuel Kant",
+      hint:{concept:"A rule-rationalist believes general moral rules can be established through pure reason (not intuition).",
+        steps:["Kant derives the Categorical Imperative through logical/rational argument, not gut feeling","This makes him a rule-rationalist, as opposed to the intuitionists"],
+        note:"Contrast: intuitionists (Prichard, Ross) hold moral knowledge comes from direct intuition, not reasoned derivation."},
+      solution:{steps:["Kant reasons his way to universal moral rules (the Categorical Imperative).","Answer: Immanuel Kant — the rule-rationalist."]}
+    },
+    {
+      q:"A rule-rationalist believes moral rules are established through reason alone, not intuition. Which deontologist fits this description?",
+      options:["Kant","Ross","Prichard","Hume"],
+      answer:"Kant",
+      hint:{concept:"Look for the philosopher whose method is pure logical derivation of duty.",
+        steps:["Kant's Categorical Imperative is derived by reasoning about universalizability and rational consistency","No appeal to intuition is needed — it's a product of reason"],
+        note:""},
+      solution:{steps:["Kant fits rule-rationalism.","Answer: Kant."]}
+    },
+    {
+      q:"Kant's approach to deriving the Categorical Imperative through pure reason makes him an example of:",
+      options:["A rule-rationalist","An act-intuitionist","A rule-intuitionist","A virtue theorist"],
+      answer:"A rule-rationalist",
+      hint:{concept:"Match the method (reason vs. intuition) and the scope (rule vs. act) to the correct label.",
+        steps:["Kant uses reason (not intuition) → rationalist","Kant produces general rules (not case-by-case judgments) → rule-based","Combine: rule-rationalist"],
+        note:""},
+      solution:{steps:["Reason + general rules = rule-rationalist.","Answer: A rule-rationalist."]}
+    }
+  ]
+},
+{
+  tag:"Deontology",
+  pool:[
+    {
+      q:"Which position holds that we grasp the rightness or wrongness of each individual act through direct intuition, without appeal to general rules?",
+      options:["Act-intuitionism (H.A. Prichard)","Rule-intuitionism (W.D. Ross)","Rule-rationalism (Kant)","Virtue theory"],
+      answer:"Act-intuitionism (H.A. Prichard)",
+      hint:{concept:"Act-intuitionism judges each act on its own, case by case, via intuition — no general rules involved.",
+        steps:["“Act” = the individual action is the unit of moral judgment","“Intuitionism” = moral knowledge comes from direct intuition, not derived rules","H.A. Prichard is the philosopher associated with this position"],
+        note:"Compare to rule-intuitionism (Ross), which intuits general duties, not individual acts."},
+      solution:{steps:["Act-by-act intuition, no general rules → act-intuitionism.","Associated philosopher: H.A. Prichard.","Answer: Act-intuitionism (H.A. Prichard)."]}
+    },
+    {
+      q:"H.A. Prichard is best known as an example of which position?",
+      options:["Act-intuitionist","Rule-intuitionist","Rule-rationalist","Eudaimonist"],
+      answer:"Act-intuitionist",
+      hint:{concept:"Prichard held that the rightness of each particular act is grasped directly, without deriving it from a general rule.",
+        steps:["Recall: act-intuitionism = judging individual acts via intuition","Prichard is the standard example of this position"],
+        note:""},
+      solution:{steps:["Prichard = act-intuitionist.","Answer: Act-intuitionist."]}
+    },
+    {
+      q:"An act-intuitionist, unlike a rule-intuitionist, believes moral knowledge applies to:",
+      options:["Individual acts, judged one at a time by intuition","General rules, known through intuition","Character traits, cultivated over a lifetime","Consequences, calculated case by case"],
+      answer:"Individual acts, judged one at a time by intuition",
+      hint:{concept:"The key contrast between act- and rule-intuitionism is the SCOPE of what intuition is applied to.",
+        steps:["Act-intuitionism: intuition applies to each specific act","Rule-intuitionism: intuition applies to general duties/rules, which then apply to acts"],
+        note:""},
+      solution:{steps:["Act-intuitionism judges acts individually via intuition.","Answer: Individual acts, judged one at a time by intuition."]}
+    }
+  ]
+},
+{
+  tag:"Deontology",
+  pool:[
+    {
+      q:"W.D. Ross, who argued we intuit general prima facie duties rather than judging each act separately, is classified as:",
+      options:["A rule-intuitionist","An act-intuitionist","A rule-rationalist","A consequentialist"],
+      answer:"A rule-intuitionist",
+      hint:{concept:"Ross holds that we intuit general DUTIES (rules), which we then apply to particular situations — that's rule-intuitionism.",
+        steps:["“Rule” = general duties/rules are the unit grasped","“Intuitionism” = grasped via direct intuition, not reasoned derivation","Combine: rule-intuitionist"],
+        note:"Ross's prima facie duties (fidelity, reparation, gratitude, etc.) are general rules, not case-by-case judgments."},
+      solution:{steps:["General rules (prima facie duties) + intuition = rule-intuitionism.","Answer: A rule-intuitionist."]}
+    },
+    {
+      q:"Which position holds that general moral rules (not individual acts) are known through direct intuition?",
+      options:["Rule-intuitionism (W.D. Ross)","Act-intuitionism (H.A. Prichard)","Rule-rationalism (Kant)","Virtue theory"],
+      answer:"Rule-intuitionism (W.D. Ross)",
+      hint:{concept:"Focus on scope: RULES (general), grasped by INTUITION (not reason).",
+        steps:["Rule-based → general duties, not single acts","Intuition-based → not derived by pure reasoning, as Kant does","Ross is the associated philosopher"],
+        note:""},
+      solution:{steps:["Rules + intuition = rule-intuitionism (Ross).","Answer: Rule-intuitionism (W.D. Ross)."]}
+    },
+    {
+      q:"Ross's theory of prima facie duties is an example of which category of deontology?",
+      options:["Rule-intuitionist","Act-intuitionist","Rule-rationalist","Act-rationalist"],
+      answer:"Rule-intuitionist",
+      hint:{concept:"Prima facie duties are GENERAL rules (fidelity, non-maleficence, etc.), known through intuition rather than derived by pure reason.",
+        steps:["General rules → “rule”","Known via intuition, not reasoned derivation → “intuitionist”"],
+        note:""},
+      solution:{steps:["Answer: Rule-intuitionist."]}
+    }
+  ]
+},
+{
+  tag:"Deontology",
+  pool:[
+    {
+      q:"According to Kant, what is the only thing that is good without qualification?",
+      options:["A good will","Intelligence","Courage","Happiness"],
+      answer:"A good will",
+      hint:{concept:"Kant opens his moral philosophy by arguing that any other good (intelligence, wit, courage, even happiness) can be used for evil purposes.",
+        steps:["Ask: can intelligence be used for bad ends? Yes (a clever criminal).","Can courage be used for bad ends? Yes (a courageous villain).","What can NEVER be turned to a bad purpose, no matter what? Only a good will."],
+        note:"This is the opening move of Kant's Groundwork of the Metaphysics of Morals."},
+      solution:{steps:["Talents and even happiness can be misused; only a good will cannot be.","Answer: A good will."]}
+    },
+    {
+      q:"Kant opens his moral philosophy by arguing that nothing in the world — not even intelligence or courage — is good without qualification except:",
+      options:["A good will","Pleasure","Wealth","Reputation"],
+      answer:"A good will",
+      hint:{concept:"All other traits/goods can be turned toward bad ends depending on the will behind them.",
+        steps:["Even virtues like courage become vicious if paired with an evil will (e.g., a courageous criminal)","Only the will itself, when good, remains unconditionally good"],
+        note:""},
+      solution:{steps:["Answer: A good will."]}
+    },
+    {
+      q:"For Kant, talents like intelligence or wit can be used for evil, but one thing remains good under all circumstances:",
+      options:["A good will","Social status","Physical strength","Wealth"],
+      answer:"A good will",
+      hint:{concept:"Kant is isolating the ONE thing whose goodness doesn't depend on how it's used.",
+        steps:["All talents/resources can be misused by a bad will","A good will, by definition, cannot be turned toward evil"],
+        note:""},
+      solution:{steps:["Answer: A good will."]}
+    }
+  ]
+},
+{
+  tag:"Deontology",
+  pool:[
+    {
+      q:"Kant's Universal Law formulation of the Categorical Imperative — “act only according to that maxim by which you can at the same time will it become a universal law” — evaluates morality based on:",
+      options:["What kind of world would result if everyone acted on that same maxim","Whether the action respects other people as ends in themselves","Whether the action is freely willed by a rational, self-legislating agent","Whether the action produces the greatest overall happiness"],
+      answer:"What kind of world would result if everyone acted on that same maxim",
+      hint:{concept:"The Universal Law formulation asks you to imagine everyone acting on your same maxim (rule) and check for consistency/coherence.",
+        steps:["Take your maxim (e.g., “I will lie when convenient”)","Imagine it as a universal law — everyone lies when convenient","Ask: does this create a livable, coherent world, or does it collapse (e.g., lying becomes pointless if everyone expects it)?"],
+        note:"This is the 'what if everyone did that?' test — it points to the kind of world universalizing the maxim would create."},
+      solution:{steps:["Universal Law formulation = test the maxim by universalizing it and checking the resulting world for consistency.","Answer: What kind of world would result if everyone acted on that same maxim."]}
+    },
+    {
+      q:"The Universal Law formulation of the Categorical Imperative points to morality as fundamentally about:",
+      options:["Creating a better or worse world by universalizing your maxim","Treating individuals with due respect","Basic rational self-legislation","Maximizing pleasure over pain"],
+      answer:"Creating a better or worse world by universalizing your maxim",
+      hint:{concept:"This formulation is about consequences of universalizing a rule — what world would result.",
+        steps:["Ask what would happen if your rule became a universal law","The formulation is concerned with the coherence/livability of that resulting world"],
+        note:""},
+      solution:{steps:["Answer: Creating a better or worse world by universalizing your maxim."]}
+    },
+    {
+      q:"If you ask, “What would happen if literally everyone did this?” you are applying which formulation of Kant's Categorical Imperative?",
+      options:["The Universal Law formulation","The Humanity formulation","The Autonomy (Kingdom of Ends) formulation","The Golden Rule"],
+      answer:"The Universal Law formulation",
+      hint:{concept:"This exact question — imagining the maxim as a universal law — is the defining move of one specific formulation.",
+        steps:["Recall the three formulations: Universal Law, Humanity, Autonomy","“What if everyone did this?” directly matches Universal Law"],
+        note:""},
+      solution:{steps:["Answer: The Universal Law formulation."]}
+    }
+  ]
+},
+{
+  tag:"Deontology",
+  pool:[
+    {
+      q:"Kant's Humanity formulation of the Categorical Imperative (“treat humanity always as an end, never merely as a means”) points to morality as:",
+      options:["Treating persons with the respect owed to rational beings, never using them merely as tools","Universalizing your maxim to see if the resulting world is coherent","Acting only on principles a rational being would freely legislate for itself","Producing the greatest good for the greatest number"],
+      answer:"Treating persons with the respect owed to rational beings, never using them merely as tools",
+      hint:{concept:"The Humanity formulation is about respecting persons as ends in themselves — not using them purely instrumentally.",
+        steps:["“End” = a being with intrinsic worth, not just useful for something else","“Means” = a tool used to achieve someone else's purpose","This formulation forbids treating people as MERE means (using someone with no regard for their own rational agency)"],
+        note:"You can interact with people instrumentally (e.g., a cashier helps you buy groceries) as long as you also respect them as rational agents — the prohibition is on treating them ONLY as a means."},
+      solution:{steps:["Humanity formulation = never treat a person merely as a means; always also as an end in themselves.","Answer: Treating persons with the respect owed to rational beings, never using them merely as tools."]}
+    },
+    {
+      q:"Which formulation of the Categorical Imperative focuses on never using another person merely as a tool for your own purposes?",
+      options:["The Humanity formulation","The Universal Law formulation","The Autonomy formulation","Rule-intuitionism"],
+      answer:"The Humanity formulation",
+      hint:{concept:"“Never merely as a means” is the signature language of one specific formulation.",
+        steps:["Recall Kant's three formulations","The 'means/end' language belongs specifically to the Humanity formulation"],
+        note:""},
+      solution:{steps:["Answer: The Humanity formulation."]}
+    },
+    {
+      q:"The Humanity formulation evaluates the morality of an action based on:",
+      options:["Whether it respects other people as ends in themselves, not mere tools","Whether the maxim behind it could be universalized without contradiction","Whether it was freely self-legislated by a rational agent","Whether it maximizes overall welfare"],
+      answer:"Whether it respects other people as ends in themselves, not mere tools",
+      hint:{concept:"This formulation centers on due respect for persons, distinct from the consistency-testing of Universal Law.",
+        steps:["Ask: does the action use another person purely as an instrument?","If so, it violates the Humanity formulation"],
+        note:""},
+      solution:{steps:["Answer: Whether it respects other people as ends in themselves, not mere tools."]}
+    }
+  ]
+},
+{
+  tag:"Deontology",
+  pool:[
+    {
+      q:"Kant's Autonomy formulation (acting as a self-legislating member of a “kingdom of ends”) points to morality as grounded in:",
+      options:["Basic rationality and self-legislation, not external commands","Universalizing maxims to check for a coherent world","Respecting persons as ends rather than mere means","Calculating the greatest happiness for the greatest number"],
+      answer:"Basic rationality and self-legislation, not external commands",
+      hint:{concept:"The Autonomy formulation grounds morality in the rational agent's own self-given law — not obedience to an outside authority.",
+        steps:["“Autonomy” = self (auto) + law (nomos) = self-legislation","A rational being gives the moral law to itself through reason, rather than receiving it from outside (heteronomy)"],
+        note:"This connects to Kant's broader idea that genuine morality requires autonomy, not heteronomous obedience to commands."},
+      solution:{steps:["Autonomy formulation = ground morality in self-legislating rational agency.","Answer: Basic rationality and self-legislation, not external commands."]}
+    },
+    {
+      q:"Which formulation of the Categorical Imperative grounds morality in basic rationality and self-governance rather than external commands?",
+      options:["The Autonomy (Kingdom of Ends) formulation","The Universal Law formulation","The Humanity formulation","Divine Command Theory"],
+      answer:"The Autonomy (Kingdom of Ends) formulation",
+      hint:{concept:"“Self-governance” and “rationality” are the defining terms of this specific formulation.",
+        steps:["Recall the three formulations and their distinct angles: consistency (Universal Law), respect (Humanity), self-legislation (Autonomy)"],
+        note:""},
+      solution:{steps:["Answer: The Autonomy (Kingdom of Ends) formulation."]}
+    },
+    {
+      q:"The idea that a moral agent must act only on principles it could rationally will as a self-legislating member of a community of rational beings describes which formulation?",
+      options:["Autonomy / Kingdom of Ends formulation","Universal Law formulation","Humanity formulation","Utilitarian calculus"],
+      answer:"Autonomy / Kingdom of Ends formulation",
+      hint:{concept:"This describes an agent legislating for itself as part of a community of rational agents — the signature of the Autonomy formulation.",
+        steps:["Look for the key phrase “self-legislating” / “kingdom of ends”"],
+        note:""},
+      solution:{steps:["Answer: Autonomy / Kingdom of Ends formulation."]}
+    }
+  ]
+},
+{
+  tag:"Deontology",
+  pool:[
+    {
+      q:"What is a commonly noted flaw of Intuitionism (both act- and rule-intuitionism)?",
+      options:["It offers no rational way to resolve conflicting intuitions between people who disagree","It requires impossibly complex calculations of pleasure and pain","It ignores the moral agent's character entirely","It cannot account for duties at all"],
+      answer:"It offers no rational way to resolve conflicting intuitions between people who disagree",
+      hint:{concept:"Because Intuitionism grounds moral knowledge in direct “seeing” rather than argument, there's no shared method to settle disputes when intuitions clash.",
+        steps:["Suppose two people have opposite intuitions about the same act","Since neither intuition is derived from an argument, there's no rational procedure to determine who is right","This makes Intuitionism seem arbitrary or unable to progress past disagreement"],
+        note:"This is the standard criticism raised against both Prichard's act-intuitionism and Ross's rule-intuitionism."},
+      solution:{steps:["Intuitionism relies on direct intuition rather than argument.","When intuitions conflict, there's no rational method to adjudicate.","Answer: It offers no rational way to resolve conflicting intuitions between people who disagree."]}
+    },
+    {
+      q:"Critics of Intuitionism point out that because moral knowledge is based on direct intuition rather than argument, the theory struggles to:",
+      options:["Settle disagreements when two people's intuitions conflict","Explain why duties exist at all","Account for any moral rules whatsoever","Distinguish acts from rules"],
+      answer:"Settle disagreements when two people's intuitions conflict",
+      hint:{concept:"Without an argumentative method behind moral claims, intuitionism has no tool for resolving disputes.",
+        steps:["Intuition provides no shared reasoning process others can evaluate or challenge","This leaves conflicting intuitions with no path to resolution"],
+        note:""},
+      solution:{steps:["Answer: Settle disagreements when two people's intuitions conflict."]}
+    },
+    {
+      q:"Why do many philosophers see Intuitionism as an unsatisfying foundation for ethics?",
+      options:["It gives no rational method for adjudicating between conflicting moral intuitions","It denies that any moral duties exist","It requires belief in God to function","It reduces morality entirely to self-interest"],
+      answer:"It gives no rational method for adjudicating between conflicting moral intuitions",
+      hint:{concept:"The core worry is about resolving disagreement, not about whether duties exist.",
+        steps:["Intuitionism says we just “see” moral truths directly","If two people “see” different things, there's no argument to appeal to"],
+        note:""},
+      solution:{steps:["Answer: It gives no rational method for adjudicating between conflicting moral intuitions."]}
+    }
+  ]
+},
+
+// ── VIRTUE THEORY ───────────────────────────────────────────────────────
+{
+  tag:"Virtue Theory",
+  pool:[
+    {
+      q:"Lester Hunt (as presented only in the textbook) divides virtues into three broad categories: virtues of self-management, virtues of will-power, and virtues of:",
+      options:["Caring for others","Rational calculation","Universal law","Aesthetic taste"],
+      answer:"Caring for others",
+      hint:{concept:"Hunt's threefold division covers how we manage ourselves, how we exercise willpower, and how we relate to other people.",
+        steps:["Self-management virtues: e.g., prudence, self-respect","Will-power virtues: e.g., courage, self-control","The third group covers other-regarding concern: e.g., benevolence, justice, compassion"],
+        note:"This categorization is noted as textbook-only, so it may not appear in lecture slides but is still fair game for the quiz."},
+      solution:{steps:["Hunt's three categories: self-management, will-power, and caring for others.","Answer: Caring for others."]}
+    },
+    {
+      q:"According to Lester Hunt's textbook categorization, which three broad types of virtues exist?",
+      options:["Self-management, will-power, and caring for others","Courage, wisdom, and justice only","Physical, intellectual, and spiritual virtues","Deontological, consequentialist, and virtue-based"],
+      answer:"Self-management, will-power, and caring for others",
+      hint:{concept:"Recall Hunt's threefold structure for organizing the many individual virtues.",
+        steps:["Group 1: managing yourself well (self-management)","Group 2: strength/resolve of will (will-power)","Group 3: concern for others (caring)"],
+        note:""},
+      solution:{steps:["Answer: Self-management, will-power, and caring for others."]}
+    },
+    {
+      q:"Hunt's category of “will-power” virtues (like courage and self-control) is one of three groups; the other two are:",
+      options:["Self-management virtues and other-regarding/caring virtues","Rational virtues and emotional virtues","Universal virtues and particular virtues","Active virtues and passive virtues"],
+      answer:"Self-management virtues and other-regarding/caring virtues",
+      hint:{concept:"Will-power is only ONE of Hunt's three categories — identify the remaining two.",
+        steps:["One handles the self broadly (self-management)","One handles concern for others (caring)"],
+        note:""},
+      solution:{steps:["Answer: Self-management virtues and other-regarding/caring virtues."]}
+    }
+  ]
+},
+{
+  tag:"Virtue Theory",
+  pool:[
+    {
+      q:"Virtue theorists criticize both Deontology and Consequentialism for sharing what common flaw?",
+      options:["Both focus narrowly on rules or outcomes for individual acts while ignoring the moral character of the agent","Both deny that morality is objective","Both require belief in a supreme being","Both reduce morality to self-interest"],
+      answer:"Both focus narrowly on rules or outcomes for individual acts while ignoring the moral character of the agent",
+      hint:{concept:"Virtue Theory's central complaint is that the other two major traditions are too act-focused and ignore WHO is acting.",
+        steps:["Deontology asks: did the act follow the rule?","Consequentialism asks: did the act produce the best outcome?","Virtue Theory's objection: neither asks about the agent's character or moral development"],
+        note:"Virtue theorists argue you could follow all the rules or calculate the best outcome and still be a bad person, or vice versa."},
+      solution:{steps:["Both Deontology and Consequentialism are act-centered and neglect character.","Answer: Both focus narrowly on rules or outcomes for individual acts while ignoring the moral character of the agent."]}
+    },
+    {
+      q:"What is the main complaint Virtue Theorists raise against act-focused theories like Deontology and Consequentialism?",
+      options:["They reduce ethics to following rules or calculating outcomes, neglecting virtuous character","They are both too subjective to be useful","They both ignore the existence of duties","They both rely too heavily on intuition"],
+      answer:"They reduce ethics to following rules or calculating outcomes, neglecting virtuous character",
+      hint:{concept:"The complaint is about what gets left out: the agent's character and moral development.",
+        steps:["Rules and outcome-calculations can be followed mechanically, without any real virtue","Virtue theorists say this misses what ethics should really be about: being a good person"],
+        note:""},
+      solution:{steps:["Answer: They reduce ethics to following rules or calculating outcomes, neglecting virtuous character."]}
+    },
+    {
+      q:"How does Virtue Theory claim to “solve” the flaws it sees in Deontology and Consequentialism?",
+      options:["By centering ethics on cultivating good character rather than on rules or consequences alone","By replacing all moral rules with divine commands","By proving that all moral disagreement is merely verbal","By reducing ethics entirely to social convention"],
+      answer:"By centering ethics on cultivating good character rather than on rules or consequences alone",
+      hint:{concept:"Virtue Theory's “solution” is a reorientation: put character first, and right action follows from having good character.",
+        steps:["Instead of asking “what rule/outcome makes this right?”, ask “what would a person of good character do?”","This is meant to capture what the other theories miss: the whole person, not just isolated acts"],
+        note:""},
+      solution:{steps:["Answer: By centering ethics on cultivating good character rather than on rules or consequences alone."]}
+    }
+  ]
+},
+{
+  tag:"Virtue Theory",
+  pool:[
+    {
+      q:"Virtue Theory rests on two central theses. One is that virtue/character is the primary concept in ethics. What is the second?",
+      options:["That practical wisdom (phronesis) is required to apply virtues correctly in particular situations","That pleasure is the only intrinsic good","That moral rules must always be followed without exception","That consequences alone determine right action"],
+      answer:"That practical wisdom (phronesis) is required to apply virtues correctly in particular situations",
+      hint:{concept:"Virtue Theory's second thesis addresses HOW virtues get applied correctly to specific, messy real-world situations.",
+        steps:["Thesis 1: virtue/character is the fundamental ethical concept (not rules or consequences)","Thesis 2: applying virtues well requires practical wisdom — the skill of judging what the situation calls for"],
+        note:"Phronesis (practical wisdom) is an Aristotelian concept: knowing HOW to act virtuously in a particular context, not just knowing virtues abstractly."},
+      solution:{steps:["Thesis 1: virtue is primary. Thesis 2: practical wisdom (phronesis) is needed to apply virtue correctly.","Answer: That practical wisdom (phronesis) is required to apply virtues correctly in particular situations."]}
+    },
+    {
+      q:"Which two claims form the theoretical core of Virtue Theory?",
+      options:["(1) Virtue/character is more fundamental than rules or consequences, and (2) practical wisdom is needed to apply virtue in specific situations","(1) Pleasure is the only good, and (2) pain is the only evil","(1) All duties are absolute, and (2) consequences never matter","(1) Morality is relative to culture, and (2) intuition is infallible"],
+      answer:"(1) Virtue/character is more fundamental than rules or consequences, and (2) practical wisdom is needed to apply virtue in specific situations",
+      hint:{concept:"Recall the two theses: primacy of character, and the need for practical wisdom to apply it.",
+        steps:["First thesis is about WHAT is fundamental (character)","Second thesis is about HOW virtue gets applied (practical wisdom)"],
+        note:""},
+      solution:{steps:["Answer: (1) Virtue/character is more fundamental than rules or consequences, and (2) practical wisdom is needed to apply virtue in specific situations."]}
+    },
+    {
+      q:"Virtue Theory's two theses concern the primacy of character and the necessity of what additional faculty?",
+      options:["Practical wisdom (phronesis)","Divine revelation","Utilitarian calculation","Legal authority"],
+      answer:"Practical wisdom (phronesis)",
+      hint:{concept:"The second thesis names the faculty needed to apply virtues wisely to particular circumstances.",
+        steps:["Ask: what skill lets someone know HOW to be courageous or generous in THIS specific situation?","Answer: practical wisdom / phronesis"],
+        note:""},
+      solution:{steps:["Answer: Practical wisdom (phronesis)."]}
+    }
+  ]
+},
+{
+  tag:"Virtue Theory",
+  pool:[
+    {
+      q:"In Virtue Theory, moral evaluation is primarily focused on:",
+      options:["The character of the person (the agent), not just the isolated act","The consequences of the act alone","Whether the act follows a universal rule","The legal status of the act"],
+      answer:"The character of the person (the agent), not just the isolated act",
+      hint:{concept:"Virtue Theory shifts the central question of ethics from “was this act right?” to “is this a good person?”",
+        steps:["Deontology evaluates acts against rules","Consequentialism evaluates acts by outcomes","Virtue Theory evaluates the AGENT's character — acts are right insofar as they flow from virtuous character"],
+        note:"This is why Virtue Theory is sometimes called “agent-based” ethics rather than “act-based” ethics."},
+      solution:{steps:["Virtue Theory's focus of evaluation is the agent's character.","Answer: The character of the person (the agent), not just the isolated act."]}
+    },
+    {
+      q:"Unlike Deontology or Consequentialism, Virtue Theory asks us to judge:",
+      options:["Whether a person has good character/is virtuous, rather than only judging individual acts","Whether an act maximizes pleasure","Whether an act was legally permitted","Whether an act was universalizable"],
+      answer:"Whether a person has good character/is virtuous, rather than only judging individual acts",
+      hint:{concept:"The distinguishing feature of Virtue Theory is judging PEOPLE (character), not just acts in isolation.",
+        steps:["Other theories focus the evaluation squarely on the act","Virtue Theory asks about the whole person's character and dispositions"],
+        note:""},
+      solution:{steps:["Answer: Whether a person has good character/is virtuous, rather than only judging individual acts."]}
+    },
+    {
+      q:"The central question of Virtue Theory — “What would a virtuous person do?” — reveals that its focus of moral evaluation is:",
+      options:["The agent's character","The act's consequences","The act's conformity to universal law","Social convention"],
+      answer:"The agent's character",
+      hint:{concept:"This guiding question centers the VIRTUOUS PERSON, not the rule or the outcome.",
+        steps:["Notice the question is framed around a type of PERSON, not a type of act or rule","This signals that character is the fundamental unit of evaluation"],
+        note:""},
+      solution:{steps:["Answer: The agent's character."]}
+    }
+  ]
+}
+
+];
+
+const SECTIONS = ["All","Deontology","Virtue Theory"];
+
+let activeSection = "All";
+let roundQuestions = [];
+let current = 0, roundNum = 1, history = [], state = {}, scores = { correct: 0, attempted: 0 };
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function buildRound() {
+  const pools = activeSection === 'All' ? POOLS : POOLS.filter(p => p.tag === activeSection);
+  roundQuestions = pools.map(p => {
+    const v = p.pool[Math.floor(Math.random() * p.pool.length)];
+    return { tag: p.tag, q: v.q, options: shuffle(v.options), answer: v.answer, hint: v.hint, solution: v.solution };
+  });
+}
+
+function buildFilters() {
+  const container = document.getElementById('filters');
+  SECTIONS.forEach(s => {
+    const btn = document.createElement('button');
+    btn.className = 'fbtn' + (s === activeSection ? ' active' : '');
+    btn.textContent = s;
+    btn.onclick = () => {
+      activeSection = s;
+      current = 0; scores = { correct: 0, attempted: 0 }; state = {}; roundNum = 1;
+      document.getElementById('banner').style.display = 'none';
+      document.getElementById('btn-redo').style.display = 'none';
+      document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      buildRound(); renderQ(); updateStats(); showHistory();
+    };
+    container.appendChild(btn);
+  });
+}
+
+function key(i) { return activeSection + '||' + roundNum + '||' + i; }
+function done(i) { const s = state[key(i)]; return s && s.done; }
+function allDone() { return roundQuestions.length > 0 && roundQuestions.every((_, i) => done(i)); }
+
+function updateStats() {
+  document.getElementById('s-correct').textContent = scores.correct;
+  document.getElementById('s-attempted').textContent = scores.attempted;
+  document.getElementById('s-pct').textContent = scores.attempted > 0 ? Math.round(scores.correct / scores.attempted * 100) + '%' : '—';
+  document.getElementById('s-round').textContent = roundNum;
+  const d = roundQuestions.filter((_, i) => done(i)).length;
+  document.getElementById('prog').style.width = (roundQuestions.length ? Math.round(d / roundQuestions.length * 100) : 0) + '%';
+  if (allDone()) {
+    const pct = Math.round(scores.correct / scores.attempted * 100);
+    if (!history.find(r => r.round === roundNum && r.section === activeSection)) {
+      history.push({ round: roundNum, correct: scores.correct, attempted: scores.attempted, pct, section: activeSection });
+      showHistory(); showBanner(pct);
+      document.getElementById('btn-redo').style.display = 'inline-block';
+    }
+  }
+}
+
+function showHistory() {
+  const panel = document.getElementById('history-panel'), row = document.getElementById('history-row');
+  const relevant = history.filter(r => r.section === activeSection);
+  if (!relevant.length) { panel.style.display = 'none'; return; }
+  panel.style.display = 'block'; row.innerHTML = '';
+  const best = Math.max(...relevant.map(r => r.pct));
+  relevant.forEach(r => {
+    const c = document.createElement('span');
+    c.className = 'hchip' + (r.pct === best ? ' best' : '');
+    c.textContent = 'Round ' + r.round + ': ' + r.correct + '/' + r.attempted + ' (' + r.pct + '%)';
+    row.appendChild(c);
+  });
+}
+
+function showBanner(pct) {
+  document.getElementById('banner').style.display = 'block';
+  document.getElementById('banner-title').textContent = 'Section complete!';
+  document.getElementById('banner-msg').textContent = pct === 100 ? 'Perfect score! Run another round — the questions will reshuffle.' : pct >= 80 ? pct + '% — strong work. Another round will cement it.' : pct >= 60 ? pct + '% — review the worked solutions, then retry.' : pct + '% — study the solution steps carefully before trying again.';
+}
+
+function newRound() {
+  roundNum++; scores = { correct: 0, attempted: 0 }; current = 0;
+  document.getElementById('banner').style.display = 'none';
+  document.getElementById('btn-redo').style.display = 'none';
+  buildRound(); renderQ(); updateStats(); showHistory();
+}
+
+function renderQ() {
+  if (!roundQuestions.length) { document.getElementById('q-area').innerHTML = '<p style="color:#888;font-size:14px;padding:1rem 0;">No questions in this section.</p>'; return; }
+  const q = roundQuestions[current];
+  const k = key(current);
+  const s = state[k] || { attempts: 0, done: false, wrongChoices: [], feedbackMsg: '', feedbackColor: '' };
+  document.getElementById('qcounter').textContent = (current + 1) + ' / ' + roundQuestions.length;
+
+  let attTag = s.attempts > 0 ? `<span class="atag">(${s.attempts} attempt${s.attempts > 1 ? 's' : ''})</span>` : '';
+  let html = `<div class="qcard"><div><span class="qtag">${q.tag}</span>${attTag}</div><p class="qtext">${q.q}</p><div class="options">`;
+  q.options.forEach((opt, i) => {
+    let cls = 'obtn', dis = '';
+    if (s.done) { if (opt === q.answer) cls += ' reveal-correct'; else if (s.wrongChoices.includes(opt)) cls += ' dwrong'; dis = 'disabled'; }
+    else if (s.wrongChoices.includes(opt)) { cls += ' dwrong'; dis = 'disabled'; }
+    html += `<button class="${cls}" data-opt="${i}" ${dis}>${opt}</button>`;
+  });
+  html += `</div><div class="btn-row"><button class="abtn" id="btn-hint">💡 how to approach</button></div>`;
+  const h = q.hint;
+  html += `<div class="hint-box" id="hint-box"><h4>💡 How to Approach This</h4><div class="hint-concept"><strong>Key idea:</strong> ${h.concept}</div><strong style="font-size:13px;color:#534AB7;">Step by step:</strong><ol class="hint-steps">`;
+  h.steps.forEach(step => { html += `<li>${step}</li>`; });
+  html += `</ol>`;
+  if (h.note) html += `<div class="hint-note">📝 ${h.note}</div>`;
+  html += `</div>`;
+  if (s.done && s.wrongChoices.length >= 2) {
+    const sol = q.solution;
+    html += `<div class="solution-box" style="display:block"><h4>📝 Full Solution</h4>`;
+    sol.steps.forEach(step => { html += `<div class="sol-step">${step}</div>`; });
+    html += `<div class="sol-answer">✓ Answer: ${q.answer}</div></div>`;
+  }
+  html += `<div class="feedback" id="feedback" style="display:${s.feedbackMsg ? 'block' : 'none'};color:${s.feedbackColor || 'inherit'}">${s.feedbackMsg || ''}</div>`;
+  html += `</div>`;
+  document.getElementById('q-area').innerHTML = html;
+
+  document.getElementById('btn-hint').onclick = () => {
+    const hb = document.getElementById('hint-box');
+    hb.style.display = hb.style.display === 'block' ? 'none' : 'block';
+  };
+
+  function showFeedback(msg, type) {
+    const fb = document.getElementById('feedback');
+    fb.style.display = 'block';
+    const colors = { correct: '#0d5c3a', tryagain: '#854f0b', wrong: '#791F1F' };
+    fb.style.color = colors[type];
+    fb.textContent = type === 'correct' ? '✓ Correct!' : msg;
+    state[k].feedbackMsg = fb.textContent; state[k].feedbackColor = fb.style.color;
+  }
+
+  function handleAnswer(chosen, correct) {
+    if (!state[k]) state[k] = { attempts: 0, done: false, wrongChoices: [], feedbackMsg: '', feedbackColor: '' };
+    const st = state[k];
+    if (st.attempts === 0) scores.attempted++;
+    st.attempts++;
+    if (correct) {
+      if (st.attempts === 1) scores.correct++;
+      st.done = true; showFeedback('', 'correct'); updateStats(); renderQ();
+    } else {
+      st.wrongChoices.push(chosen);
+      if (st.attempts >= 2) {
+        st.done = true;
+        showFeedback('✗ Incorrect. See the full solution below.', 'wrong');
+        updateStats(); renderQ();
+      } else {
+        showFeedback('✗ Not quite — one more try. Use the hint if needed.', 'tryagain');
+        updateStats();
+        document.querySelectorAll('.obtn').forEach(b => {
+          if (st.wrongChoices.includes(q.options[parseInt(b.dataset.opt)])) { b.classList.add('dwrong'); b.disabled = true; }
+        });
+      }
+    }
+  }
+
+  if (!s.done) {
+    document.querySelectorAll('.obtn:not([disabled])').forEach(btn => {
+      btn.onclick = () => handleAnswer(q.options[parseInt(btn.dataset.opt)], q.options[parseInt(btn.dataset.opt)] === q.answer);
+    });
+  }
+}
+
+document.getElementById('btn-prev').onclick = () => { if (current > 0) { current--; renderQ(); } };
+document.getElementById('btn-next').onclick = () => { if (current < roundQuestions.length - 1) { current++; renderQ(); } };
+document.getElementById('btn-rand').onclick = () => { current = Math.floor(Math.random() * roundQuestions.length); renderQ(); };
+document.getElementById('btn-redo').onclick = () => newRound();
+
+buildFilters(); buildRound(); renderQ(); updateStats();
+</script>
+</body>
+</html>
